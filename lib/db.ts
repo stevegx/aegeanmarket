@@ -1,18 +1,14 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_CONNECTION_STRING as string;
-
+const MONGODB_URI = process.env.MONGODB_URI as string;
 
 if (!MONGODB_URI) {
-    throw new Error("Please define the MONGODB_CONNECTION_STRING environment variable");
+    throw new Error("Please define MONGODB_URI in .env.local");
 }
 
-
-
-async function dbConnect() {
-    if (mongoose.connection.readyState >= 1){
-        await mongoose.connect(MONGODB_URI);
-    }
+async function connectDB() {
+    if (mongoose.connection.readyState >= 1) return;
+    await mongoose.connect(MONGODB_URI);
 }
 
-ecport default connectDB;
+export default connectDB;

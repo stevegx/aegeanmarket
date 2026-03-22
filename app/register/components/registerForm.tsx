@@ -4,29 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import * as z from "zod";
-
-const registerSchema = z.object({
-    username: z.string().min(3, "Username must be at least 3 characters long"),
-    email: z.string().email("Invalid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
-    confirmPassword: z.string(),
-    address: z.string().min(3, "Address must be at least 3 characters long"),
-    phone: z.string().length(10, "Phone number must be exactly 10 digits")
-             .regex(/^\d+$/, "Phone number must contain only digits")
-             .startsWith("69", "Phone number must start with 69"),
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"]
-})
-
-type RegisterFormData = z.infer<typeof registerSchema>;
+import { createUser } from "../actions/createUser";
+import { registerSchema, RegisterFormData } from "@/lib/validate"
 
 export default function RegisterPage(){
-    const [errors, setErrors] = useState<Partial<Record<keyof RegisterFormData, string[]>>>({});
+    const [errors, setErrors] = useState<Partial<Record<keyof RegisterFormData, string[]>>>({})
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { 
+        e.preventDefault()
         const formData = {
             username: e.currentTarget.username.value,
             email: e.currentTarget.email.value,
@@ -40,16 +25,16 @@ export default function RegisterPage(){
             const fieldErrors = result.error.flatten().fieldErrors;
             setErrors(fieldErrors);
         } else {
-            setErrors({});
-            console.log("Valid data:", result.data)
-            // TODO: send to backend
+            setErrors({})
+            const {confirmPassword, ...userData} = result.data
+            await createUser(userData)
         }
     }
 
     return(
         <div className="flex flex-col justify-center items-center min-h-screen">
-            <form className="flex flex-col shadow-lg rounded-4xl w-lg p-10 gap-4" onSubmit={handleSubmit}>
-                <h1 className="text-4xl my-5 font-bold">Register</h1>
+            <form className="flex flex-col shadow-2xl rounded-4xl w-lg p-10 gap-4" onSubmit={handleSubmit}>
+                <h1 className="flex text-4xl my-5 font-bold justify-center">Register</h1>
 
                 <div className="flex flex-col gap-1">
                     <Label htmlFor="username">Username</Label>
