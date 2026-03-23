@@ -25,5 +25,5 @@ export async function createUser(data: CreateUserData){
         phone: data.phone
     })
     await newUser.save()
-    redirect("/")
+    redirect("/register/success")
 }

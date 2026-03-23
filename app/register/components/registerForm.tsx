@@ -38,38 +38,32 @@ export default function RegisterPage(){
 
                 <div className="flex flex-col gap-1">
                     <Label htmlFor="username">Username</Label>
-                    <Input id="username" name="username" type="text" placeholder="Username" />
-                    {errors.username && <p className="text-red-500 text-sm">{errors.username[0]}</p>}
+                    <Input id="username" name="username" type="text" placeholder="Username" error={errors.username?.[0]}/>
                 </div>
 
                 <div className="flex flex-col gap-1">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" name="email"  placeholder="Email" />
-                    {errors.email && <p className="text-red-500 text-sm">{errors.email[0]}</p>}
+                    <Input id="email" name="email" placeholder="Email" error={errors.email?.[0]} />
                 </div>
 
                 <div className="flex flex-col gap-1">
                     <Label htmlFor="password">Password</Label>
-                    <Input id="password" name="password" type="password" placeholder="Password" />
-                    {errors.password && <p className="text-red-500 text-sm">{errors.password[0]}</p>}
+                    <Input id="password" name="password" type="password" placeholder="Password" error={errors.password?.[0]} />
                 </div>
 
                 <div className="flex flex-col gap-1">
                     <Label htmlFor="confirmPassword">Confirm Password</Label>
-                    <Input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" />
-                    {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword[0]}</p>}
+                    <Input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" error={errors.confirmPassword?.[0]} />
                 </div>
 
                 <div className="flex flex-col gap-1">
                     <Label htmlFor="address">Address</Label>
-                    <Input id="address" name="address" type="text" placeholder="Address" />
-                    {errors.address && <p className="text-red-500 text-sm">{errors.address[0]}</p>}
+                    <Input id="address" name="address" type="text" placeholder="Address" error={errors.address?.[0]} />
                 </div>
 
                 <div className="flex flex-col gap-1">
                     <Label htmlFor="phone">Phone Number</Label>
-                    <Input id="phone" name="phone" type="tel" placeholder="Phone Number" />
-                    {errors.phone && <p className="text-red-500 text-sm">{errors.phone[0]}</p>}
+                    <Input id="phone" name="phone" type="tel" placeholder="Phone Number" error={errors.phone?.[0]} />
                 </div>
 
                 <Button type="submit" className="w-full mt-2 py-5 font-bold text-lg">Register</Button>

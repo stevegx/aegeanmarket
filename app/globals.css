@@ -47,6 +47,14 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 }
+@theme {
+  --color-aegean-dark: #21618C;
+  --color-aegean-light: #AED6F1;
+  --color-aegean-terracotta: #D98880;
+  --color-aegean-green: #27AE60;
+  --color-aegean-white: #FFFFFF;
+  --color-aegean-gray: #F2F4F4;
+}
 
 :root {
   --background: oklch(1 0 0);

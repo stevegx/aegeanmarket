@@ -14,4 +14,11 @@ export const registerSchema = z.object({
     path: ["confirmPassword"]
 })
 
+export const LoginSchema = z.object({
+    loginCredentials: z.string().min(3, "Username or email must be at least 3 characters long"),
+     password: z.string().min(8, "Password must be at least 8 characters long")
+})
+
+
 export type RegisterFormData = z.infer<typeof registerSchema>;
+export type LoginFormData = z.infer<typeof LoginSchema>;
