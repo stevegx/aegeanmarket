@@ -19,6 +19,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cookie": "^1.1.1",
+    "jose": "^6.2.2",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.3.1",
