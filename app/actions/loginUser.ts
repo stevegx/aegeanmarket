@@ -17,7 +17,7 @@ export async function loginUser(data: LoginUserData) {
       { email: data.loginCredentials },
       { username: data.loginCredentials },
     ],
-  })
+  }).select('+password')
 
   if (!findUser) return { success: false, error: 'Invalid login credentials' }
 
@@ -28,6 +28,7 @@ export async function loginUser(data: LoginUserData) {
   const token = await new SignJWT({
     userId: findUser._id.toString(),
     username: findUser.username,
+    role: findUser.role,
   })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -43,5 +44,5 @@ export async function loginUser(data: LoginUserData) {
     path: '/',
   })
 
-  return { success: true, username: findUser.username }
+  return { success: true, username: findUser.username, role: findUser.role }
 }

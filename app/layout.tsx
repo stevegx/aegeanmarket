@@ -4,6 +4,7 @@ import './globals.css'
 import { cn } from '@/lib/utils'
 import Navbar from '@/components/ui/navbar'
 import { getSession } from '@/app/actions/getSession'
+import { CartSyncHandler } from '@/app/products/components/cart/handler/CartSyncHandler'
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 const geistSans = Geist({
@@ -28,19 +29,14 @@ export default async function RootLayout({
 }>) {
   const session = await getSession()
   return (
-    <html
-      lang="en"
-      className={cn(
-        'h-full',
-        'antialiased',
-        geistSans.variable,
-        geistMono.variable,
-        'font-sans',
-        inter.variable
-      )}
-    >
-      <Navbar initialSession={session} />
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={cn('h-full', 'antialiased', inter.variable)}>
+      <body
+        className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} font-sans min-h-full flex flex-col`}
+      >
+        <Navbar initialSession={session} />
+        <CartSyncHandler />
+        {children}
+      </body>
     </html>
   )
 }
