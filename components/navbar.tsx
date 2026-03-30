@@ -8,7 +8,7 @@ import {
   NavigationMenuTrigger,
   NavigationMenuContent,
   NavigationMenuList,
-} from './navigation-menu'
+} from './ui/navigation-menu'
 import Logo from '@/images/aegeanMarketLogo.jpg'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -16,8 +16,9 @@ import { getSession } from '@/app/actions//getSession'
 import { logoutUser } from '@/app/actions/logoutUser'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuthStore } from '@/app/(auth)/store/useAuthStore'
-import { useCartStore } from '@/app/products/store/useCartStore'
-import { Span } from 'next/dist/trace'
+
+import CartModal from './cartModal'
+
 interface NavbarProps {
   initialSession: {
     username: string
@@ -29,7 +30,7 @@ export default function Navbar({ initialSession }: NavbarProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [isHydrated, setIsHydrated] = useState(false)
-  const cartItems = useCartStore((state) => state.getTotalItems())
+
   useEffect(() => {
     const initAuth = async () => {
       const session = await getSession()
@@ -91,21 +92,8 @@ export default function Navbar({ initialSession }: NavbarProps) {
             )}
           </div>
         )}
-        <button className="relative flex items-center justify-center w-10 h-10 rounded-full bg-aegean-light/30 hover:cursor-pointer transition-colors pr-1">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24" // Σημαντικό για να ξέρει το SVG πώς να κεντραριστεί
-            fill="currentColor"
-          >
-            <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2h-11.42c-.14 0-.25-.11-.25-.25l.03-.12 .9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49a1 1 0 0 0-.87-1.48h-14.31l-.94-2zm3 16a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
-          </svg>
-          {cartItems > 0 && (
-            <span className="absolute -top-1.5 -right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-aegean-terracotta text-[11px] text-aegean-gray font-bold">
-              {cartItems}
-            </span>
-          )}
-        </button>
+
+        <CartModal />
       </div>
     </div>
   )

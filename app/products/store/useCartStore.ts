@@ -7,6 +7,7 @@ type CartItem = {
   price: number
   quantity: number
   stock: number
+  image: string
 }
 
 interface CartState {

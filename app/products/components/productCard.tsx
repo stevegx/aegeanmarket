@@ -1,5 +1,6 @@
 'use client'
 import Image from 'next/image'
+import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useCartStore } from '../store/useCartStore'
@@ -26,10 +27,17 @@ interface ProductValue {
 interface ProductProps {
   product: ProductValue
 }
+interface QuantityControllerProps {
+  product: {
+    _id: string
+    stock: number
+  }
+  className?: string // <--- Πρόσθεσε αυτό
+}
 
 export default function ProductCard({ product }: ProductProps) {
   const buyItem = useCartStore((state) => state.addItem)
-  const quantityHandler = useCartStore((state) => state.updateQuantity)
+
   const quantity = useCartStore(
     (state) => state.items.find((i) => i._id === product._id)?.quantity || 0
   )
@@ -96,25 +104,43 @@ export default function ProductCard({ product }: ProductProps) {
             </Button>
           )
         ) : (
-          <div className="flex justify-around items-center w-full bg-aegean-dark text-primary-foreground cursor-pointer rounded-2xl px-2 py-1 transition-all duration-300 animate-in slide-in-from-left-40 fade-in">
-            <Button
-              variant="buy"
-              className="font-bold text-xl rounded-xl hover:bg-aegean-light/20"
-              onClick={() => quantityHandler(product._id, -1)}
-            >
-              -
-            </Button>
-            <span className="font-bold text-lg">{quantity}</span>
-            <Button
-              variant="buy"
-              className="font-bold text-xl rounded-xl hover:bg-aegean-light/20"
-              onClick={() => quantityHandler(product._id, +1)}
-            >
-              +
-            </Button>
-          </div>
+          <QuantityController product={product} />
         )}
       </CardFooter>
     </Card>
+  )
+}
+
+export function QuantityController({
+  product,
+  className,
+}: QuantityControllerProps) {
+  const quantity = useCartStore(
+    (state) => state.items.find((i) => i._id === product._id)?.quantity || 0
+  )
+  const quantityHandler = useCartStore((state) => state.updateQuantity)
+  return (
+    <div
+      className={cn(
+        'flex justify-around items-center w-full bg-aegean-dark text-primary-foreground rounded-2xl px-2 py-1 transition-all duration-300',
+        className
+      )}
+    >
+      <Button
+        variant="buy"
+        className="font-bold text-xl rounded-xl hover:bg-aegean-light/20"
+        onClick={() => quantityHandler(product._id, -1)}
+      >
+        -
+      </Button>
+      <span className="font-bold text-lg">{quantity}</span>
+      <Button
+        variant="buy"
+        className="font-bold text-xl rounded-xl hover:bg-aegean-light/20"
+        onClick={() => quantityHandler(product._id, +1)}
+      >
+        +
+      </Button>
+    </div>
   )
 }
