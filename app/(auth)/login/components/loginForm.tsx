@@ -8,14 +8,16 @@ import { LoginSchema, LoginFormData } from '@/lib/validate'
 import { loginUser } from '@/app/actions/loginUser'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '../../store/useAuthStore'
+import { useCartStore } from '@/app/products/store/useCartStore'
 export default function LoginForm() {
   const setLogin = useAuthStore((state) => state.setLogin)
   const router = useRouter()
-
   const [errors, setErrors] = useState<
     Partial<Record<keyof LoginFormData, string[]>>
   >({})
 
+  const { syncCart } = useCartStore()
+  const { fetchCart } = useCartStore()
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = {
@@ -33,6 +35,8 @@ export default function LoginForm() {
         setErrors({ loginCredentials: [response.error || 'Wrong Credentials'] })
       } else {
         setLogin(response.username)
+        await syncCart()
+        await fetchCart()
         router.push('/')
         router.refresh()
       }

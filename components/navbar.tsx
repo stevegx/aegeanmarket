@@ -41,7 +41,7 @@ export default function Navbar({ initialSession }: NavbarProps) {
   }, [setLogin, setLogout])
 
   return (
-    <div className="flex items-center justify-between px-6 py-2 bg-aegean-dark text-aegean-white gap-4 shadow-md sticky top-0">
+    <div className="flex items-center justify-between px-6 py-2 bg-aegean-dark text-aegean-white gap-4 shadow-md sticky top-0 h-16 w-full z-50">
       <Link href="/" className="shrink-0">
         <Image
           src={Logo}

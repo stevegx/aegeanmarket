@@ -1,13 +1,56 @@
-import getProduct from '../actions/getProducts'
+// components/productList.tsx
+import getProducts from '../actions/getProducts'
 import ProductCard from '../components/productCard'
+import PaginationControls from '../components/PaginationControls'
+import FilterCategories from './filterCategories'
 
-export default async function ProductList() {
-  const product = await getProduct()
+export interface IProduct {
+  _id: string
+  name: string
+  price: number
+  description: string
+  category: string
+  image: string
+  stock: number
+  rating: number
+  manufacturer?: string
+}
+
+interface ProductListProps {
+  currentPage: number
+}
+
+export default async function ProductList({ currentPage }: ProductListProps) {
+  const { products, totalPages } = await getProducts(currentPage)
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6 bg-aegean-gray">
-      {product.map((products) => (
-        <ProductCard key={products._id} product={products} />
-      ))}
+    <div className="flex flex-col lg:flex-row w-full max-w-360 mx-auto min-h-screen gap-2">
+      <main className="flex-1 flex flex-col p-4 min-w-0">
+        <div className="w-full mb-8">
+          <FilterCategories />
+        </div>
+
+        {products.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
+            {products.map((p: IProduct) => (
+              <ProductCard key={p._id} product={p} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+            <p className="text-xl font-semibold">No products found!</p>
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <div className="mt-auto py-12">
+            <PaginationControls
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
+          </div>
+        )}
+      </main>
     </div>
   )
 }

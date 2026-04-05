@@ -58,7 +58,7 @@ export default function CartModal() {
                 {Math.floor(cartTotal * 100) / 100} €
               </span>
             </span>
-            <Button type="submit" variant={'buy'}>
+            <Button type="submit" variant={'buy'} className={'p-5'}>
               Checkout
             </Button>
           </div>

@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<dataroot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<item>
+		<id>01-09-102</id>
+		<name>MONSTER 500ml GREEN 500ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-271.jpg</image>
+		<category>ENERGY DRINKS</category>
+		<price>1.05</price>
+		<manufacturer>CC3E HBC</manufacturer>
+		<stock>3965</stock>
+		<rating>5</rating>
+		<description>The classic energy drink that delivers a smooth, easy drinking flavor with a powerful caffeine kick.</description>
+	</item>
+	<item>
+		<id>01-01-0005</id>
+		<name>COCA COLA 330ml CAN (6 PACK)</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-128.jpg</image>
+		<category>Cola</category>
+		<price>4.78</price>
+		<manufacturer>CC3E HBC</manufacturer>
+		<stock>222</stock>
+		<rating>5</rating>
+		<description>Original taste Coca-Cola in a convenient 6-pack of 330ml cans for ultimate refreshment.</description>
+	</item>
+	<item>
+		<id>01-08-069</id>
+		<name>FUZE 330ml PEACH/HIBISCUS CAN BlackTea (4 PACK) 330ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-262.jpg</image>
+		<category>BEVERAGES</category>
+		<price>3.41</price>
+		<manufacturer>CC3E HBC</manufacturer>
+		<stock>2754</stock>
+		<rating>4</rating>
+		<description>A delicious fusion of black tea, sweet peach, and aromatic hibiscus notes.</description>
+	</item>
+	<item>
+		<id>06-007-133</id>
+		<name>TSIPOURO 200ml DEKARAKI</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-2144.jpg</image>
+		<category>TSIPOURO</category>
+		<price>4.02</price>
+		<manufacturer>CC3E HBC</manufacturer>
+		<stock>2548</stock>
+		<rating>5</rating>
+		<description>High-quality single-variety Greek spirit with a rich aroma and smooth finish.</description>
+	</item>
+	<item>
+		<id>03-12-042</id>
+		<name>PILLS HELLAS CAN 500ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-525.jpg</image>
+		<category>Lager Beer</category>
+		<price>0.97</price>
+		<manufacturer>CrystalBevarages</manufacturer>
+		<stock>9584</stock>
+		<rating>4</rating>
+		<description>A crisp and refreshing Greek lager beer with a balanced taste and light body.</description>
+	</item>
+	<item>
+		<id>01-09-121</id>
+		<name>MONSTER 500ml PINK PIPELINE 500ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-280.jpg</image>
+		<category>ENERGY DRINKS</category>
+		<price>1.1</price>
+		<manufacturer>CC3E HBC</manufacturer>
+		<stock>939</stock>
+		<rating>5</rating>
+		<description>A tropical energy blend inspired by the surf of Hawaii, featuring passionfruit and orange.</description>
+	</item>
+	<item>
+		<id>01-03-209</id>
+		<name>FANTA LEMON 330ml CAN (6 PACK)</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-4196-scaled.jpg</image>
+		<category>Lemonade</category>
+		<price>4.98</price>
+		<manufacturer>CC3E HBC</manufacturer>
+		<stock>2013</stock>
+		<rating>4</rating>
+		<description>Bubbly and refreshing lemon soft drink made with real fruit juice.</description>
+	</item>
+	<item>
+		<id>03-07-001</id>
+		<name>SOL BEER BOTTLE 330ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/07/CCCPRODUCTIMAGES-506.jpg</image>
+		<category>Lager Beer</category>
+		<price>1.12</price>
+		<manufacturer>SOL</manufacturer>
+		<stock>727</stock>
+		<rating>4</rating>
+		<description>The original sunshine beer, light and easy-to-drink Mexican lager.</description>
+	</item>
+	<item>
+		<id>04-011-607</id>
+		<name>PROSECCO 750ml RUGGERI Stelvin/Screw Cap 750ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-3601-scaled.jpg</image>
+		<category>White Wines</category>
+		<price>6.8</price>
+		<manufacturer>PROSECCO</manufacturer>
+		<stock>0</stock>
+		<rating>5</rating>
+		<description>Elegant sparkling white wine from Italy with fine bubbles and fruity notes.</description>
+	</item>
+	<item>
+		<id>06-003-416</id>
+		<name>APEROL APERITIVO 1LT</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-2048.jpg</image>
+		<category>Liqueur</category>
+		<price>16.07</price>
+		<manufacturer>CC3E HBC</manufacturer>
+		<stock>2450</stock>
+		<rating>5</rating>
+		<description>The perfect bittersweet liqueur for your Spritz, featuring orange and rhubarb infusions.</description>
+	</item>
+	<item>
+		<id>80-031-051</id>
+		<name>NESCAFE CLASSIC 50gr</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-2851.jpg</image>
+		<category>COFFEE</category>
+		<price>2.54</price>
+		<manufacturer>NESTLE/CPW</manufacturer>
+		<stock>1777</stock>
+		<rating>4</rating>
+		<description>The authentic instant coffee with the rich aroma and full taste you know and love.</description>
+	</item>
+	<item>
+		<id>06-007-031</id>
+		<name>TSIPOURO 200ml IDONIKO</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-2125.jpg</image>
+		<category>TSIPOURO</category>
+		<price>4.62</price>
+		<manufacturer>LAZARIDI COSTA</manufacturer>
+		<stock>2930</stock>
+		<rating>5</rating>
+		<description>Traditional Greek spirit from the Lazaridi estate, known for its crystal clarity.</description>
+	</item>
+	<item>
+		<id>80-31-155</id>
+		<name>COFFEE LOUMIDIS "GREEN" 96gr</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-2871.jpg</image>
+		<category>COFFEE</category>
+		<price>2.26</price>
+		<manufacturer>NESTLE/CPW</manufacturer>
+		<stock>1853</stock>
+		<rating>5</rating>
+		<description>The most famous traditional Greek coffee, ground to perfection for a rich foam.</description>
+	</item>
+	<item>
+		<id>01-01-023</id>
+		<name>COCA COLA 500ml PET (4 PACK)</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-130-scaled.jpg</image>
+		<category>Cola</category>
+		<price>4.79</price>
+		<manufacturer>CC3E HBC</manufacturer>
+		<stock>1047</stock>
+		<rating>5</rating>
+		<description>Convenient 4-pack of 500ml bottles, perfect for sharing with friends and family.</description>
+	</item>
+	<item>
+		<id>03-07-122</id>
+		<name>CORONA 330ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2025/06/CCCPRODUCTIMAGES-508.jpg</image>
+		<category>Lager Beer</category>
+		<price>1.39</price>
+		<manufacturer>CORONA</manufacturer>
+		<stock>1641</stock>
+		<rating>5</rating>
+		<description>Premium Mexican pilsner-style beer, best served chilled with a slice of lime.</description>
+	</item>
+	<item>
+		<id>01-09-108</id>
+		<name>MONSTER 500ml "THE DOCTOR" 500ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-273.jpg</image>
+		<category>ENERGY DRINKS</category>
+		<price>1.13</price>
+		<manufacturer>CC3E HBC</manufacturer>
+		<stock>465</stock>
+		<rating>5</rating>
+		<description>A light, crisp, and refreshing citrus flavor named after MotoGP legend Valentino Rossi.</description>
+	</item>
+	<item>
+		<id>80-031-055</id>
+		<name>NESCAFE CLASSIC 100gr</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-2852.jpg</image>
+		<category>COFFEE</category>
+		<price>4.65</price>
+		<manufacturer>NESTLE/CPW</manufacturer>
+		<stock>1395</stock>
+		<rating>4</rating>
+		<description>Standard 100g tin of the legendary Nescafe Classic for your daily caffeine fix.</description>
+	</item>
+	<item>
+		<id>09-81-023</id>
+		<name>FRISKIES DOG PICNIC SNACK BEEF 42gr</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-3263-scaled.jpg</image>
+		<category>DOG FOOD</category>
+		<price>0.64</price>
+		<manufacturer>NESTLE/CPW</manufacturer>
+		<stock>1376</stock>
+		<rating>4</rating>
+		<description>Savory beef-flavored snacks that your dog will love during playtime or walks.</description>
+	</item>
+	<item>
+		<id>04-41-022</id>
+		<name>JULIA GEORGIADI SEMI-SWEET RED 500ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2025/02/CCCPRODUCTIMAGES-5061.jpg</image>
+		<category>Red Wines</category>
+		<price>2.34</price>
+		<manufacturer>GEORGIADIS CANTEEN</manufacturer>
+		<stock>518</stock>
+		<rating>3</rating>
+		<description>A smooth and easy-to-drink semi-sweet red wine for casual dining.</description>
+	</item>
+	<item>
+		<id>03-12-179</id>
+		<name>NISSOS BEER PILSNER 330ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-568.jpg</image>
+		<category>Pilsner Beer</category>
+		<price>2.07</price>
+		<manufacturer>OLYMPIC BREWERY</manufacturer>
+		<stock>705</stock>
+		<rating>5</rating>
+		<description>Award-winning Greek craft pilsner with an unpasteurized, rich floral flavor.</description>
+	</item>
+	<item>
+		<id>80-031-060</id>
+		<name>NESCAFE CLASSIC 200gr</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-2853.jpg</image>
+		<category>COFFEE</category>
+		<price>8.43</price>
+		<manufacturer>NESTLE/CPW</manufacturer>
+		<stock>670</stock>
+		<rating>4</rating>
+		<description>Large 200g pack of Nescafe Classic, ideal for the heavy coffee drinkers.</description>
+	</item>
+	<item>
+		<id>05-005-002</id>
+		<name>TANQUERAY "DRY GIN" 700ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-1629.jpg</image>
+		<category>Gin</category>
+		<price>20.55</price>
+		<manufacturer>DIAGEO</manufacturer>
+		<stock>189</stock>
+		<rating>5</rating>
+		<description>A London Dry Gin with a perfect balance of four botanicals, great for G&amp;T.</description>
+	</item>
+	<item>
+		<id>51-006-012</id>
+		<name>LAVAZZA "QUALITA" GOLD SELECTION 1kg</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/10/CCCPRODUCTIMAGES-4009-scaled.jpg</image>
+		<category>Coffee</category>
+		<price>25</price>
+		<manufacturer>BEVERAGE WORLD</manufacturer>
+		<stock>86</stock>
+		<rating>5</rating>
+		<description>Premium 100% Arabica coffee blend with an intense and aromatic profile.</description>
+	</item>
+	<item>
+		<id>02-18-012</id>
+		<name>HELL "ENERGY" STRONG FOCUS +20% Caffeine 250ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-317.jpg</image>
+		<category>Energy Drinks</category>
+		<price>0.53</price>
+		<manufacturer>HELL GREECE</manufacturer>
+		<stock>56</stock>
+		<rating>4</rating>
+		<description>Extra-caffeinated energy drink designed to help you focus during intense tasks.</description>
+	</item>
+	<item>
+		<id>06-006-013</id>
+		<name>COINTREAU LIQUEUR 700ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-2115.jpg</image>
+		<category>Liqueur</category>
+		<price>20.15</price>
+		<manufacturer>DIAGEO</manufacturer>
+		<stock>55</stock>
+		<rating>5</rating>
+		<description>Crystal clear orange liqueur used in world-famous cocktails like the Margarita.</description>
+	</item>
+	<item>
+		<id>07-001-114</id>
+		<name>OUZO 200ml MINI Miniature</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-2231.jpg</image>
+		<category>Ouzo</category>
+		<price>3.34</price>
+		<manufacturer>PERNOD RICARD</manufacturer>
+		<stock>32</stock>
+		<rating>4</rating>
+		<description>The classic Ouzo Mini from Mytilene in a small, convenient 200ml bottle.</description>
+	</item>
+	<item>
+		<id>05-004-001</id>
+		<name>ABSOLUT VODKA 700ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-1560.jpg</image>
+		<category>Vodka</category>
+		<price>16.2</price>
+		<manufacturer>PERNOD RICARD</manufacturer>
+		<stock>542</stock>
+		<rating>5</rating>
+		<description>Premium Swedish vodka made exclusively from natural ingredients with no added sugar.</description>
+	</item>
+	<item>
+		<id>04-41-018</id>
+		<name>JULIA GEORGIADI ROSE DRY 500ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-3148-scaled.jpg</image>
+		<category>Rose Wines</category>
+		<price>2.39</price>
+		<manufacturer>GEORGIADIS CANTEEN</manufacturer>
+		<stock>102</stock>
+		<rating>3</rating>
+		<description>A light and crisp dry rose wine, perfect for summer afternoons.</description>
+	</item>
+	<item>
+		<id>05-001-001</id>
+		<name>J&amp;B RARE ORIGINAL SCOTCH WHISKY 700ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-1428.jpg</image>
+		<category>Whisky</category>
+		<price>16.81</price>
+		<manufacturer>PERNOD RICARD</manufacturer>
+		<stock>81</stock>
+		<rating>4</rating>
+		<description>A blend of 42 single malt and grain whiskies for a smooth and complex flavor.</description>
+	</item>
+	<item>
+		<id>07-001-112</id>
+		<name>OUZO 200ml ARVANITI ISIDOROU (Mini)</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-2229-1.jpg</image>
+		<category>Ouzo</category>
+		<price>3.34</price>
+		<manufacturer>CC3E HBC</manufacturer>
+		<stock>14</stock>
+		<rating>5</rating>
+		<description>Traditional Greek Ouzo with a distinct anise aroma from Plomari.</description>
+	</item>
+	<item>
+		<id>03-12-049</id>
+		<name>PILS HELLAS CAN 330ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-530.jpg</image>
+		<category>Lager Beer</category>
+		<price>0.72</price>
+		<manufacturer>TRILIKIS</manufacturer>
+		<stock>7</stock>
+		<rating>3</rating>
+		<description>Value-for-money Greek pilsner beer in a single 330ml can.</description>
+	</item>
+	<item>
+		<id>02-18-013</id>
+		<name>RED BULL 250ml CAN SUGARFREE</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-318.jpg</image>
+		<category>Energy Drinks</category>
+		<price>1.34</price>
+		<manufacturer>DIAGEO</manufacturer>
+		<stock>98</stock>
+		<rating>5</rating>
+		<description>All the wings of Red Bull without the sugar. High-quality energy boost.</description>
+	</item>
+	<item>
+		<id>05-004-043</id>
+		<name>ABSOLUT VODKA MEDIUM 350ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-1583.jpg</image>
+		<category>Vodka</category>
+		<price>9.54</price>
+		<manufacturer>PERNOD RICARD</manufacturer>
+		<stock>22</stock>
+		<rating>4</rating>
+		<description>The standard Absolut Vodka in a medium-sized 350ml bottle.</description>
+	</item>
+	<item>
+		<id>05-005-265</id>
+		<name>GIN VOTANICON GREEK BOTANICALS 700ml (Vol. 40%)</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-1687.jpg</image>
+		<category>Gin</category>
+		<price>27.06</price>
+		<manufacturer>CONCEPTS</manufacturer>
+		<stock>25</stock>
+		<rating>5</rating>
+		<description>Artisanal Greek gin infused with 20 mountain herbs and botanicals.</description>
+	</item>
+	<item>
+		<id>06-002-420</id>
+		<name>VERMOUTH OTTO'S ATHENS 750ml (Vol. 17%)</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-1998.jpg</image>
+		<category>Vermouth</category>
+		<price>16.6</price>
+		<manufacturer>CONCEPTS</manufacturer>
+		<stock>66</stock>
+		<rating>5</rating>
+		<description>Premium Greek vermouth with rose petals, citrus, and vanilla notes.</description>
+	</item>
+	<item>
+		<id>04-055-007</id>
+		<name>ANAMA ROUSSOS 187ml SMALL SWEET RED WINE 187ml (10%)</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-1301.jpg</image>
+		<category>Red Wines</category>
+		<price>4.77</price>
+		<manufacturer>ANAMA ROUSSOS</manufacturer>
+		<stock>148</stock>
+		<rating>4</rating>
+		<description>A sweet dessert wine from the famous Roussos winery in a mini bottle.</description>
+	</item>
+	<item>
+		<id>KK55563</id>
+		<name>WINE BOX VAENI 10LT "TAXIDI" SEMI-SWEET RED</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-3578.jpg</image>
+		<category>Wine Box</category>
+		<price>20.25</price>
+		<manufacturer>VAENI NAOUSSA</manufacturer>
+		<stock>151</stock>
+		<rating>4</rating>
+		<description>Large 10-liter bag-in-box semi-sweet red wine, perfect for events and large groups.</description>
+	</item>
+	<item>
+		<id>04-13-116</id>
+		<name>BIANCONERO DRY RED 187.5ml (INDIVIDUAL)</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-990.jpg</image>
+		<category>Red Wines</category>
+		<price>2.06</price>
+		<manufacturer>KAROULIAS</manufacturer>
+		<stock>119</stock>
+		<rating>4</rating>
+		<description>Individual serving of dry red wine, convenient for a single glass.</description>
+	</item>
+	<item>
+		<id>04-011-252</id>
+		<name>ESTATE HATZIMICHALI POLYVARIETAL WHITE 750ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2025/01/CCCPRODUCTIMAGES-817.jpg</image>
+		<category>White Wines</category>
+		<price>9.85</price>
+		<manufacturer>ESTATE HATZIMICHALI</manufacturer>
+		<stock>63</stock>
+		<rating>5</rating>
+		<description>Elegant multi-variety white wine with floral aromas and a crisp finish.</description>
+	</item>
+	<item>
+		<id>09-81-035</id>
+		<name>FRISKIES DOG DENTALIFE MEDIUM 115gr</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-4053-scaled.jpg</image>
+		<category>DOG FOOD</category>
+		<price>1.63</price>
+		<manufacturer>NESTLE/CPW</manufacturer>
+		<stock>42</stock>
+		<rating>5</rating>
+		<description>Daily oral care snacks for medium dogs to help clean teeth and reduce plaque.</description>
+	</item>
+	<item>
+		<id>06-007-136</id>
+		<name>TSIPOURO 700ml APOSTOLAKI</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-2147.jpg</image>
+		<category>TSIPOURO</category>
+		<price>13.32</price>
+		<manufacturer>OEM</manufacturer>
+		<stock>82</stock>
+		<rating>5</rating>
+		<description>Authentic Greek spirit from Magnesia, known for its balanced and traditional taste.</description>
+	</item>
+	<item>
+		<id>04-92-004</id>
+		<name>LESVOS DAFNIS &amp; CHLOE (INDIVIDUAL) WHITE 187.5ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-1403.jpg</image>
+		<category>White Wines</category>
+		<price>1.99</price>
+		<manufacturer>OINOFOROS</manufacturer>
+		<stock>49</stock>
+		<rating>4</rating>
+		<description>A small bottle of white wine from Lesvos island, perfect for single servings.</description>
+	</item>
+	<item>
+		<id>05-001-005</id>
+		<name>JOHNNIE "RED LABEL" WHISKY 700ml</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2023/11/CCCPRODUCTIMAGES-1431.jpg</image>
+		<category>Whisky</category>
+		<price>18.09</price>
+		<manufacturer>DIAGEO</manufacturer>
+		<stock>936</stock>
+		<rating>5</rating>
+		<description>The world's best-selling Scotch Whisky, known for its bold and smoky character.</description>
+	</item>
+	<item>
+		<id>07-001-426</id>
+		<name>OUZO MINIATURE LINOU</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-2262.jpg</image>
+		<category>OUZO</category>
+		<price>1.4</price>
+		<manufacturer>LINOU/KEFI</manufacturer>
+		<stock>253</stock>
+		<rating>3</rating>
+		<description>Miniature bottle of Ouzo, perfect as a souvenir or for a single taste.</description>
+	</item>
+	<item>
+		<id>05-007-002</id>
+		<name>OLMEGA "REPOSADO" GOLD TEQUILA 700ml (Vol. 38%)</name>
+		<image>https://grigoriouonline.gr/wp-content/uploads/2024/01/CCCPRODUCTIMAGES-1854.jpg</image>
+		<category>Tequila</category>
+		<price>23.23</price>
+		<manufacturer>PERNOD RICARD</manufacturer>
+		<stock>37</stock>
+		<rating>5</rating>
+		<description>Premium aged tequila with a smooth honey finish and woody notes.</description>
+	</item>
+</dataroot>

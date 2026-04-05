@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -23,6 +24,8 @@ interface CartState {
   setItems: (items: CartItem[]) => void
   getTotalPrice: () => number
   getTotalItems: () => number
+  syncCart: () => Promise<void>
+  fetchCart: () => Promise<void>
 }
 
 export const useCartStore = create<CartState>()(
@@ -99,6 +102,39 @@ export const useCartStore = create<CartState>()(
           (acc: number, item: CartItem) => acc + item.quantity,
           0
         ),
+      syncCart: async () => {
+        const items = get().items
+        if (items.length === 0) return
+        try {
+          await fetch('/api/cart/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items }),
+          })
+        } catch (error) {
+          console.log('Failed to sync cart', error)
+        }
+      },
+      fetchCart: async () => {
+        try {
+          const res = await fetch('/api/cart')
+          if (res.ok) {
+            const data = await res.json()
+            const formattedItems = (data.items || []).map((item: any) => ({
+              _id: item.product._id,
+              name: item.product.name,
+              price: item.product.price,
+              image: item.product.image,
+              stock: item.product.stock,
+              quantity: item.quantity,
+            }))
+
+            set({ items: formattedItems })
+          }
+        } catch (error) {
+          console.error('Failed to fetch cart:', error)
+        }
+      },
     }),
     {
       name: 'aegean-cart-storage',

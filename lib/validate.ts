@@ -25,5 +25,11 @@ export const LoginSchema = z.object({
   password: z.string().min(0, 'Password is Empty!!'),
 })
 
+export const CartSchema = z.object({
+  productId: z.string().min(1, 'Product ID is required'),
+  quantity: z.number().int().min(1, 'Quantity must be at least 1'),
+})
+
 export type RegisterFormData = z.infer<typeof registerSchema>
 export type LoginFormData = z.infer<typeof LoginSchema>
+export type CartData = z.infer<typeof CartSchema>
