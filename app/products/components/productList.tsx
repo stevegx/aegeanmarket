@@ -18,10 +18,14 @@ export interface IProduct {
 
 interface ProductListProps {
   currentPage: number
+  category?: string
 }
 
-export default async function ProductList({ currentPage }: ProductListProps) {
-  const { products, totalPages } = await getProducts(currentPage)
+export default async function ProductList({
+  currentPage,
+  category,
+}: ProductListProps) {
+  const { products, totalPages } = await getProducts(currentPage, category)
 
   return (
     <div className="flex flex-col lg:flex-row w-full max-w-360 mx-auto min-h-screen gap-2">

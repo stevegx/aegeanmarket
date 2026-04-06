@@ -11,16 +11,18 @@ export interface IProduct {
   rating: number
   manufacturer?: string
 }
-export default async function getProducts(page: number = 1) {
+export default async function getProducts(page: number = 1, category?: string) {
   const limit = 20
   const skip = (page - 1) * limit
 
   try {
     await connectDB()
-
+    const filter = category
+      ? { category: { $regex: new RegExp(`^${category}$`, 'i') } }
+      : {}
     const [products, total] = await Promise.all([
-      Product.find({}).lean().skip(skip).limit(limit),
-      Product.countDocuments({}),
+      Product.find(filter).lean().skip(skip).limit(limit),
+      Product.countDocuments(filter),
     ])
 
     if (!products || products.length === 0) {
