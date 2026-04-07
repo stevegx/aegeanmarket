@@ -1,5 +1,5 @@
 import connectDB from '@/lib/db'
-import product from '@/models/products'
+import product from '@/models/Products'
 import CategoryButtons from './categoryButtons'
 export default async function FilterCategories() {
   let categories: string[] = []

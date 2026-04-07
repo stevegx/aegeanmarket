@@ -1,4 +1,4 @@
-import Product from '@/models/products'
+import Product from '@/models/Products'
 import connectDB from '@/lib/db'
 import ProductDetails from './ProductDetails'
 
