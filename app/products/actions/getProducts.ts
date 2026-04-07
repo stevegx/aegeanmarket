@@ -1,5 +1,5 @@
 import connectDB from '@/lib/db'
-import Product from '@/models/products'
+import Product from '@/models/Products'
 export interface IProduct {
   _id: string
   name: string
