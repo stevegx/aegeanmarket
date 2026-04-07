@@ -4,7 +4,7 @@ import {
   SidebarGroup,
   SidebarHeader,
 } from '@/components/ui/sidebar'
-import FilterList from './cart/filterList'
+import FilterList from './filterList'
 
 export default async function FilterSideBar() {
   return (

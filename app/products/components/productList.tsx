@@ -19,13 +19,28 @@ export interface IProduct {
 interface ProductListProps {
   currentPage: number
   category?: string
+  maxPrice?: number
+  manufacturers?: string[]
+  minRating?: number
+  onlyInStock?: boolean
 }
 
 export default async function ProductList({
   currentPage,
   category,
+  maxPrice,
+  manufacturers,
+  minRating,
+  onlyInStock,
 }: ProductListProps) {
-  const { products, totalPages } = await getProducts(currentPage, category)
+  const { products, totalPages } = await getProducts({
+    page: currentPage,
+    category,
+    maxPrice,
+    manufacturers,
+    minRating,
+    onlyInStock,
+  })
 
   return (
     <div className="flex flex-col lg:flex-row w-full max-w-360 mx-auto min-h-screen gap-2">
