@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils'
 import Navbar from '@/components/navbar'
 import { getSession } from '@/app/actions/getSession'
 import { CartSyncHandler } from '@/app/products/components/cart/handler/CartSyncHandler'
+import SearchComponent from '@/components/searchcomponents/searchComponent'
+
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 const geistSans = Geist({
@@ -33,7 +35,9 @@ export default async function RootLayout({
       <body
         className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} font-sans min-h-full flex flex-col`}
       >
-        <Navbar initialSession={session} />
+        <Navbar initialSession={session}>
+          <SearchComponent />
+        </Navbar>
         <CartSyncHandler />
         {children}
       </body>

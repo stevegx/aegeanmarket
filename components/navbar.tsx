@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import { Input } from '@base-ui/react/input'
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -16,7 +15,6 @@ import { getSession } from '@/app/actions//getSession'
 import { logoutUser } from '@/app/actions/logoutUser'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuthStore } from '@/app/(auth)/store/useAuthStore'
-
 import CartModal from './cartModal'
 
 interface NavbarProps {
@@ -24,8 +22,9 @@ interface NavbarProps {
     username: string
     userId: string
   } | null
+  children?: React.ReactNode
 }
-export default function Navbar({ initialSession }: NavbarProps) {
+export default function Navbar({ initialSession, children }: NavbarProps) {
   const { isLoggedIn, setLogout, setLogin } = useAuthStore()
   const router = useRouter()
   const pathname = usePathname()
@@ -52,13 +51,7 @@ export default function Navbar({ initialSession }: NavbarProps) {
         />
       </Link>
 
-      <div className="grow max-w-md">
-        <Input
-          placeholder="Search products..."
-          type="search"
-          className="w-full bg-white/10 border-none px-3 py-1.5 rounded text-sm text-white placeholder:text-gray-200 focus:bg-white focus:text-black transition-all outline-none"
-        />
-      </div>
+      <div className="grow max-w-md">{children}</div>
 
       <div className="flex items-center gap-3">
         {!isHydrated ? (

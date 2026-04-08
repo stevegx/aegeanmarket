@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
@@ -9,7 +8,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { useCartStore } from '@/app/products/store/useCartStore'
-import CartItems from './cart components/cartItems'
+import CartItems from './cartcomponents/cartItems'
 
 export default function CartModal() {
   const cartTotalItems = useCartStore((state) => state.getTotalItems())
@@ -19,7 +18,7 @@ export default function CartModal() {
   console.log(cartItems)
   return (
     <Sheet>
-      <SheetTrigger asChild>
+      <SheetTrigger>
         <button
           onClick={cartToggle}
           className="relative flex items-center justify-center w-10 h-10 rounded-full bg-aegean-light/30 hover:cursor-pointer transition-colors pr-1 active:bg-aegean-light"
