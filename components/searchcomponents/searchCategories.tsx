@@ -1,7 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+
 import {
   Sheet,
   SheetClose,
@@ -19,7 +18,7 @@ export default function SearchCategories({ categories }: SearchBarProps) {
     <div>
       <Sheet>
         <SheetTrigger>
-          <div className="inline-flex items-center justify-center rounded-md bg-secondary px-4 py-2 hover:cursor-pointer mb-2 gap-2 text-secondary-foreground hover:bg-secondary/80 h-10">
+          <div className="inline-flex items-center justify-center rounded-md bg-secondary px-3 hover:cursor-pointer  gap-2 text-secondary-foreground hover:bg-secondary/80 h-10">
             <svg
               width="24"
               height="24"
@@ -34,7 +33,9 @@ export default function SearchCategories({ categories }: SearchBarProps) {
               <line x1="3" y1="6" x2="21" y2="6" />
               <line x1="3" y1="18" x2="21" y2="18" />
             </svg>
-            <span className="font-medium">Categories</span>
+            <span className="font-medium text-sm md:block hidden">
+              Categories
+            </span>
           </div>
         </SheetTrigger>
 
@@ -44,13 +45,13 @@ export default function SearchCategories({ categories }: SearchBarProps) {
             <SheetDescription>Select a category</SheetDescription>
           </SheetHeader>
 
-          <div className="flex flex-col gap-2 py-4">
+          <div className="flex flex-col gap-2 py-4 overflow-y-auto">
             {categories.length > 0 ? (
               categories.map((cat) => (
                 <Button
                   key={cat}
                   variant="ghost"
-                  className="justify-start uppercase text-xs hover:cursor-pointer p-2 hover:bg-aegean-dark hover:text-aegean-gray"
+                  className="justify-start uppercase text-xs hover:cursor-pointer p-2 py-4 hover:bg-aegean-dark hover:text-aegean-gray"
                 >
                   {cat}
                 </Button>
