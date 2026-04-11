@@ -10,10 +10,11 @@ interface PageProps {
   searchParams: Promise<{
     page?: string
     category?: string
-    maxPrice?: string // Προσθήκη
-    manufacturer?: string | string[] // Προσθήκη (μπορεί να είναι ένα ή πολλά)
-    minRating?: string // Προσθήκη
-    onlyInStock?: string // Προσθήκη
+    maxPrice?: string
+    manufacturer?: string | string[]
+    minRating?: string
+    onlyInStock?: string
+    q?: string
   }>
 }
 
@@ -26,6 +27,7 @@ export default async function ProductPage({ searchParams }: PageProps) {
   const maxPrice = sParams.maxPrice ? Number(sParams.maxPrice) : undefined
   const minRating = sParams.minRating ? Number(sParams.minRating) : undefined
   const onlyInStock = sParams.onlyInStock === 'true'
+  const searchTerm = sParams.q
 
   // Διαχείριση των manufacturers (αν είναι string το κάνουμε array)
   const manufacturers = Array.isArray(sParams.manufacturer)
@@ -45,6 +47,7 @@ export default async function ProductPage({ searchParams }: PageProps) {
             currentPage={currentPage}
             category={category}
             maxPrice={maxPrice}
+            searchTerm={searchTerm}
             manufacturers={manufacturers}
             minRating={minRating}
             onlyInStock={onlyInStock}

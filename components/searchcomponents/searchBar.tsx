@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -11,14 +11,51 @@ import {
   CommandList,
 } from '@/components/ui/command'
 import SearchCategories from './searchCategories'
-
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 export interface SearchBarProps {
   categories: string[]
 }
 
 export default function SearchBar({ categories }: SearchBarProps) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState<boolean>(false)
+  const [searchInput, setSearchInput] = useState<string>('')
+  const [results, setResults] = useState({
+    products: [] as any[],
+    categories: [] as string[],
+    manufacturer: [] as string[],
+  })
+  const router = useRouter()
+  useEffect(() => {
+    if (searchInput?.length < 2) {
+      if (
+        results.products.length > 0 ||
+        results.categories.length > 0 ||
+        results.manufacturer.length > 0
+      ) {
+        setResults({ products: [], categories: [], manufacturer: [] })
+      }
+      return
+    }
+    const timer = setTimeout(() => {
+      fetch(`/api/quick-search?q=${searchInput}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setResults(data)
+        })
+        .catch((err) => console.error('Search error:', err))
+    }, 300)
+    console.log('TEST: ', results)
+    return () => clearTimeout(timer)
+  }, [searchInput])
 
+  const handleSearch = () => {
+    if (searchInput.length > 2) {
+      router.push(`/products?q=${encodeURIComponent(searchInput)}`)
+      setOpen(false)
+      setSearchInput('')
+    }
+  }
   return (
     <div className="flex flex-col gap-4 ">
       <div className="flex items-center justify-between w-full max-w-2xl mx-auto rounded-2xl bg-[#F3F4F6] shadow-sm border border-transparent focus-within:border-aegean-green/30 focus-within:bg-white focus-within:shadow-md transition-all duration-300 overflow-hidden cursor-pointer">
@@ -55,18 +92,96 @@ export default function SearchBar({ categories }: SearchBarProps) {
       <CommandDialog open={open} onOpenChange={setOpen}>
         <div className="flex justify-around items-baseline">
           <Command shouldFilter={false}>
-            <CommandInput placeholder="Search Products..." />
+            <div className="flex justify-between w-full">
+              <CommandInput
+                placeholder="Search Products..."
+                className="w-full"
+                value={searchInput}
+                onValueChange={(v) => setSearchInput(v)}
+                onSearchIconClick={handleSearch}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    if (searchInput?.length >= 2) {
+                      router.push(
+                        `/products?q=${encodeURIComponent(searchInput)}`
+                      )
+                      setOpen(false)
+                      setSearchInput('')
+                    }
+                  }
+                }}
+              />
+              <SearchCategories categories={categories} />
+            </div>
             <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
-              <CommandGroup heading="Suggestions">
-                <CommandItem>Calendar</CommandItem>{' '}
-                {/* edw tha mpoun ta search results*/}
-                <CommandItem>Search Emoji</CommandItem>
-                <CommandItem>Calculator</CommandItem>
+              <CommandEmpty>No results found for "{searchInput}"</CommandEmpty>
+
+              <CommandGroup heading="Suggestions" className="overflow-y-auto">
+                {results.categories?.length > 0 &&
+                  results.categories.map((category) => (
+                    <CommandItem
+                      key={`category-${category}`}
+                      value={category}
+                      onSelect={() => {
+                        router.push(
+                          `/products?category=${encodeURIComponent(category)}`
+                        )
+                        setSearchInput('')
+                        setOpen(false)
+                      }}
+                    >
+                      <span className="hover:pointer-cursor">{category}</span>
+                    </CommandItem>
+                  ))}
+                {results.manufacturer?.length > 0 &&
+                  results.manufacturer.map((manufacturers) => (
+                    <CommandItem
+                      key={`manufacturer-${manufacturers}`}
+                      value={manufacturers}
+                      onSelect={() => {
+                        router.push(
+                          `/products?manufacturer=${encodeURIComponent(manufacturers)}`
+                        )
+                        setSearchInput('')
+                        setOpen(false)
+                      }}
+                    >
+                      <div>
+                        <span className="hover:pointer-cursor">
+                          {manufacturers}
+                        </span>
+                      </div>
+                    </CommandItem>
+                  ))}
+                {results.products?.length > 0 &&
+                  results.products.map((product) => (
+                    <CommandItem
+                      key={product._id}
+                      value={product.name}
+                      onSelect={() => {
+                        router.push(`/products/${product._id}`)
+                        setSearchInput('')
+                        setOpen(false)
+                      }}
+                    >
+                      <div className="flex justify-around items-center w-full hover:cursor-pointer gap-1">
+                        <Image
+                          src={product.image}
+                          height={60}
+                          width={60}
+                          alt={product.name}
+                          className="aspect-video"
+                        />
+                        <span>{product.name}</span>
+                        <span className="text-gray-400">{product.price}€</span>
+                      </div>
+                    </CommandItem>
+                  ))}
               </CommandGroup>
             </CommandList>
           </Command>
-          <SearchCategories categories={categories} />
         </div>
       </CommandDialog>
     </div>

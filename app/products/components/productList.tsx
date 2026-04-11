@@ -23,6 +23,7 @@ interface ProductListProps {
   manufacturers?: string[]
   minRating?: number
   onlyInStock?: boolean
+  searchTerm?: string
 }
 
 export default async function ProductList({
@@ -32,6 +33,7 @@ export default async function ProductList({
   manufacturers,
   minRating,
   onlyInStock,
+  searchTerm,
 }: ProductListProps) {
   const { products, totalPages } = await getProducts({
     page: currentPage,
@@ -40,6 +42,7 @@ export default async function ProductList({
     manufacturers,
     minRating,
     onlyInStock,
+    searchTerm,
   })
 
   return (

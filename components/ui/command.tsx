@@ -66,8 +66,11 @@ function CommandDialog({
 
 function CommandInput({
   className,
+  onSearchIconClick,
   ...props
-}: React.ComponentProps<typeof CommandPrimitive.Input>) {
+}: React.ComponentProps<typeof CommandPrimitive.Input> & {
+  onSearchIconClick?: () => void
+}) {
   return (
     <div data-slot="command-input-wrapper" className="p-1 pb-0">
       <InputGroup className="h-8! bg-input/20 dark:bg-input/30">
@@ -79,7 +82,10 @@ function CommandInput({
           )}
           {...props}
         />
-        <InputGroupAddon>
+        <InputGroupAddon
+          className="cursor-pointer hover:text-aegean-dark/30 active:text-aegean-dark transition-opacity"
+          onClick={onSearchIconClick}
+        >
           <HugeiconsIcon
             icon={SearchIcon}
             strokeWidth={2}

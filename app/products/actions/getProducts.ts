@@ -15,9 +15,10 @@ interface GetProductsArgs {
   page?: number
   category?: string
   maxPrice?: number
-  manufacturers?: string[] // Πίνακας για πολλαπλά brands
+  manufacturers?: string[]
   minRating?: number
   onlyInStock?: boolean
+  searchTerm?: string
 }
 export default async function getProducts({
   page = 1,
@@ -26,6 +27,7 @@ export default async function getProducts({
   manufacturers,
   minRating,
   onlyInStock,
+  searchTerm,
 }: GetProductsArgs = {}) {
   const limit = 20
   const skip = (page - 1) * limit
@@ -58,6 +60,16 @@ export default async function getProducts({
     // Φίλτρο Stock (Αν είναι true, δείξε μόνο > 0)
     if (onlyInStock) {
       query.stock = { $gt: 0 }
+    }
+
+    // Φίλτρο Αναζήτησης (searchTerm)
+    if (searchTerm) {
+      const searchRegex = new RegExp(searchTerm, 'i')
+      query.$or = [
+        { name: searchRegex },
+        { manufacturer: searchRegex },
+        { category: searchRegex },
+      ]
     }
 
     // 2. Εκτέλεση Query
