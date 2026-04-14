@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
-
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   Sheet,
   SheetClose,
@@ -14,6 +14,21 @@ import {
 import { SearchBarProps } from './searchBar'
 
 export default function SearchCategories({ categories }: SearchBarProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const activeCat = searchParams.get('category')
+
+  const handleFilter = (category: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (activeCat === category) {
+      params.delete('category')
+    } else {
+      params.set('category', category)
+    }
+    params.set('page', '1')
+    router.push(`/products/?${params.toString()}`)
+  }
+
   return (
     <div>
       <Sheet>
@@ -51,7 +66,12 @@ export default function SearchCategories({ categories }: SearchBarProps) {
                 <Button
                   key={cat}
                   variant="ghost"
-                  className="justify-start uppercase text-xs hover:cursor-pointer p-2 py-4 hover:bg-aegean-dark hover:text-aegean-gray"
+                  onClick={() => handleFilter(cat)}
+                  className={`justify-start uppercase text-xs hover:cursor-pointer hover:bg-aegean-green/90 hover:text-white p-2 py-4 ${
+                    activeCat === cat
+                      ? 'bg-aegean-green text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
                 >
                   {cat}
                 </Button>

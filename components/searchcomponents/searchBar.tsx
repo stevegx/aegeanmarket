@@ -116,7 +116,9 @@ export default function SearchBar({ categories }: SearchBarProps) {
               <SearchCategories categories={categories} />
             </div>
             <CommandList>
-              <CommandEmpty>No results found for "{searchInput}"</CommandEmpty>
+              <CommandEmpty>
+                No results found for &quot;{searchInput}&quot;
+              </CommandEmpty>
 
               <CommandGroup heading="Suggestions" className="overflow-y-auto">
                 {results.categories?.length > 0 &&
