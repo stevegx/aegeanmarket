@@ -68,6 +68,8 @@ export default function ProductCard({ product }: ProductProps) {
               className="w-full h-full object-cover grayscale-100"
               width={500}
               height={500}
+              unoptimized={true}
+              loading="lazy"
             />
           </div>
         )}

@@ -15,6 +15,8 @@ const productSchema = new mongoose.Schema({
   sku: { type: String, unique: true },
   manufacturer: String,
   rating: Number,
+  volume: String,
+  origin: String,
 })
 
 const Product =
@@ -33,15 +35,17 @@ async function feedProducts() {
 
     const bulkOps = rawItems.map((item) => {
       const formattedProduct = {
-        sku: item.id[0],
-        name: item.name[0],
-        image: item.image ? item.image[0] : '',
-        category: item.category[0],
-        price: parseFloat(item.price[0]),
-        manufacturer: item.manufacturer ? item.manufacturer[0] : 'Unknown',
-        stock: parseInt(item.stock[0]),
-        description: item.description ? item.description[0] : 'Unknown',
-        rating: parseInt(item.rating[0]),
+        sku: item.id?.[0]?.trim() || `unknown-${Math.random()}`,
+        name: item.name?.[0]?.trim() || 'No Name',
+        image: item.image?.[0]?.trim() || '',
+        category: item.category?.[0]?.trim() || 'Uncategorized',
+        price: Number(item.price?.[0]) || 0,
+        manufacturer: item.manufacturer?.[0]?.trim() || 'Unknown',
+        stock: Number(item.stock?.[0]) || 0,
+        rating: Number(item.rating?.[0]) || 0,
+        description: item.description?.[0]?.trim() || '',
+        origin: item.Origin?.[0]?.trim() || 'Unknown',
+        volume: item.Volume?.[0]?.trim() || 'Unknown',
       }
 
       return {
@@ -56,7 +60,7 @@ async function feedProducts() {
     // 3. Μαζική εγγραφή στη βάση
     const finalResult = await Product.bulkWrite(bulkOps)
     console.log(
-      `New products: ${finalResult.upsertedCount} Updated Products:{finalResult.modifiedCount}`
+      `New products: ${finalResult.upsertedCount} Updated Products: ${finalResult.modifiedCount}`
     )
 
     process.exit(0)

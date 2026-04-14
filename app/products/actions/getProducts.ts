@@ -19,6 +19,8 @@ interface GetProductsArgs {
   minRating?: number
   onlyInStock?: boolean
   searchTerm?: string
+  volume?: string[]
+  origin?: string[]
 }
 export default async function getProducts({
   page = 1,
@@ -28,6 +30,8 @@ export default async function getProducts({
   minRating,
   onlyInStock,
   searchTerm,
+  volume,
+  origin,
 }: GetProductsArgs = {}) {
   const limit = 20
   const skip = (page - 1) * limit
@@ -71,7 +75,14 @@ export default async function getProducts({
         { category: searchRegex },
       ]
     }
-
+    // Φίλτρο για πολλαπλά μεγέθη
+    if (volume && volume.length > 0) {
+      query.volume = { $in: volume }
+    }
+    // Φίλτρο για Προέλευση
+    if (origin && origin.length > 0) {
+      query.origin = { $in: origin }
+    }
     // 2. Εκτέλεση Query
     const [products, total] = await Promise.all([
       Product.find(query).lean().skip(skip).limit(limit),

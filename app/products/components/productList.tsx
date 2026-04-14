@@ -14,6 +14,8 @@ export interface IProduct {
   stock: number
   rating: number
   manufacturer?: string
+  volume?: string
+  origin?: string
 }
 
 interface ProductListProps {
@@ -24,6 +26,8 @@ interface ProductListProps {
   minRating?: number
   onlyInStock?: boolean
   searchTerm?: string
+  volume?: string[]
+  origin?: string[]
 }
 
 export default async function ProductList({
@@ -34,6 +38,8 @@ export default async function ProductList({
   minRating,
   onlyInStock,
   searchTerm,
+  volume,
+  origin,
 }: ProductListProps) {
   const { products, totalPages } = await getProducts({
     page: currentPage,
@@ -43,6 +49,8 @@ export default async function ProductList({
     minRating,
     onlyInStock,
     searchTerm,
+    volume,
+    origin,
   })
 
   return (

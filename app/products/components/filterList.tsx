@@ -8,6 +8,8 @@ interface FilterStats {
   totalStock: number
   maxRating: number
   manufacturers: string[]
+  origin: string[]
+  volume: string[]
 }
 
 export default async function FilterList() {
@@ -18,6 +20,8 @@ export default async function FilterList() {
     totalStock: 0,
     maxRating: 5,
     manufacturers: [],
+    origin: [],
+    volume: [],
   }
 
   try {
@@ -34,6 +38,8 @@ export default async function FilterList() {
             maxPrice: { $max: '$price' },
             totalStock: { $sum: '$stock' },
             maxRating: { $max: '$rating' },
+            uniqueOrigins: { $addToSet: '$origin' },
+            uniqueVolumes: { $addToSet: '$volume' },
           },
         },
       ]),
@@ -46,6 +52,12 @@ export default async function FilterList() {
         totalStock: aggregationResult[0].totalStock || 0,
         maxRating: aggregationResult[0].maxRating || 5,
         manufacturers: (uniqueManufacturers as string[]).filter(Boolean).sort(),
+        origin: (aggregationResult[0].uniqueOrigins as string[])
+          .filter(Boolean)
+          .sort(),
+        volume: (aggregationResult[0].uniqueVolumes as string[])
+          .filter(Boolean)
+          .sort(),
       }
     }
   } catch (error) {
@@ -60,6 +72,8 @@ export default async function FilterList() {
         manufacturers={stats.manufacturers}
         totalStock={stats.totalStock}
         maxRating={stats.maxRating}
+        origin={stats.origin}
+        volume={stats.volume}
       />
     </div>
   )
