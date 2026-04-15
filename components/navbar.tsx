@@ -29,7 +29,6 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [isHydrated, setIsHydrated] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   useEffect(() => {
     const initAuth = async () => {
       const session = await getSession()
@@ -39,7 +38,7 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
     initAuth()
   }, [setLogin, setLogout])
   return (
-    <div className="flex flex-wrap items-center justify-between px-4 md:px-6 py-2 bg-aegean-dark text-aegean-white gap-y-3 shadow-md sticky top-0 h-auto min-h-16 w-full z-50">
+    <div className="flex flex-wrap items-center justify-between px-4 md:px-6 py-2 bg-gray-100/20 text-aegean-dark gap-y-3 shadow-md sticky top-0 h-auto min-h-16 w-full z-50 backdrop-filter backdrop-blur-sm bg-opacity-0">
       {' '}
       <Link href="/" className="shrink-0">
         <Image
@@ -70,7 +69,7 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
           <div className="flex items-center gap-2">
             {!pathname.startsWith('/login') && (
               <Link href="/login">
-                <button className=" text-aegean-white text-md font-bold hover:bg-sky-900 cursor-pointer px-4 py-1.5 rounded">
+                <button className=" text-aegean-dark text-md font-bold bg-aegean-gray/40 hover:bg-aegean-gray  cursor-pointer px-4 py-1.5 rounded">
                   Login
                 </button>
               </Link>
@@ -78,7 +77,7 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
 
             {!pathname.startsWith('/register') && (
               <Link href="/register">
-                <button className=" text-aegean-white text-md font-bold hover:bg-sky-900 cursor-pointer px-4 py-1.5 rounded">
+                <button className=" text-aegean-dark text-md font-bold bg-aegean-gray/40 hover:bg-aegean-gray cursor-pointer px-4 py-1.5 rounded">
                   Register
                 </button>
               </Link>

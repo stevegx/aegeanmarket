@@ -58,7 +58,7 @@ export default function SearchBar({ categories }: SearchBarProps) {
   }
   return (
     <div className="flex flex-col gap-4 ">
-      <div className="flex items-center justify-between w-full max-w-2xl mx-auto rounded-2xl bg-[#F3F4F6] shadow-sm border border-transparent focus-within:border-aegean-green/30 focus-within:bg-white focus-within:shadow-md transition-all duration-300 overflow-hidden cursor-pointer">
+      <div className="flex items-center justify-between w-full max-w-2xl mx-auto rounded-2xl bg-[#F3F4F6] shadow-sm border border-aegean-dark/20 focus-within:border-aegean-green/30 focus-within:bg-white focus-within:shadow-md transition-all duration-300 overflow-hidden cursor-pointer">
         <div className="flex-1 cursor-pointer">
           <Button
             onClick={() => setOpen(true)}
@@ -79,7 +79,7 @@ export default function SearchBar({ categories }: SearchBarProps) {
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
             </svg>
-            <span className="text-gray-400 font-medium text-sm tracking-tight hidden md:block cursor-pointer">
+            <span className="text-aegean-dark font-medium text-sm tracking-tight hidden md:block cursor-pointer">
               Search for products
             </span>
           </Button>

@@ -6,6 +6,7 @@ import Navbar from '@/components/navbar'
 import { getSession } from '@/app/actions/getSession'
 import { CartSyncHandler } from '@/app/products/components/cart/handler/CartSyncHandler'
 import SearchComponent from '@/components/searchcomponents/searchComponent'
+import Footer from '@/components/footer'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -40,6 +41,7 @@ export default async function RootLayout({
         </Navbar>
         <CartSyncHandler />
         {children}
+        <Footer />
       </body>
     </html>
   )
