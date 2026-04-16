@@ -1,5 +1,6 @@
 import Logo from '@/images/aegeanMarketLogo.jpg'
 import Image from 'next/image'
+import Link from 'next/link'
 export default function Footer() {
   return (
     <div className="flex flex-col bg-aegean-dark text-white w-full h-auto p-4 pt-10">
@@ -22,15 +23,24 @@ export default function Footer() {
 
           <div className="flex flex-col">
             <h3 className="font-semibold text-lg pb-2">Store</h3>
-            <h4 className="font-extralight pt-2 hover:text-aegean-green cursor-pointer">
+            <Link
+              href="/aboutus"
+              className="font-extralight pt-2 hover:text-aegean-green cursor-pointer"
+            >
               About us
-            </h4>
-            <h4 className="font-extralight pt-2 hover:text-aegean-green cursor-pointer">
+            </Link>
+            <Link
+              href="/products"
+              className="font-extralight pt-2 hover:text-aegean-green cursor-pointer"
+            >
               Store
-            </h4>
-            <h4 className="font-extralight pt-2 hover:text-aegean-green cursor-pointer">
+            </Link>
+            <Link
+              href="/blog"
+              className="font-extralight pt-2 hover:text-aegean-green cursor-pointer"
+            >
               Blog
-            </h4>
+            </Link>
             <h4 className="font-extralight pt-2 hover:text-aegean-green cursor-pointer">
               Communication
             </h4>
@@ -71,7 +81,6 @@ export default function Footer() {
 
         <hr className="border-t border-gray-50/20 my-8 w-full" />
 
-        {/* Το Copyright πλέον είναι στην ίδια ευθεία με το περιεχόμενο */}
         <div className="flex justify-center md:justify-start w-full">
           <h2 className="text-xs md:text-sm font-semibold opacity-80">
             © Created by Stauros Vetsikas @2026
