@@ -8,7 +8,7 @@ import {
   NavigationMenuContent,
   NavigationMenuList,
 } from './ui/navigation-menu'
-import Logo from '@/images/aegeanMarketLogo.jpg'
+import Logo from '../public/images/aegeanMarketLogo.jpg'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { getSession } from '@/app/actions//getSession'

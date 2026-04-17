@@ -1,4 +1,4 @@
-import Logo from '@/images/aegeanMarketLogo.jpg'
+import Logo from '../public/images/aegeanMarketLogo.jpg'
 import Image from 'next/image'
 import Link from 'next/link'
 export default function Footer() {
@@ -41,9 +41,12 @@ export default function Footer() {
             >
               Blog
             </Link>
-            <h4 className="font-extralight pt-2 hover:text-aegean-green cursor-pointer">
+            <Link
+              href="/communication"
+              className="font-extralight pt-2 hover:text-aegean-green cursor-pointer"
+            >
               Communication
-            </h4>
+            </Link>
           </div>
 
           <div className="flex flex-col">

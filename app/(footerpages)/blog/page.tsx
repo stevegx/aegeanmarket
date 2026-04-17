@@ -38,9 +38,11 @@ export const blogPostData = [
 ] as BlogPostType[]
 export default function BlogPage() {
   return (
-    <div className="flex flex-col gap-6 p-5">
-      <h1 className="text-5xl text-center">Blog</h1>
-      <div className="flex justify-around gap-5 flex-wrap">
+    <div className="flex flex-col gap-6 p-5 mx-auto my-5">
+      <h1 className="text-5xl text-center mb-5 font-bold text-aegean-dark ">
+        Blog
+      </h1>
+      <div className="flex justify-around gap-8 flex-wrap mb-5">
         {blogPostData.map((post) => (
           <BlogPost key={post.id} post={post} />
         ))}
