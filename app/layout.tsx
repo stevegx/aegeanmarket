@@ -40,9 +40,9 @@ export default async function RootLayout({
           <SearchComponent />
         </Navbar>
         <CartSyncHandler />
-        <main className="flex-grow flex flex-col"> {children}</main>
+        <main className="grow flex flex-col"> {children}</main>
 
-        <Footer />
+        <Footer userId={session?.userId ?? null} />
       </body>
     </html>
   )

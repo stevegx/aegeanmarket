@@ -49,7 +49,9 @@ export default function LoginForm() {
         className="flex flex-col shadow-2xl rounded-4xl w-lg p-10 gap-4"
         onSubmit={handleSubmit}
       >
-        <h1 className="flex text-4xl my-5 font-bold justify-center">Login</h1>
+        <h1 className="flex text-4xl my-5 font-bold justify-center text-aegean-dark">
+          Login
+        </h1>
 
         <div className="flex flex-col gap-1">
           <Label htmlFor="loginCredentials">Username / Email</Label>
@@ -73,7 +75,10 @@ export default function LoginForm() {
           />
         </div>
 
-        <Button type="submit" className="w-full mt-2 py-5 font-bold text-lg">
+        <Button
+          type="submit"
+          className="w-full mt-2 py-5 font-bold text-lg text-white"
+        >
           Login
         </Button>
         <p className="text-sm text-center">

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-
+import User from '@/models/User'
 declare global {
   var mongoose:
     | {
@@ -39,6 +39,20 @@ async function connectDB() {
     throw error
   }
   return cached!.conn
+}
+export async function getUserFromDb(id: string) {
+  try {
+    await connectDB()
+    const user = await User.findById(id)
+      .select('-password')
+      .select('-createdAt')
+      .select('-updatedAt')
+      .select('-isActive')
+    return user
+  } catch (error) {
+    console.error('Error fetching user:', error)
+    return null
+  }
 }
 
 export default connectDB

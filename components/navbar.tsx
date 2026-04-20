@@ -38,7 +38,7 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
     initAuth()
   }, [setLogin, setLogout])
   return (
-    <div className="flex flex-wrap items-center justify-between px-4 md:px-6 py-2 bg-gray-100/20 text-aegean-dark gap-y-3 shadow-md sticky top-0 h-auto min-h-16 w-full z-50 backdrop-filter backdrop-blur-sm bg-opacity-0">
+    <div className="flex flex-wrap items-center justify-between gap-x-5 px-4 md:px-6 py-2 bg-gray-100/20 text-aegean-dark gap-y-3 shadow-md sticky top-0 h-auto min-h-16 w-full z-50 backdrop-filter backdrop-blur-sm bg-opacity-0">
       {' '}
       <Link href="/" className="shrink-0">
         <Image
@@ -53,12 +53,14 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
       <div className="order-last md:order-0 w-full md:w-auto md:grow md:max-w-md mx-auto">
         {children}
       </div>
+      <CartModal />
       <div className="flex items-center gap-3">
         {!isHydrated ? (
           <div className="w-20 h-8 bg-white/10 animate-pulse rounded" />
         ) : isLoggedIn && initialSession?.username ? (
           <UserMenu
             name={initialSession.username}
+            userId={initialSession.userId}
             onLogout={async () => {
               await logoutUser()
               setLogout()
@@ -84,8 +86,6 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
             )}
           </div>
         )}
-
-        <CartModal />
       </div>
     </div>
   )
@@ -93,23 +93,25 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
 
 export function UserMenu({
   name,
+  userId,
   onLogout,
 }: {
   name: string
+  userId: string
   onLogout: () => void
 }) {
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="bg-transparent text-white hover:text-aegean-green border-none text-sm px-2">
+          <NavigationMenuTrigger className="bg-transparent text-aegean-dark hover:text-aegean-green border-none text-sm px-2">
             {name}
           </NavigationMenuTrigger>
           <NavigationMenuContent className="bg-white text-aegean-dark rounded-md shadow-xl mt-2 border border-gray-200">
             <ul className="p-2 min-w-35 flex flex-col gap-1">
               <li>
                 <Link
-                  href="/profile"
+                  href={`/profile/${userId}`}
                   className="block px-4 py-2 text-sm hover:bg-gray-100 rounded transition-colors"
                 >
                   Profile

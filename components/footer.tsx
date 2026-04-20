@@ -1,7 +1,11 @@
 import Logo from '../public/images/aegeanMarketLogo.jpg'
 import Image from 'next/image'
 import Link from 'next/link'
-export default function Footer() {
+
+interface FooterProps {
+  userId: string | null
+}
+export default function Footer({ userId }: FooterProps) {
   return (
     <div className="flex flex-col bg-aegean-dark text-white w-full h-auto p-4 pt-10">
       <div className="max-w-7xl mx-auto w-full">
@@ -51,18 +55,30 @@ export default function Footer() {
 
           <div className="flex flex-col">
             <h3 className="font-semibold text-lg pb-2">Useful Information</h3>
-            <h4 className="font-extralight pt-2 hover:text-aegean-green cursor-pointer">
+            <Link
+              href={`/profile/${userId}`}
+              className="font-extralight pt-2 hover:text-aegean-green cursor-pointer"
+            >
               My account
-            </h4>
-            <h4 className="font-extralight pt-2 hover:text-aegean-green cursor-pointer">
+            </Link>
+            <Link
+              href="/payment-methods"
+              className="font-extralight pt-2 hover:text-aegean-green cursor-pointer"
+            >
               Payment Methods
-            </h4>
-            <h4 className="font-extralight pt-2 hover:text-aegean-green cursor-pointer">
+            </Link>
+            <Link
+              href="/shipments"
+              className="font-extralight pt-2 hover:text-aegean-green cursor-pointer"
+            >
               Shipments
-            </h4>
-            <h4 className="font-extralight pt-2 hover:text-aegean-green cursor-pointer">
+            </Link>
+            <Link
+              href="/returns-cancelations"
+              className="font-extralight pt-2 hover:text-aegean-green cursor-pointer"
+            >
               Returns/Cancelations
-            </h4>
+            </Link>
           </div>
 
           <div className="flex flex-col">

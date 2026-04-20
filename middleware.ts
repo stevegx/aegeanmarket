@@ -10,82 +10,88 @@ export async function middleware(request: NextRequest) {
   const authToken = request.cookies.get('auth_token')?.value
   const refreshToken = request.cookies.get('refresh_token')?.value
 
-  // --- 1. ΠΕΡΙΠΤΩΣΗ: ΔΕΝ ΥΠΑΡΧΕΙ AUTH TOKEN ---
-  if (!authToken) {
-    // Αν δεν έχει auth_token αλλά έχει REFRESH, προσπάθησε να βγάλεις νέο
-    if (refreshToken) {
-      try {
-        const { payload } = await jwtVerify(refreshToken, REFRESH_SECRET)
-
-        // Δημιουργία νέου Access Token (15 λεπτά)
-        const newAccessToken = await new SignJWT({
-          userId: payload.userId,
-          username: payload.username, // Σιγουρέψου ότι το έβαλες στο refresh token κατά το login
-          role: payload.role,
-        })
-          .setProtectedHeader({ alg: 'HS256' })
-          .setIssuedAt()
-          .setExpirationTime('15m')
-          .sign(JWT_SECRET)
-
-        // Φτιάχνουμε την απάντηση
-        const response = NextResponse.next()
-
-        // Βάζουμε το νέο cookie
-        response.cookies.set('auth_token', newAccessToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
-          maxAge: 60 * 15,
-          path: '/',
-        })
-
-        // Αν προσπαθεί να μπει σε login/register ενώ μόλις τον κάναμε refresh, στείλτον αρχική
-        if (pathname.startsWith('/login') || pathname.startsWith('/register')) {
-          return NextResponse.redirect(new URL('/', request.url))
-        }
-
-        return response
-      } catch (err) {
-        // Αν και το refresh token είναι άκυρο/ληγμένο
-        if (pathname.startsWith('/admin')) {
-          return NextResponse.redirect(new URL('/login', request.url))
-        }
-      }
+  // --- 1. ΠΡΟΣΠΑΘΕΙΑ VERIFY ΤΟΥ AUTH TOKEN ---
+  let payload = null
+  if (authToken) {
+    try {
+      const verified = await jwtVerify(authToken, JWT_SECRET)
+      payload = verified.payload
+    } catch (err) {
+      payload = null // Έληξε ή είναι άκυρο
     }
-
-    // Αν δεν έχει καθόλου tokens και πάει admin
-    if (pathname.startsWith('/admin')) {
-      return NextResponse.redirect(new URL('/login', request.url))
-    }
-    return NextResponse.next()
   }
 
-  // --- 2. ΠΕΡΙΠΤΩΣΗ: ΥΠΑΡΧΕΙ AUTH TOKEN (Έλεγχος Ρόλων) ---
-  try {
-    const { payload } = await jwtVerify(authToken, JWT_SECRET)
-    const userRole = payload.role as string
+  // --- 2. ΑΝ ΕΙΝΑΙ ΛΗΓΜΕΝΟ ΑΛΛΑ ΕΧΟΥΜΕ REFRESH TOKEN (ΑΝΑΝΕΩΣΗ) ---
+  if (!payload && refreshToken) {
+    try {
+      const { payload: refreshPayload } = await jwtVerify(
+        refreshToken,
+        REFRESH_SECRET
+      )
 
-    if (pathname.startsWith('/register') || pathname.startsWith('/login')) {
-      return NextResponse.redirect(new URL('/', request.url))
-    }
+      const newAccessToken = await new SignJWT({
+        userId: refreshPayload.userId,
+        username: refreshPayload.username,
+        role: refreshPayload.role,
+      })
+        .setProtectedHeader({ alg: 'HS256' })
+        .setIssuedAt()
+        .setExpirationTime('15m')
+        .sign(JWT_SECRET)
 
-    if (pathname.startsWith('/admin') && userRole !== 'admin') {
-      return NextResponse.redirect(new URL('/', request.url))
+      // Δημιουργούμε το response και βάζουμε το ΝΕΟ cookie
+      const response = NextResponse.next()
+      response.cookies.set('auth_token', newAccessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 60 * 15,
+        path: '/',
+      })
+
+      // Αν είναι ήδη συνδεδεμένος και πάει login/register, στείλτον αρχική
+      if (pathname.startsWith('/login') || pathname.startsWith('/register')) {
+        return NextResponse.redirect(new URL('/', request.url))
+      }
+      return response
+    } catch (err) {
+      // Αν και το refresh απέτυχε, καθάρισε τα πάντα
+      const response = NextResponse.next()
+      response.cookies.delete('auth_token')
+      response.cookies.delete('refresh_token')
+      return response
     }
-  } catch (error) {
-    // Αν το token είναι ληγμένο/άκυρο, καθάρισέ το και άσε το επόμενο request
-    // να προσπαθήσει το refresh (ή στείλτον login αν είναι admin)
-    const response = NextResponse.redirect(
-      new URL(pathname.startsWith('/admin') ? '/login' : '/', request.url)
-    )
-    response.cookies.delete('auth_token')
-    return response
+  }
+
+  // --- 3. ΠΡΟΣΤΑΣΙΑ ΔΙΑΔΡΟΜΩΝ (RBAC) ---
+
+  // Αν δεν είναι συνδεδεμένος και πάει Admin
+  if (!payload && pathname.startsWith('/admin')) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  // Αν είναι συνδεδεμένος και πάει Login/Register
+  if (
+    payload &&
+    (pathname.startsWith('/login') || pathname.startsWith('/register'))
+  ) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
+
+  // Αν πάει Admin αλλά δεν είναι Admin
+  if (payload && pathname.startsWith('/admin') && payload.role !== 'admin') {
+    return NextResponse.redirect(new URL('/', request.url))
   }
 
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/login', '/register/:path*'],
+  matcher: [
+    '/admin/:path*',
+    '/login',
+    '/register',
+    '/profile/:path*',
+    '/((?!api|_next/static|_next/image|favicon.ico).*)', // Αυτό τρέχει παντού εκτός από αρχεία
+  ],
 }

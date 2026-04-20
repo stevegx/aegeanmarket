@@ -39,7 +39,7 @@ export default function RegisterPage() {
         className="flex flex-col shadow-2xl rounded-4xl w-lg p-10 gap-4"
         onSubmit={handleSubmit}
       >
-        <h1 className="flex text-4xl my-5 font-bold justify-center">
+        <h1 className="flex text-4xl my-5 font-bold justify-center text-aegean-dark">
           Register
         </h1>
 
