@@ -34,13 +34,13 @@ export default async function RootLayout({
   return (
     <html lang="en" className={cn('h-full', 'antialiased', inter.variable)}>
       <body
-        className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} font-sans min-h-full flex flex-col`}
+        className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} font-sans h-full flex flex-col`}
       >
         <Navbar initialSession={session}>
           <SearchComponent />
         </Navbar>
         <CartSyncHandler />
-        <main className="grow flex flex-col"> {children}</main>
+        <main className="grow flex flex-col pt-20 md:pt-24"> {children}</main>
 
         <Footer userId={session?.userId ?? null} />
       </body>

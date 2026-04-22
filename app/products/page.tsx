@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+import Loading from './loading'
 import ProductList from './components/productList'
 import {
   SidebarProvider,
@@ -23,15 +25,15 @@ interface PageProps {
 export default async function ProductPage({ searchParams }: PageProps) {
   const sParams = await searchParams
 
-  // 1. Προετοιμασία των τιμών για το ProductList
-  const currentPage: number = Number(sParams.page) || 1
-  const category = sParams.category
-  const maxPrice = sParams.maxPrice ? Number(sParams.maxPrice) : undefined
-  const minRating = sParams.minRating ? Number(sParams.minRating) : undefined
-  const onlyInStock = sParams.onlyInStock === 'true'
-  const searchTerm = sParams.q
+  return (
+    <Suspense key={JSON.stringify(sParams)} fallback={<Loading />}>
+      <ProductPageContent sParams={sParams} />
+    </Suspense>
+  )
+}
 
-  // Διαχείριση των manufacturers, volume, origin (αν είναι string το κάνουμε array)
+async function ProductPageContent({ sParams }: { sParams: any }) {
+  const currentPage = Number(sParams.page) || 1
   const manufacturers = Array.isArray(sParams.manufacturer)
     ? sParams.manufacturer
     : sParams.manufacturer
@@ -47,21 +49,23 @@ export default async function ProductPage({ searchParams }: PageProps) {
     : sParams.origin
       ? [sParams.origin]
       : []
+
   return (
     <SidebarProvider>
       <FilterSideBar />
       <SidebarInset className="w-full">
-        <SidebarTrigger className="md:hidden fixed top-35 left-4 z-50 flex h-11 w-auto items-center px-4 gap-2 bg-aegean-green! text-white! shadow-xl hover:cursor-pointer rounded-full border-none transition-transform active:scale-95 after:content-['Filters'] after:text-sm after:font-bold after:ml-1" />
-
+        <SidebarTrigger className="md:hidden fixed top-35 left-4 z-50 flex h-11 w-auto items-center px-4 gap-2 bg-aegean-green! text-white! shadow-xl rounded-full border-none transition-transform active:scale-95 after:content-['Filters'] after:text-sm after:font-bold after:ml-1" />
         <main className="p-4 w-full">
           <ProductList
             currentPage={currentPage}
-            category={category}
-            maxPrice={maxPrice}
-            searchTerm={searchTerm}
+            category={sParams.category}
+            maxPrice={sParams.maxPrice ? Number(sParams.maxPrice) : undefined}
+            searchTerm={sParams.q}
             manufacturers={manufacturers}
-            minRating={minRating}
-            onlyInStock={onlyInStock}
+            minRating={
+              sParams.minRating ? Number(sParams.minRating) : undefined
+            }
+            onlyInStock={sParams.onlyInStock === 'true'}
             volume={volume}
             origin={origin}
           />

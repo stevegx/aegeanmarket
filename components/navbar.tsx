@@ -38,7 +38,7 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
     initAuth()
   }, [setLogin, setLogout])
   return (
-    <div className="flex flex-wrap items-center justify-between gap-x-5 px-4 md:px-6 py-2 bg-gray-100/20 text-aegean-dark gap-y-3 shadow-md sticky top-0 h-auto min-h-16 w-full z-50 backdrop-filter backdrop-blur-sm bg-opacity-0">
+    <div className="fixed top-0 left-0 w-full z-50 flex flex-wrap items-center justify-between gap-x-5 px-4 md:px-6 py-2 bg-white/80 text-aegean-dark shadow-md backdrop-filter backdrop-blur-sm bg-opacity-0">
       {' '}
       <Link href="/" className="shrink-0">
         <Image

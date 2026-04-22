@@ -13,6 +13,7 @@ import {
 import SearchCategories from './searchCategories'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+
 export interface SearchBarProps {
   categories: string[]
 }
@@ -20,12 +21,14 @@ export interface SearchBarProps {
 export default function SearchBar({ categories }: SearchBarProps) {
   const [open, setOpen] = useState<boolean>(false)
   const [searchInput, setSearchInput] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(false) // Loading state για το API
   const [results, setResults] = useState({
     products: [] as any[],
     categories: [] as string[],
     manufacturer: [] as string[],
   })
   const router = useRouter()
+
   useEffect(() => {
     if (searchInput?.length < 2) {
       if (
@@ -35,17 +38,24 @@ export default function SearchBar({ categories }: SearchBarProps) {
       ) {
         setResults({ products: [], categories: [], manufacturer: [] })
       }
+      setIsLoading(false)
       return
     }
+
+    setIsLoading(true) // Ξεκινάει το φόρτωμα
     const timer = setTimeout(() => {
       fetch(`/api/quick-search?q=${searchInput}`)
         .then((res) => res.json())
         .then((data) => {
           setResults(data)
+          setIsLoading(false) // Τελείωσε το φόρτωμα
         })
-        .catch((err) => console.error('Search error:', err))
+        .catch((err) => {
+          console.error('Search error:', err)
+          setIsLoading(false)
+        })
     }, 300)
-    console.log('TEST: ', results)
+
     return () => clearTimeout(timer)
   }, [searchInput])
 
@@ -56,8 +66,9 @@ export default function SearchBar({ categories }: SearchBarProps) {
       setSearchInput('')
     }
   }
+
   return (
-    <div className="flex flex-col gap-4 ">
+    <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between w-full max-w-2xl mx-auto rounded-2xl bg-[#F3F4F6] shadow-sm border border-aegean-dark/20 focus-within:border-aegean-green/30 focus-within:bg-white focus-within:shadow-md transition-all duration-300 overflow-hidden cursor-pointer">
         <div className="flex-1 cursor-pointer">
           <Button
@@ -89,10 +100,11 @@ export default function SearchBar({ categories }: SearchBarProps) {
           <SearchCategories categories={categories} />
         </div>
       </div>
+
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <div className="flex justify-around items-baseline">
+        <div className="flex flex-col">
           <Command shouldFilter={false}>
-            <div className="flex justify-between w-full">
+            <div className="relative flex items-center w-full pr-2">
               <CommandInput
                 placeholder="Search Products..."
                 className="w-full"
@@ -100,87 +112,105 @@ export default function SearchBar({ categories }: SearchBarProps) {
                 onValueChange={(v) => setSearchInput(v)}
                 onSearchIconClick={handleSearch}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    if (searchInput?.length >= 2) {
-                      router.push(
-                        `/products?q=${encodeURIComponent(searchInput)}`
-                      )
-                      setOpen(false)
-                      setSearchInput('')
-                    }
+                  if (e.key === 'Enter' && searchInput?.length >= 2) {
+                    router.push(
+                      `/products?q=${encodeURIComponent(searchInput)}`
+                    )
+                    setOpen(false)
+                    setSearchInput('')
                   }
                 }}
               />
+
               <SearchCategories categories={categories} />
             </div>
+
             <CommandList>
               <CommandEmpty>
-                No results found for &quot;{searchInput}&quot;
+                {isLoading ? (
+                  <div className="absolute right-1/2 top-1/2 -translate-y-1/2 text-aegean-green">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                  </div>
+                ) : (
+                  `No results found for "${searchInput}"`
+                )}
               </CommandEmpty>
 
               <CommandGroup heading="Suggestions" className="overflow-y-auto">
-                {results.categories?.length > 0 &&
-                  results.categories.map((category) => (
-                    <CommandItem
-                      key={`category-${category}`}
-                      value={category}
-                      onSelect={() => {
-                        router.push(
-                          `/products?category=${encodeURIComponent(category)}`
-                        )
-                        setSearchInput('')
-                        setOpen(false)
-                      }}
-                    >
-                      <span className="hover:pointer-cursor">{category}</span>
-                    </CommandItem>
-                  ))}
-                {results.manufacturer?.length > 0 &&
-                  results.manufacturer.map((manufacturers) => (
-                    <CommandItem
-                      key={`manufacturer-${manufacturers}`}
-                      value={manufacturers}
-                      onSelect={() => {
-                        router.push(
-                          `/products?manufacturer=${encodeURIComponent(manufacturers)}`
-                        )
-                        setSearchInput('')
-                        setOpen(false)
-                      }}
-                    >
-                      <div>
-                        <span className="hover:pointer-cursor">
-                          {manufacturers}
-                        </span>
-                      </div>
-                    </CommandItem>
-                  ))}
-                {results.products?.length > 0 &&
-                  results.products.map((product) => (
-                    <CommandItem
-                      key={product._id}
-                      value={product.name}
-                      onSelect={() => {
-                        router.push(`/products/${product._id}`)
-                        setSearchInput('')
-                        setOpen(false)
-                      }}
-                    >
-                      <div className="flex justify-around items-center w-full hover:cursor-pointer gap-1">
+                {results.categories?.map((category) => (
+                  <CommandItem
+                    key={`category-${category}`}
+                    value={category}
+                    onSelect={() => {
+                      router.push(
+                        `/products?category=${encodeURIComponent(category)}`
+                      )
+                      setSearchInput('')
+                      setOpen(false)
+                    }}
+                  >
+                    <span className="hover:pointer-cursor">{category}</span>
+                  </CommandItem>
+                ))}
+
+                {results.manufacturer?.map((m) => (
+                  <CommandItem
+                    key={`manufacturer-${m}`}
+                    value={m}
+                    onSelect={() => {
+                      router.push(
+                        `/products?manufacturer=${encodeURIComponent(m)}`
+                      )
+                      setSearchInput('')
+                      setOpen(false)
+                    }}
+                  >
+                    <span className="hover:pointer-cursor">{m}</span>
+                  </CommandItem>
+                ))}
+
+                {results.products?.map((product) => (
+                  <CommandItem
+                    key={product._id}
+                    value={product.name}
+                    onSelect={() => {
+                      router.push(`/products/${product._id}`)
+                      setSearchInput('')
+                      setOpen(false)
+                    }}
+                  >
+                    <div className="flex justify-between items-center w-full hover:cursor-pointer gap-2">
+                      <div className="flex items-center gap-2">
                         <Image
                           src={product.image}
-                          height={60}
-                          width={60}
+                          height={40}
+                          width={40}
                           alt={product.name}
-                          className="aspect-video"
+                          className="aspect-square object-contain bg-white rounded-md"
                         />
                         <span>{product.name}</span>
-                        <span className="text-gray-400">{product.price}€</span>
                       </div>
-                    </CommandItem>
-                  ))}
+                      <span className="text-aegean-blue font-bold">
+                        {product.price}€
+                      </span>
+                    </div>
+                  </CommandItem>
+                ))}
               </CommandGroup>
             </CommandList>
           </Command>

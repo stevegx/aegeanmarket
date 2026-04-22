@@ -156,7 +156,7 @@ export function QuantityController({
     >
       <Button
         variant="buy"
-        className="font-bold text-xl rounded-xl hover:bg-aegean-light/20"
+        className="font-bold text-xl rounded-xl "
         onClick={() => quantityHandler(product._id, -1)}
       >
         -
@@ -164,7 +164,7 @@ export function QuantityController({
       <span className="font-bold text-lg">{quantity}</span>
       <Button
         variant="buy"
-        className="font-bold text-xl rounded-xl hover:bg-aegean-light/20"
+        className="font-bold text-xl rounded-xl"
         onClick={() => quantityHandler(product._id, +1)}
       >
         +

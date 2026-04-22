@@ -52,10 +52,9 @@ export default async function ProductList({
     volume,
     origin,
   })
-
   return (
     <div className="flex flex-col lg:flex-row w-full max-w-360 mx-auto min-h-screen gap-2">
-      <main className="flex-1 flex flex-col p-4 min-w-0">
+      <main className="flex-1 flex flex-col min-w-0">
         <div className="w-full mb-8">
           <FilterCategories />
         </div>
