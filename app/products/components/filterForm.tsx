@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
-
+import { Slider } from '@/components/ui/slider'
 interface FilterFormProps {
   minPrice: number
   maxPrice: number
@@ -90,14 +90,14 @@ export default function FilterForm({
           />
           <span className="text-xs text-gray-500">Up to {maxPrice}€</span>
         </div>
-        <input
-          type="range"
+        <Slider
           min={minPrice}
           max={maxPrice}
+          step={1}
           value={priceInput}
           onChange={(e) => setPriceInput(e.target.value)}
           onMouseUp={() => updateURL({ maxPrice: priceInput })}
-          className="w-full accent-aegean-green hover:cursor-pointer "
+          className="w-full"
         />
       </div>
 
