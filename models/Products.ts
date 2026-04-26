@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { boolean } from 'zod'
 
 const ProductSchema = new mongoose.Schema(
   {
@@ -12,6 +13,7 @@ const ProductSchema = new mongoose.Schema(
     manufacturer: { type: String, required: false, index: true },
     origin: { type: String, required: false, index: true },
     volume: { type: String, required: false, index: true },
+    isFeatured: { type: Boolean, required: false },
   },
   { timestamps: true }
 )

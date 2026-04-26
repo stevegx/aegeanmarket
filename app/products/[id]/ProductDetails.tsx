@@ -15,15 +15,14 @@ export default function ProductDetails({ product }: { product: PageProduct }) {
 
   return (
     <div className="flex flex-col lg:flex-row p-5 md:p-10 max-w-7xl mx-auto w-full items-center">
-      <div className="w-full flex items-center justify-around rounded-lg p-4">
+      <div className="w-full flex items-center justify-around rounded-lg p-4 aspect-square relative">
         <Image
           src={product.image}
           alt={product.name}
           className="object-contain"
           quality={85}
           priority
-          height={400}
-          width={400}
+          fill
         />
       </div>
 

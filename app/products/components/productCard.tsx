@@ -27,7 +27,7 @@ interface ProductValue {
 interface ProductProps {
   product: ProductValue
 }
-interface QuantityControllerProps {
+export interface QuantityControllerProps {
   product: {
     _id: string
     stock: number
