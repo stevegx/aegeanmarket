@@ -9,6 +9,9 @@ const UserSchema = new mongoose.Schema(
     address: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
     isActive: { type: Boolean, default: true },
+    favorites: [
+      { type: mongoose.Schema.Types.ObjectId, ref: 'Product', default: [] },
+    ],
   },
   { timestamps: true }
 )

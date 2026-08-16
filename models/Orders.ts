@@ -5,8 +5,23 @@ const OrderSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
       index: true,
+    },
+    guestEmail: {
+      type: String,
+      required: function (this: any) {
+        return !this.user
+      },
+      trim: true,
+      lowercase: true,
+    },
+    guestName: {
+      type: String,
+      required: function (this: any) {
+        return !this.user
+      },
+      trim: true,
     },
     items: [
       {
@@ -34,6 +49,11 @@ const OrderSchema = new mongoose.Schema(
       city: { type: String, required: true },
       zipcode: { type: String, required: true },
       country: { type: String, required: true },
+    },
+    paymentMethod: {
+      type: String,
+      enum: ['credit_card', 'iris', 'paypal', 'klarna', 'cod'],
+      required: true,
     },
     paymentStatus: {
       type: String,
