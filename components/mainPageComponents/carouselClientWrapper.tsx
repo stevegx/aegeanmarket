@@ -20,7 +20,7 @@ interface CarouselProps {
 
 export default function CarouselClientWrapper({ products }: CarouselProps) {
   return (
-    <div className="w-full max-h-xl flex justify-center px-10">
+    <div className="w-full max-h-xl flex justify-center px-10 mt-10">
       <Carousel
         opts={{ align: 'start', loop: true }}
         className="w-full max-w-screen"

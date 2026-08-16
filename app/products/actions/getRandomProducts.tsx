@@ -11,7 +11,10 @@ export interface IRandomProduct {
 export default async function getRandomProducts(limit: number = 10) {
   try {
     await connectDB()
-    const products = await Product.aggregate([{ $sample: { size: limit } }])
+    const products = await Product.aggregate([
+      { $sample: { size: limit } },
+      { $project: { name: 1, image: 1 } },
+    ])
     return products.map(
       (product): IRandomProduct => ({
         _id: product._id.toString(),

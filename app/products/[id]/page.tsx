@@ -1,5 +1,6 @@
 import Product from '@/models/Products'
-import connectDB from '@/lib/db'
+import connectDB, { getProductReviews } from '@/lib/db'
+import { getSession } from '@/app/actions/getSession'
 import ProductDetails from './ProductDetails'
 
 export interface PageProduct {
@@ -35,5 +36,16 @@ export default async function Page({
   // Next.js fix: Τα MongoDB objects πρέπει να γίνουν JSON safe
   const product = JSON.parse(JSON.stringify(productRaw))
 
-  return <ProductDetails product={product} />
+  const [reviews, session] = await Promise.all([
+    getProductReviews(id),
+    getSession(),
+  ])
+
+  return (
+    <ProductDetails
+      product={product}
+      reviews={reviews}
+      currentUserId={session?.userId ?? null}
+    />
+  )
 }

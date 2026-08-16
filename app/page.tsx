@@ -10,8 +10,10 @@ import walkerLogo from '@/public/images/walkerLogo.jpg'
 import macallanLogo from '@/public/images/macallanLogo.png'
 
 export default async function mainPage() {
-  const latestProducts = await getLatestProducts(10)
-  const featuredProducts = await getFeaturedProducts(10)
+  const [latestProducts, featuredProducts] = await Promise.all([
+    getLatestProducts(10),
+    getFeaturedProducts(10),
+  ])
 
   return (
     <div className="w-full flex flex-col items-center justify-start overflow-x-hidden bg-white">

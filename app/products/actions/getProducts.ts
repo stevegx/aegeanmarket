@@ -85,7 +85,11 @@ export default async function getProducts({
     }
     // 2. Εκτέλεση Query
     const [products, total] = await Promise.all([
-      Product.find(query).lean().skip(skip).limit(limit),
+      Product.find(query)
+        .select('name description category stock rating price image')
+        .lean()
+        .skip(skip)
+        .limit(limit),
       Product.countDocuments(query),
     ])
 

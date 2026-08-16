@@ -16,6 +16,7 @@ export default async function getLatestProducts(limit: number = 10) {
     await connectDB()
 
     const products = await Product.find({})
+      .select('name image price category stock')
       .sort({ createdAt: -1 })
       .limit(limit)
       .lean()

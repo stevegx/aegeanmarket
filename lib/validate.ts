@@ -52,8 +52,56 @@ export const checkoutSchema = z.object({
   paymentMethod: z.enum(['credit_card', 'iris', 'paypal', 'klarna', 'cod']),
 })
 
+export const updateProfileSchema = z.object({
+  username: z.string().min(3, 'Username must be at least 3 characters long'),
+  email: z.string().email('Invalid email address'),
+  address: z.string().min(3, 'Address must be at least 3 characters long'),
+  phone: z
+    .string()
+    .length(10, 'Phone number must be exactly 10 digits')
+    .regex(/^\d+$/, 'Phone number must contain only digits')
+    .startsWith('69', 'Phone number must start with 69'),
+})
+
+export const reviewSchema = z.object({
+  rating: z.number().int().min(1, 'Rating is required').max(5),
+  text: z
+    .string()
+    .max(1000, 'Review must be at most 1000 characters')
+    .optional()
+    .default(''),
+})
+
+export const replySchema = z.object({
+  text: z
+    .string()
+    .min(1, 'Reply text is required')
+    .max(1000, 'Reply must be at most 1000 characters'),
+})
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Current password is required'),
+    newPassword: z
+      .string()
+      .min(8, 'Password must be at least 8 characters long'),
+    confirmNewPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmNewPassword'],
+  })
+  .refine((data) => data.currentPassword !== data.newPassword, {
+    message: 'New password must be different from the current password',
+    path: ['newPassword'],
+  })
+
 export type RegisterFormData = z.infer<typeof registerSchema>
 export type LoginFormData = z.infer<typeof LoginSchema>
 export type CartData = z.infer<typeof CartSchema>
 export type ShippingAddressData = z.infer<typeof shippingAddressSchema>
 export type CheckoutFormData = z.infer<typeof checkoutSchema>
+export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>
+export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>
+export type ReviewFormData = z.infer<typeof reviewSchema>
+export type ReplyFormData = z.infer<typeof replySchema>

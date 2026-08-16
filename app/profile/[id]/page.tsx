@@ -1,14 +1,22 @@
 import { redirect } from 'next/navigation'
 import { getSession } from '@/app/actions/getSession'
-import { getUserFromDb } from '@/lib/db'
+import {
+  getUserFromDb,
+  getUserOrders,
+  getUserFavorites,
+  getUserReviews,
+} from '@/lib/db'
+import ProfileTabs from './components/ProfileTabs'
 
-import Image from 'next/image'
 export default async function ProfilePage({
   params,
+  searchParams,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ tab?: string }>
 }) {
   const { id } = await params
+  const { tab } = await searchParams
   const session = await getSession()
   if (!session) {
     redirect('/login')
@@ -27,71 +35,31 @@ export default async function ProfilePage({
     redirect('/login')
   }
 
+  const [orders, favorites, reviews] = await Promise.all([
+    getUserOrders(id),
+    getUserFavorites(id),
+    getUserReviews(id),
+  ])
+
   return (
-    <div className="flex flex-col justify-center items-center h-full w-full gap-4">
-      <h1 className="font-bold text-4xl text-center text-aegean-dark mt-10">
+    <div className="flex flex-col items-center w-full px-4 py-10 gap-6">
+      <h1 className="font-bold text-4xl text-center text-aegean-dark">
         Profile
       </h1>
-      <div className="border border-aegean-gray shadow-md w-full h-auto max-w-md p-6 rounded-lg flex flex-col items-center gap-4 m-6 shadow-aegean-green/20">
-        <div className="h-12 w-full relative">
-          <Image
-            src="/images/userDefaultImage.png"
-            alt="User Default Image"
-            fill
-            className="object-contain"
-          />
-        </div>
-        <h2 className="font-bold text-xl">
-          Hello {user.role},{' '}
-          <span className=" text-aegean-dark">{user.username}</span>
-        </h2>
-        <div className="flex flex-col">
-          <label className="pt-2 text-aegean-dark" htmlFor="username">
-            Username:
-          </label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            defaultValue={user.username}
-            className="bg-aegean-gray/50 rounded-md px-2 py-1 focus:ring-1 focus:ring-aegean-terracotta focus:ring-opacity-20 focus:outline-none transition-all"
-            readOnly
-          />
-          <label className="pt-2 text-aegean-dark" htmlFor="email">
-            Email:
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            defaultValue={user.email}
-            className="bg-aegean-gray/50 rounded-md px-2 py-1 focus:ring-1 focus:ring-aegean-terracotta focus:ring-opacity-20 focus:outline-none transition-all"
-            readOnly
-          />
-          <label className="pt-2 text-aegean-dark" htmlFor="address">
-            Address:
-          </label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            defaultValue={user.address}
-            className="bg-aegean-gray/50 rounded-md px-2 py-1 focus:ring-1 focus:ring-aegean-terracotta focus:ring-opacity-20 focus:outline-none transition-all"
-            readOnly
-          />
-          <label className="pt-2 text-aegean-dark" htmlFor="phone">
-            Phone:
-          </label>
-          <input
-            type="text"
-            id="phone"
-            name="phone"
-            defaultValue={user.phone}
-            className="bg-aegean-gray/50 rounded-md px-2 py-1 focus:ring-1 focus:ring-aegean-terracotta focus:ring-opacity-20 focus:outline-none transition-all"
-            readOnly
-          />
-        </div>
-      </div>
+      <ProfileTabs
+        user={{
+          id,
+          username: user.username,
+          email: user.email,
+          address: user.address,
+          phone: user.phone,
+          role: user.role,
+        }}
+        orders={orders}
+        favorites={favorites}
+        reviews={reviews}
+        defaultTab={tab}
+      />
     </div>
   )
 }

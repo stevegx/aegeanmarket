@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useCartStore } from '../store/useCartStore'
+import FavoriteButton from './FavoriteButton'
 import {
   Card,
   CardAction,
@@ -50,25 +51,33 @@ export default function ProductCard({ product }: ProductProps) {
       <Link href={`/products/${product._id}`} className="block h-full">
         {stock > 0 ? (
           <div className="relative aspect-video w-full">
+            <FavoriteButton
+              productId={product._id}
+              className="absolute top-2 right-2 z-10"
+            />
             <Image
               src={(product.image || '').trim().replace(/\s/g, '')}
               alt={product.name}
               fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
               className="object-contain"
             />
           </div>
         ) : (
-          <div className="relative">
+          <div className="relative aspect-video w-full">
+            <FavoriteButton
+              productId={product._id}
+              className="absolute top-2 right-2 z-10"
+            />
             <span className="z-10 absolute text-5xl font-bold text-black top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  text-center">
               OUT OF STOCK
             </span>
             <Image
-              src={product.image}
+              src={(product.image || '').trim().replace(/\s/g, '')}
               alt={product.name}
-              className="w-full h-full object-cover grayscale-100"
-              width={500}
-              height={500}
-              unoptimized={true}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
+              className="object-cover grayscale-100"
               loading="lazy"
             />
           </div>

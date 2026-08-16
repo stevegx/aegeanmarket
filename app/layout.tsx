@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import Navbar from '@/components/navbar'
 import { getSession } from '@/app/actions/getSession'
 import { CartSyncHandler } from '@/app/products/components/cart/handler/CartSyncHandler'
+import { FavoritesSyncHandler } from '@/app/products/components/favorites/handler/FavoritesSyncHandler'
 import SearchComponent from '@/components/searchcomponents/searchComponent'
 import Footer from '@/components/footer'
 
@@ -40,6 +41,7 @@ export default async function RootLayout({
           <SearchComponent />
         </Navbar>
         <CartSyncHandler />
+        <FavoritesSyncHandler />
         <main className="grow flex flex-col md:pt-12 pt-20"> {children}</main>
 
         <Footer userId={session?.userId ?? null} />

@@ -16,6 +16,7 @@ export default async function getFeaturedProducts(limit: number = 10) {
     await connectDB()
 
     const products = await Product.find({ isFeatured: true })
+      .select('name image price category stock')
       .limit(limit)
       .lean()
     return products.map(

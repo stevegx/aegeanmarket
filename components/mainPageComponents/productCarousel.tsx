@@ -78,6 +78,7 @@ export default function ProductCarousel({
                             src={product.image}
                             alt={product.name}
                             className="object-contain p-6 group-hover:scale-105 transition-transform duration-500"
+                            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                             fill
                           />
                         </div>
