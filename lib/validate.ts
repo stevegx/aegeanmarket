@@ -30,6 +30,30 @@ export const CartSchema = z.object({
   quantity: z.number().int().min(1, 'Quantity must be at least 1'),
 })
 
+export const shippingAddressSchema = z.object({
+  street: z.string().min(2, 'Street is required'),
+  number: z.string().min(1, 'Number is required'),
+  city: z.string().min(2, 'City is required'),
+  zipcode: z.string().min(3, 'Zipcode is required'),
+  country: z.string().min(2, 'Country is required'),
+})
+
+export const checkoutSchema = z.object({
+  guestName: z
+    .string()
+    .min(3, 'Full name must be at least 3 characters long')
+    .optional(),
+  guestEmail: z.string().email('Invalid email address').optional(),
+  street: z.string().min(2, 'Street is required'),
+  number: z.string().min(1, 'Number is required'),
+  city: z.string().min(2, 'City is required'),
+  zipcode: z.string().min(3, 'Zipcode is required'),
+  country: z.string().min(2, 'Country is required'),
+  paymentMethod: z.enum(['credit_card', 'iris', 'paypal', 'klarna', 'cod']),
+})
+
 export type RegisterFormData = z.infer<typeof registerSchema>
 export type LoginFormData = z.infer<typeof LoginSchema>
 export type CartData = z.infer<typeof CartSchema>
+export type ShippingAddressData = z.infer<typeof shippingAddressSchema>
+export type CheckoutFormData = z.infer<typeof checkoutSchema>
