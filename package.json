@@ -30,7 +30,7 @@
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.3.1",
-    "next": "^15.3.1",
+    "next": "15.3.8",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "shadcn": "^4.1.0",
