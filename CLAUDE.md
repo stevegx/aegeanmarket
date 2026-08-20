@@ -26,7 +26,7 @@ Requires a `.env.local` with: `NEXT_PUBLIC_APP_URL`, `MONGODB_URI` (plus `MONGOD
 
 ## Architecture
 
-Next.js 15 App Router + React 19, MongoDB via Mongoose, Zustand for client state, Tailwind v4 + shadcn/ui (`components.json`, style `base-mira`, icon library `hugeicons`). Path alias `@/*` → repo root.
+Next.js 16 App Router + React 19, MongoDB via Mongoose, Zustand for client state, Tailwind v4 + shadcn/ui (`components.json`, style `base-mira`, icon library `hugeicons`). Path alias `@/*` → repo root.
 
 ### Data flow: server-first, client stores are a thin sync layer
 
@@ -39,7 +39,7 @@ Cart state has a two-way sync: local optimistic updates in `useCartStore`/`useCa
 ### Auth
 
 JWT-based, cookie-stored (`auth_token` short-lived + `refresh_token`), verified with `jose`. Three layers, each independent:
-- `middleware.ts` — verifies/refreshes the token at the edge for most routes (matcher excludes `api`, `_next/static`, `_next/image`, `favicon.ico`), handles redirects for `/admin`, `/login`, `/register`, `/profile/*`.
+- `proxy.ts` (Next.js 16 renamed Middleware to Proxy; exports `proxy` instead of `middleware`) — verifies/refreshes the token at the edge for most routes (matcher excludes `api`, `_next/static`, `_next/image`, `favicon.ico`), handles redirects for `/admin`, `/login`, `/register`, `/profile/*`.
 - `app/actions/getSession.ts` (`'use server'`) — the source of truth used inside Server Components/Server Actions/API routes to get `{ username, userId }` from the `auth_token` cookie.
 - `app/actions/auth-utils.ts` — lower-level `verifyToken`/`signAccessToken` helpers (used by login/refresh flows).
 
