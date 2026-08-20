@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Notification01Icon } from '@hugeicons/core-free-icons'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import {
   Sheet,
   SheetContent,
@@ -54,19 +55,24 @@ export default function NotificationBell() {
         if (open) markAllRead()
       }}
     >
-      <SheetTrigger>
-        <button className="relative flex items-center justify-center w-10 h-10 rounded-full bg-aegean-light/30 hover:cursor-pointer transition-colors active:bg-aegean-light">
-          <HugeiconsIcon
-            icon={Notification01Icon}
-            strokeWidth={2}
-            className="size-5 text-aegean-dark"
+      <SheetTrigger
+        render={
+          <Button
+            variant="ghost"
+            className="relative size-10 rounded-full bg-aegean-light/30 hover:bg-aegean-light/30 active:bg-aegean-light"
           />
-          {unreadCount > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-aegean-terracotta text-[11px] text-aegean-gray font-bold">
-              {unreadCount}
-            </span>
-          )}
-        </button>
+        }
+      >
+        <HugeiconsIcon
+          icon={Notification01Icon}
+          strokeWidth={2}
+          className="size-5 text-aegean-dark"
+        />
+        {unreadCount > 0 && (
+          <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-aegean-terracotta text-[11px] text-aegean-gray font-bold">
+            {unreadCount}
+          </span>
+        )}
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
@@ -74,7 +80,7 @@ export default function NotificationBell() {
         </SheetHeader>
         <div className="flex flex-col overflow-y-auto w-full h-full px-6 gap-3">
           {notifications.length === 0 ? (
-            <p className="text-sm text-gray-500">Δεν έχεις ειδοποιήσεις.</p>
+            <p className="text-sm text-muted-foreground">Δεν έχεις ειδοποιήσεις.</p>
           ) : (
             notifications.map((notification) => (
               <Link
@@ -94,7 +100,7 @@ export default function NotificationBell() {
                 <span className="text-aegean-dark">
                   {notificationText(notification)}
                 </span>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-muted-foreground">
                   {formatDate(notification.createdAt)}
                 </span>
               </Link>

@@ -1,8 +1,9 @@
 import { QuantityController } from '@/app/products/components/productCard'
 import { useCartStore } from '@/app/products/store/useCartStore'
-import Image from 'next/image'
+import ProductImage from '@/components/productImage'
 import Link from 'next/link'
 import { SheetClose } from '@/components/ui/sheet'
+import { Button } from '@/components/ui/button'
 type CartItem = {
   _id: string
   name: string
@@ -24,8 +25,8 @@ export default function CartItems({ item }: CartItemsProps) {
           className="flex items-center gap-4 sm:grid sm:grid-cols-5 sm:gap-3 hover:opacity-80 transition-opacity"
         >
           <div className="sm:col-span-2 flex justify-center shrink-0">
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border border-gray-100 bg-white">
-              <Image
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border border-border bg-white">
+              <ProductImage
                 src={item.image}
                 alt={item.name}
                 fill
@@ -38,14 +39,14 @@ export default function CartItems({ item }: CartItemsProps) {
             <h1 className="font-bold text-sm sm:text-xs md:text-sm leading-tight text-aegean-dark uppercase tracking-tight line-clamp-2">
               {item.name}
             </h1>
-            <span className="sm:hidden text-xs text-gray-500 mt-1">
+            <span className="sm:hidden text-xs text-muted-foreground mt-1">
               {item.price.toFixed(2)}€ / μονάδα
             </span>
           </div>
         </Link>
       </SheetClose>
 
-      <div className="flex items-center justify-between w-full sm:col-span-7 gap-2 mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-none border-gray-100">
+      <div className="flex items-center justify-between w-full sm:col-span-7 gap-2 mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-none border-border">
         <div className="flex-1 sm:col-span-3 flex justify-center">
           <QuantityController
             product={item as CartItem}
@@ -54,7 +55,7 @@ export default function CartItems({ item }: CartItemsProps) {
         </div>
 
         <div className="flex-1 sm:col-span-2 text-center sm:text-right">
-          <p className="text-[10px] uppercase text-gray-400 font-medium sm:hidden">
+          <p className="text-[10px] uppercase text-muted-foreground font-medium sm:hidden">
             Σύνολο
           </p>
           <h3 className="font-bold text-base sm:text-sm text-aegean-dark">
@@ -63,16 +64,17 @@ export default function CartItems({ item }: CartItemsProps) {
         </div>
 
         <div className="sm:col-span-2 flex justify-end">
-          <button
+          <Button
+            variant="destructive"
+            size="icon-lg"
             onClick={(e) => {
               e.preventDefault()
               removeCartItem(item._id)
             }}
-            className="p-2.5 text-red-500 bg-red-50 rounded-xl hover:bg-red-500 hover:text-white active:scale-95 transition-all shadow-sm hover:cursor-pointer"
             aria-label="Remove item"
           >
             <svg
-              className="w-5 h-5 sm:w-4 sm:h-4"
+              className="size-5 sm:size-4"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -80,7 +82,7 @@ export default function CartItems({ item }: CartItemsProps) {
             >
               <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
             </svg>
-          </button>
+          </Button>
         </div>
       </div>
     </div>

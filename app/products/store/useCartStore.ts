@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -9,6 +8,17 @@ type CartItem = {
   quantity: number
   stock: number
   image: string
+}
+
+type FetchedCartItem = {
+  quantity: number
+  product: {
+    _id: string
+    name: string
+    price: number
+    image: string
+    stock: number
+  }
 }
 
 interface CartState {
@@ -119,8 +129,8 @@ export const useCartStore = create<CartState>()(
         try {
           const res = await fetch('/api/cart')
           if (res.ok) {
-            const data = await res.json()
-            const formattedItems = (data.items || []).map((item: any) => ({
+            const data: { items?: FetchedCartItem[] } = await res.json()
+            const formattedItems = (data.items || []).map((item) => ({
               _id: item.product._id,
               name: item.product.name,
               price: item.product.price,

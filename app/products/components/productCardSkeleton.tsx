@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export function ProductCardSkeleton() {
   return (
-    <Card className="mx-auto w-full h-auto overflow-hidden max-w-sm pt-0 my-10 flex flex-col border-gray-100">
+    <Card className="mx-auto w-full h-auto overflow-hidden max-w-sm pt-0 my-10 flex flex-col border-border">
       <Skeleton className="aspect-video w-full rounded-none" />
 
       <CardHeader className="flex-none p-5 pb-2">

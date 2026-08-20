@@ -1,5 +1,5 @@
 import BlogPost from '@/app/(footerpages)/blog/blogPost'
-import { blogPostData } from '@/app/(footerpages)/blog/page'
+import { blogPostData } from '@/app/(footerpages)/blog/blogPostData'
 export default function BlogSection() {
   return (
     <div className="flex flex-col items-center">

@@ -67,9 +67,9 @@ export const reviewSchema = z.object({
   rating: z.number().int().min(1, 'Rating is required').max(5),
   text: z
     .string()
-    .max(1000, 'Review must be at most 1000 characters')
-    .optional()
-    .default(''),
+    .trim()
+    .min(1, 'Review text is required')
+    .max(1000, 'Review must be at most 1000 characters'),
 })
 
 export const replySchema = z.object({

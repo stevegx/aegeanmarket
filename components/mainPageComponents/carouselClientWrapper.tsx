@@ -10,7 +10,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
-import Image from 'next/image'
+import ProductImage from '@/components/productImage'
 import Link from 'next/link'
 import { IRandomProduct } from '@/app/products/actions/getRandomProducts'
 
@@ -38,7 +38,7 @@ export default function CarouselClientWrapper({ products }: CarouselProps) {
               <Link href={`/products/${product._id}`}>
                 <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
                   <CardContent className="flex aspect-video max-h-120 items-center justify-center p-0 relative">
-                    <Image
+                    <ProductImage
                       src={product.image}
                       alt={product.name}
                       fill

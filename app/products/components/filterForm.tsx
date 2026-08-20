@@ -17,7 +17,9 @@ export default function FilterForm({
   minPrice,
   maxPrice,
   manufacturers,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- reserved for a future stock filter UI
   totalStock,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- reserved for a future rating filter UI
   maxRating,
   origin,
   volume,
@@ -88,7 +90,7 @@ export default function FilterForm({
             onBlur={() => updateURL({ maxPrice: priceInput })}
             className="w-20 p-1 border rounded text-sm hover:cursor-pointer "
           />
-          <span className="text-xs text-gray-500">Up to {maxPrice}€</span>
+          <span className="text-xs text-muted-foreground">Up to {maxPrice}€</span>
         </div>
         <Slider
           min={minPrice}
@@ -103,7 +105,7 @@ export default function FilterForm({
 
       {/* 2. RATING (Κάθετη διάταξη με αστεράκια) */}
       <div className="space-y-3">
-        <h4 className="font-bold text-sm uppercase text-gray-700 tracking-wider">
+        <h4 className="font-bold text-sm uppercase text-muted-foreground tracking-wider">
           Βαθμολογία
         </h4>
         <div className="flex flex-col gap-1">
@@ -120,7 +122,7 @@ export default function FilterForm({
                     minRating: isSelected ? null : starCount.toString(),
                   })
                 }
-                className={`flex items-center gap-3 p-2 rounded-md transition-all group hover:bg-gray-50 hover:cursor-pointer ${
+                className={`flex items-center gap-3 p-2 rounded-md transition-all group hover:bg-muted hover:cursor-pointer ${
                   isSelected
                     ? 'bg-aegean-green/10 ring-1 ring-aegean-green/30'
                     : ''
@@ -131,7 +133,7 @@ export default function FilterForm({
                     <span
                       key={index}
                       className={`text-lg transition-colors ${
-                        index <= starCount ? 'text-yellow-400' : 'text-gray-200'
+                        index <= starCount ? 'text-yellow-400' : 'text-muted'
                       }`}
                     >
                       ★
@@ -184,13 +186,13 @@ export default function FilterForm({
       {/* 5. ORIGIN */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <h4 className="font-bold text-sm uppercase text-gray-700 tracking-wider">
+          <h4 className="font-bold text-sm uppercase text-muted-foreground tracking-wider">
             Προέλευση
           </h4>
           {searchParams.get('origin') && (
             <button
               onClick={() => updateURL({ origin: null })}
-              className="text-[10px] text-red-500 hover:underline cursor-pointer font-medium"
+              className="text-[10px] text-destructive hover:underline cursor-pointer font-medium"
             >
               Clear
             </button>
@@ -208,17 +210,17 @@ export default function FilterForm({
                 name="origin-group"
                 checked={searchParams.get('origin') === o}
                 onChange={() => handleOriginSelect(o)}
-                className="w-3.5 h-3.5 
-                       text-aegean-green 
-                       border-gray-300 
-                       focus:ring-aegean-green/30 
+                className="w-3.5 h-3.5
+                       text-aegean-green
+                       border-border
+                       focus:ring-aegean-green/30
                        cursor-pointer"
               />
               <span
                 className={`transition-colors ${
                   searchParams.get('origin') === o
                     ? 'text-aegean-green font-bold'
-                    : 'text-gray-600 hover:text-aegean-green'
+                    : 'text-muted-foreground hover:text-aegean-green'
                 }`}
               >
                 {o}
@@ -242,7 +244,7 @@ export default function FilterForm({
                 className={`px-3 py-1 text-xs rounded-full border transition-all ${
                   isSelected
                     ? 'bg-aegean-green text-white border-aegean-green'
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-aegean-green'
+                    : 'bg-white text-muted-foreground border-border hover:border-aegean-green'
                 }`}
               >
                 {v}

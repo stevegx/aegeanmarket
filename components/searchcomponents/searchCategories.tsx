@@ -103,7 +103,7 @@ export default function SearchCategories({ categories }: SearchBarProps) {
                 return (
                   <div
                     key={cat}
-                    className="rounded-md overflow-hidden border border-gray-100"
+                    className="rounded-md overflow-hidden border border-border"
                   >
                     <div className="flex items-stretch">
                       <Button
@@ -113,7 +113,7 @@ export default function SearchCategories({ categories }: SearchBarProps) {
                         className={`flex-1 justify-between uppercase text-xs hover:cursor-pointer p-2 py-6 rounded-none ${
                           isCatActive
                             ? 'bg-aegean-green text-white'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                         }`}
                       >
                         <span className="truncate">{cat}</span>
@@ -154,7 +154,7 @@ export default function SearchCategories({ categories }: SearchBarProps) {
                           className={`px-3 flex items-center justify-center hover:cursor-pointer transition-colors ${
                             isCatActive
                               ? 'bg-aegean-green text-white'
-                              : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                              : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                           }`}
                         >
                           <svg
@@ -190,7 +190,7 @@ export default function SearchCategories({ categories }: SearchBarProps) {
                               className={`rounded-full text-xs px-3 py-4 hover:cursor-pointer ${
                                 isSubActive
                                   ? 'bg-aegean-dark text-white'
-                                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                               }`}
                             >
                               {sub.label}

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import ProductImage from '@/components/productImage'
 import StarRating from '@/app/products/components/reviews/StarRating'
 
 export interface UserReviewData {
@@ -43,7 +43,7 @@ export default function ReviewsTab({ reviews }: { reviews: UserReviewData[] }) {
                 className="flex items-center gap-3 group"
               >
                 <div className="relative size-10 shrink-0 rounded-md overflow-hidden bg-aegean-gray/30">
-                  <Image
+                  <ProductImage
                     src={review.product.image}
                     alt={review.product.name}
                     fill
@@ -55,11 +55,11 @@ export default function ReviewsTab({ reviews }: { reviews: UserReviewData[] }) {
                 </span>
               </Link>
             ) : (
-              <span className="font-semibold text-sm text-gray-400">
+              <span className="font-semibold text-sm text-muted-foreground">
                 Το προϊόν δεν υπάρχει πια
               </span>
             )}
-            <span className="text-xs text-gray-400 shrink-0">
+            <span className="text-xs text-muted-foreground shrink-0">
               {new Date(review.createdAt).toLocaleDateString('el-GR', {
                 year: 'numeric',
                 month: 'long',
@@ -77,7 +77,7 @@ export default function ReviewsTab({ reviews }: { reviews: UserReviewData[] }) {
             </span>
           )}
 
-          <p className="text-sm text-gray-700 whitespace-pre-wrap">
+          <p className="text-sm text-foreground whitespace-pre-wrap">
             {review.text}
           </p>
         </div>

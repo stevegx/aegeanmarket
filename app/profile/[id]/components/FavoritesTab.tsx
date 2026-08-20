@@ -23,7 +23,7 @@ export default function FavoritesTab({
         <p className="text-lg font-semibold text-aegean-dark">
           Δεν έχεις προσθέσει αγαπημένα προϊόντα ακόμα.
         </p>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           Πάτησε την καρδούλα σε ένα προϊόν για να το αποθηκεύσεις εδώ.
         </p>
         <Link

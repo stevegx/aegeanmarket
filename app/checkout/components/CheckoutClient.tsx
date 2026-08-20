@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useSyncExternalStore } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
+import ProductImage from '@/components/productImage'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { QuantityController } from '@/app/products/components/productCard'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -39,11 +40,17 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
   const router = useRouter()
 
   const items = useCartStore((state) => state.items)
-  const updateQuantity = useCartStore((state) => state.updateQuantity)
   const removeItem = useCartStore((state) => state.removeItem)
   const totalPrice = useCartStore((state) => state.getTotalPrice())
 
-  const [hasHydrated, setHasHydrated] = useState(false)
+  // useCartStore.persist must only be read client-side (never during
+  // render/SSR), so we go through useSyncExternalStore with a `false`
+  // server snapshot instead of touching it in a useState initializer.
+  const hasHydrated = useSyncExternalStore(
+    (onStoreChange) => useCartStore.persist.onFinishHydration(onStoreChange),
+    () => useCartStore.persist.hasHydrated(),
+    () => false
+  )
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodValue | ''>(
     ''
   )
@@ -69,19 +76,6 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
     paymentMethod === 'iris' ||
     paymentMethod === 'paypal' ||
     paymentMethod === 'klarna'
-
-  // Zustand's persist middleware rehydrates from localStorage after mount,
-  // so we wait for it before trusting `items` (avoids a false "empty cart" flash).
-  useEffect(() => {
-    if (useCartStore.persist.hasHydrated()) {
-      setHasHydrated(true)
-      return
-    }
-    const unsubscribe = useCartStore.persist.onFinishHydration(() =>
-      setHasHydrated(true)
-    )
-    return unsubscribe
-  }, [])
 
   useEffect(() => {
     if (hasHydrated && items.length === 0) {
@@ -159,7 +153,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
   if (!hasHydrated) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <span className="text-gray-400">Loading your cart...</span>
+        <span className="text-muted-foreground">Loading your cart...</span>
       </div>
     )
   }
@@ -170,11 +164,11 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
         <h1 className="text-2xl font-bold text-aegean-dark">
           Your cart is empty
         </h1>
-        <p className="text-gray-500">
+        <p className="text-muted-foreground">
           Add some products to your cart before checking out.
         </p>
         <Link href="/products">
-          <Button variant="buy" className="px-6 py-5 font-bold">
+          <Button variant="buy" className="px-6 py-5 font-bold text-lg">
             Browse Products
           </Button>
         </Link>
@@ -183,7 +177,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
   }
 
   return (
-    <div className="max-w-6xl mx-auto w-full px-4 py-8 md:py-10">
+    <div className="max-w-7xl mx-auto w-full px-5 md:px-10 py-8 md:py-10">
       <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark mb-8 text-center md:text-left">
         Checkout
       </h1>
@@ -332,7 +326,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
                   className="flex items-center gap-3 py-3 first:pt-0 last:pb-0"
                 >
                   <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md border border-border bg-white">
-                    <Image
+                    <ProductImage
                       src={item.image}
                       alt={item.name}
                       fill
@@ -346,29 +340,10 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
                     <span className="text-xs text-muted-foreground">
                       {item.price.toFixed(2)}€ / unit
                     </span>
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => updateQuantity(item._id, -1)}
-                        disabled={item.quantity <= 1}
-                        aria-label={`Decrease quantity of ${item.name}`}
-                        className="flex h-6 w-6 items-center justify-center rounded border border-border font-bold text-aegean-dark hover:bg-aegean-gray/60 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                      >
-                        −
-                      </button>
-                      <span className="w-4 text-center text-sm font-bold">
-                        {item.quantity}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => updateQuantity(item._id, 1)}
-                        disabled={item.quantity >= item.stock}
-                        aria-label={`Increase quantity of ${item.name}`}
-                        className="flex h-6 w-6 items-center justify-center rounded border border-border font-bold text-aegean-dark hover:bg-aegean-gray/60 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                      >
-                        +
-                      </button>
-                    </div>
+                    <QuantityController
+                      product={item}
+                      className="w-fit gap-1 px-1.5 py-1"
+                    />
                   </div>
                   <div className="flex flex-col items-end gap-2 shrink-0">
                     <span className="text-sm font-bold text-aegean-dark">
@@ -377,7 +352,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
                     <button
                       type="button"
                       onClick={() => removeItem(item._id)}
-                      className="text-xs font-medium text-red-500 hover:underline cursor-pointer"
+                      className="text-xs font-medium text-destructive hover:underline cursor-pointer"
                     >
                       Remove
                     </button>

@@ -12,7 +12,14 @@ import {
 } from '@/components/ui/command'
 import SearchCategories from './searchCategories'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
+import ProductImage from '@/components/productImage'
+
+interface SearchProduct {
+  _id: string
+  name: string
+  image: string
+  price: number
+}
 
 export interface SearchBarProps {
   categories: string[]
@@ -23,7 +30,7 @@ export default function SearchBar({ categories }: SearchBarProps) {
   const [searchInput, setSearchInput] = useState<string>('')
   const [isLoading, setIsLoading] = useState(false) // Loading state για το API
   const [results, setResults] = useState({
-    products: [] as any[],
+    products: [] as SearchProduct[],
     categories: [] as string[],
     manufacturer: [] as string[],
   })
@@ -31,13 +38,9 @@ export default function SearchBar({ categories }: SearchBarProps) {
 
   useEffect(() => {
     if (searchInput?.length < 2) {
-      if (
-        results.products.length > 0 ||
-        results.categories.length > 0 ||
-        results.manufacturer.length > 0
-      ) {
-        setResults({ products: [], categories: [], manufacturer: [] })
-      }
+      // Clears results left over from the previous (longer) query.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setResults({ products: [], categories: [], manufacturer: [] })
       setIsLoading(false)
       return
     }
@@ -85,7 +88,7 @@ export default function SearchBar({ categories }: SearchBarProps) {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="text-gray-500 cursor-pointer"
+              className="text-muted-foreground cursor-pointer"
             >
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
@@ -196,7 +199,7 @@ export default function SearchBar({ categories }: SearchBarProps) {
                   >
                     <div className="flex justify-between items-center w-full hover:cursor-pointer gap-2">
                       <div className="flex items-center gap-2">
-                        <Image
+                        <ProductImage
                           src={product.image}
                           height={40}
                           width={40}

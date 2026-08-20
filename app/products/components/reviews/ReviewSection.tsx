@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { ThumbsUpIcon } from '@hugeicons/core-free-icons'
 import { cn } from '@/lib/utils'
@@ -10,7 +9,6 @@ import { deleteReply } from '@/app/actions/deleteReply'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import StarRating from './StarRating'
-import ReviewCommentForm from './ReviewCommentForm'
 import { ReviewData } from './types'
 
 function formatDate(date: string) {
@@ -22,25 +20,16 @@ function formatDate(date: string) {
 }
 
 export default function ReviewSection({
-  productId,
   reviews,
   currentUserId,
   isLoggedIn,
-  onReviewSaved,
   onReplyAdded,
   onReplyDeleted,
   onToggleLike,
 }: {
-  productId: string
   reviews: ReviewData[]
   currentUserId: string | null
   isLoggedIn: boolean
-  onReviewSaved: (review: {
-    _id: string
-    rating: number
-    text: string
-    createdAt: string
-  }) => void
   onReplyAdded: (reply: ReviewData) => void
   onReplyDeleted: (id: string) => void
   onToggleLike: (id: string) => void
@@ -57,36 +46,14 @@ export default function ReviewSection({
       return acc
     }, {})
 
-  const myReview =
-    (currentUserId && topLevel.find((r) => r.user._id === currentUserId)) ||
-    null
-
   return (
     <div className="max-w-7xl mx-auto w-full px-5 md:px-10 py-10 flex flex-col gap-6">
       <h2 className="font-bold text-2xl text-aegean-dark">
         Κριτικές {topLevel.length > 0 && `(${topLevel.length})`}
       </h2>
 
-      {isLoggedIn && currentUserId ? (
-        <ReviewCommentForm
-          productId={productId}
-          myReview={myReview}
-          onSaved={onReviewSaved}
-        />
-      ) : (
-        <div className="border border-aegean-gray rounded-lg p-4 text-sm text-gray-600">
-          <Link
-            href="/login"
-            className="text-aegean-terracotta font-medium hover:underline"
-          >
-            Συνδέσου
-          </Link>{' '}
-          για να αφήσεις κριτική.
-        </div>
-      )}
-
       {topLevel.length === 0 ? (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           Δεν υπάρχουν κριτικές ακόμα. Γίνε ο πρώτος!
         </p>
       ) : (
@@ -144,11 +111,11 @@ function ReviewItem({
           </span>
           <StarRating rating={review.rating ?? 0} size="size-3.5" />
         </div>
-        <span className="text-xs text-gray-400 shrink-0">
+        <span className="text-xs text-muted-foreground shrink-0">
           {formatDate(review.createdAt)}
         </span>
       </div>
-      <p className="text-sm text-gray-700 mt-1 whitespace-pre-wrap">
+      <p className="text-sm text-foreground mt-1 whitespace-pre-wrap">
         {review.text}
       </p>
       <div className="flex items-center gap-4 mt-2">
@@ -160,7 +127,7 @@ function ReviewItem({
               'flex items-center gap-1 text-xs font-medium cursor-pointer transition-colors',
               isLiked
                 ? 'text-aegean-terracotta'
-                : 'text-gray-500 hover:text-aegean-terracotta'
+                : 'text-muted-foreground hover:text-aegean-terracotta'
             )}
           >
             <HugeiconsIcon
@@ -192,11 +159,11 @@ function ReviewItem({
                 <span className="font-semibold text-sm text-aegean-dark">
                   {reply.user.username}
                 </span>
-                <span className="text-xs text-gray-400 shrink-0">
+                <span className="text-xs text-muted-foreground shrink-0">
                   {formatDate(reply.createdAt)}
                 </span>
               </div>
-              <p className="text-sm text-gray-700 mt-0.5">
+              <p className="text-sm text-foreground mt-0.5">
                 {reply.mentionedUser && (
                   <span className="text-aegean-terracotta font-medium">
                     @{reply.mentionedUser.username}{' '}
@@ -226,7 +193,7 @@ function ReviewItem({
                       const result = await deleteReply(reply._id)
                       if (result.success) onReplyDeleted(reply._id)
                     }}
-                    className="text-xs font-medium text-red-500 hover:underline cursor-pointer"
+                    className="text-xs font-medium text-destructive hover:underline cursor-pointer"
                   >
                     Διαγραφή
                   </button>
@@ -287,7 +254,9 @@ function ReplyForm({
         maxLength={1000}
         className="text-sm"
       />
-      {error && <p className="text-xs text-destructive">{error}</p>}
+      {error && (
+        <p className="text-xs font-semibold text-aegean-green">{error}</p>
+      )}
       <div className="flex items-center gap-2 self-end">
         <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
           Άκυρο

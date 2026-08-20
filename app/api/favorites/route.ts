@@ -15,7 +15,7 @@ export async function GET() {
         id.toString()
       ),
     })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

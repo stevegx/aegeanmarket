@@ -1,9 +1,15 @@
 'use client'
-import { blogPostData } from '../page'
+import { use } from 'react'
+import { blogPostData } from '../blogPostData'
 import Image from 'next/image'
 import Link from 'next/link'
-export default function BlogPostPage({ params }: { params: { id: string } }) {
-  const post = blogPostData.find((p) => p.id === parseInt(params.id))
+export default function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = use(params)
+  const post = blogPostData.find((p) => p.id === parseInt(id))
   if (!post) {
     return (
       <div className="grow flex justify-center items-center text-7xl font-bold uppercase tracking-tighter">
@@ -14,7 +20,7 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
   return (
     <div>
       <Link href="/blog">
-        <div className="mt-12 pt-8 border-t border-gray-100 p-3">
+        <div className="mt-12 pt-8 border-t border-border p-3">
           <button className="text-aegean-dark font-bold hover:text-aegean-green transition-colors flex items-center gap-2 hover:cursor-pointer hover:underline">
             ← Επιστροφή στο Blog
           </button>
@@ -22,10 +28,10 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
       </Link>
       <article className="max-w-4xl mx-auto py-12 px-6">
         <header className="mb-8 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-aegean-dark mb-4 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-aegean-dark mb-4 leading-tight">
             {post.title}
           </h1>
-          <div className="flex items-center justify-center md:justify-start gap-3 text-gray-500 text-sm">
+          <div className="flex items-center justify-center md:justify-start gap-3 text-muted-foreground text-sm">
             <span className="bg-aegean-green/10 text-aegean-green px-3 py-1 rounded-full font-semibold">
               {post.date}
             </span>
@@ -47,7 +53,7 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
         </div>
 
         <div className="prose prose-lg max-w-none">
-          <p className="text-lg md:text-xl text-gray-700 leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:mr-3 first-letter:float-left">
+          <p className="text-lg md:text-xl text-foreground leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:mr-3 first-letter:float-left">
             {post.content}
           </p>
         </div>

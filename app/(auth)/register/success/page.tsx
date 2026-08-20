@@ -17,8 +17,8 @@ export default function RegisterSuccessPage(){
 
     return(
         <div className="flex flex-col justify-center items-center min-h-screen">
-            <h1 className="text-4xl font-bold mb-4">Registration Successful!</h1>
-            <p className="text-lg text-gray-600 font-italic">Thank you for registering. You will be redirected in {'timer'}.</p>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">Registration Successful!</h1>
+            <p className="text-lg text-muted-foreground font-italic">Thank you for registering. You will be redirected in {'timer'}.</p>
         </div>
     )
 }

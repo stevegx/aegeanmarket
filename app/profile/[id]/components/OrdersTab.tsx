@@ -67,7 +67,7 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
               <p className="text-xs text-muted-foreground font-mono">
                 #{order._id.slice(-8).toUpperCase()}
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 {new Date(order.createdAt).toLocaleDateString('el-GR', {
                   year: 'numeric',
                   month: 'long',
@@ -90,7 +90,7 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
               >
                 <span className="text-aegean-dark">
                   {item.name}{' '}
-                  <span className="text-gray-400">x{item.quantity}</span>
+                  <span className="text-muted-foreground">x{item.quantity}</span>
                 </span>
                 <span className="font-medium">
                   {(item.priceAtpurchase * item.quantity).toFixed(2)}€
@@ -104,7 +104,7 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
               <p className="font-semibold text-aegean-dark mb-1">
                 Διεύθυνση Αποστολής
               </p>
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 {order.shippingAddress.street} {order.shippingAddress.number},{' '}
                 {order.shippingAddress.zipcode} {order.shippingAddress.city},{' '}
                 {order.shippingAddress.country}
@@ -112,7 +112,7 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
             </div>
             <div>
               <p className="font-semibold text-aegean-dark mb-1">Πληρωμή</p>
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 {PAYMENT_LABELS[order.paymentMethod]} &middot;{' '}
                 <span className="capitalize">{order.paymentStatus}</span>
               </p>
