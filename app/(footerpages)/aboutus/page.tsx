@@ -10,7 +10,7 @@ export default function AboutUsPage() {
       </div>
 
       {/* Main Content Container */}
-      <div className="max-w-4xl space-y-12 text-gray-700">
+      <div className="max-w-4xl space-y-12 text-foreground">
         {/* Section 1: Our Story */}
         <section>
           <h2 className="text-3xl font-bold text-aegean-dark mb-4">
@@ -29,7 +29,7 @@ export default function AboutUsPage() {
         </section>
 
         {/* Section 2: Our Philosophy & Commitment */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 border-y border-gray-100 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 border-y border-border py-10">
           <section>
             <h2 className="text-2xl font-bold text-aegean-dark mb-3">
               Our Philosophy
@@ -76,7 +76,7 @@ export default function AboutUsPage() {
         {/* Closing Message */}
         <footer className="text-center pt-8">
           <p className="text-2xl font-serif italic text-aegean-dark">
-            "Cheers to the Aegean spirit!"
+            &ldquo;Cheers to the Aegean spirit!&rdquo;
           </p>
         </footer>
       </div>

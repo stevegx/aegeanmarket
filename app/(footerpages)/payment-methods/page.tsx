@@ -40,12 +40,12 @@ export default function PaymentMethodsPage() {
     },
   ] as PaymentMethods[]
   return (
-    <div className="flex flex-col gap-10 p-10 max-w-7xl mx-auto my-10">
+    <div className="flex flex-col gap-10 px-5 md:px-10 py-10 max-w-7xl mx-auto my-10">
       <div className="text-center">
-        <h1 className="font-bold text-aegean-dark text-4xl mb-2">
+        <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark mb-2">
           Payment Methods
         </h1>
-        <p className="text-gray-500">
+        <p className="text-muted-foreground">
           Fast, secure and flexible payment options
         </p>
       </div>
@@ -54,7 +54,7 @@ export default function PaymentMethodsPage() {
         {paymentMethods.map((method) => (
           <div
             key={method.name}
-            className="flex flex-col items-start border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-aegean-green hover:shadow-md transition-shadow bg-white w-full sm:w-72"
+            className="flex flex-col items-start border border-border rounded-lg p-6 shadow-sm hover:shadow-aegean-green hover:shadow-md transition-shadow bg-white w-full sm:w-72"
           >
             <div className="h-12 w-full mb-6 relative">
               <Image
@@ -69,7 +69,7 @@ export default function PaymentMethodsPage() {
               {method.name}
             </h2>
 
-            <p className="text-sm text-gray-600 leading-relaxed font-normal">
+            <p className="text-sm text-muted-foreground leading-relaxed font-normal">
               {method.description}
             </p>
           </div>

@@ -10,7 +10,7 @@ export default function Loading() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
         {[...Array(3)].map((_, i) => (
           <div key={i} className="w-full max-w-100">
-            <Card className="flex flex-col h-full overflow-hidden p-0 border-gray-100">
+            <Card className="flex flex-col h-full overflow-hidden p-0 border-border">
               <Skeleton className="aspect-video w-full rounded-none" />
 
               <div className="p-5 space-y-4">

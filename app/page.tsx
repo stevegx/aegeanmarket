@@ -21,7 +21,7 @@ export default async function mainPage() {
         <MainPageCarousel />
       </section>
 
-      <section className="w-full py-4 bg-gray-50 border-y border-gray-100">
+      <section className="w-full py-4 bg-aegean-gray border-y border-border">
         <InfoCarousel />
       </section>
 
@@ -29,7 +29,7 @@ export default async function mainPage() {
         <h3 className="text-sm md:text-md font-mono tracking-widest text-aegean-dark/70 uppercase mb-3">
           The power of quality behind the name
         </h3>
-        <h2 className="text-3xl md:text-5xl font-extrabold mb-12 text-center text-gray-900">
+        <h2 className="text-3xl md:text-5xl font-bold mb-12 text-center text-aegean-dark">
           Featured Partners
         </h2>
         <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24 w-full opacity-80 hover:opacity-100 transition-opacity">
@@ -61,10 +61,10 @@ export default async function mainPage() {
           </div>
         </section>
 
-        <section className="w-full py-24 bg-aegean-gray/10 border-y border-gray-100">
+        <section className="w-full py-24 bg-aegean-gray/10 border-y border-border">
           <div className="max-w-7xl mx-auto px-4">
             <div className="mb-12 text-center">
-              <h2 className="text-4xl font-bold text-gray-900">Our Stories</h2>
+              <h2 className="text-4xl font-bold text-aegean-dark">Our Stories</h2>
               <div className="h-1 w-20 bg-aegean-dark mx-auto mt-4" />
             </div>
             <BlogSection />

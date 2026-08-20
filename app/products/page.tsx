@@ -32,7 +32,11 @@ export default async function ProductPage({ searchParams }: PageProps) {
   )
 }
 
-async function ProductPageContent({ sParams }: { sParams: any }) {
+async function ProductPageContent({
+  sParams,
+}: {
+  sParams: Awaited<PageProps['searchParams']>
+}) {
   const currentPage = Number(sParams.page) || 1
   const manufacturers = Array.isArray(sParams.manufacturer)
     ? sParams.manufacturer

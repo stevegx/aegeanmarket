@@ -1,4 +1,4 @@
-import { jwtVerify, SignJWT } from 'jose'
+import { jwtVerify, SignJWT, type JWTPayload } from 'jose'
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
 const REFRESH_SECRET = new TextEncoder().encode(process.env.REFRESH_SECRET)
@@ -10,12 +10,12 @@ export async function verifyToken(token: string, isRefresh = false) {
       isRefresh ? REFRESH_SECRET : JWT_SECRET
     )
     return payload
-  } catch (error) {
+  } catch {
     return null
   }
 }
 
-export async function signAccessToken(payload: any) {
+export async function signAccessToken(payload: JWTPayload) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()

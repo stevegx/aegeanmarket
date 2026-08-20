@@ -32,28 +32,28 @@ function CheckoutSuccessContent() {
       <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark">
         Order Completed!
       </h1>
-      <p className="text-gray-500 max-w-md">
+      <p className="text-muted-foreground max-w-md">
         Thank you for your purchase! We&apos;ve received your order and will
         start processing it shortly.
       </p>
       {orderId && (
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-muted-foreground">
           Order ID: <span className="font-mono text-aegean-dark">{orderId}</span>
         </p>
       )}
       <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
         <Link href="/products">
-          <Button variant="buy" className="px-6 py-5 font-bold">
+          <Button variant="buy" className="px-6 py-5 font-bold text-lg">
             Continue Shopping
           </Button>
         </Link>
         <Link href="/">
-          <Button variant="outline" className="px-6 py-5 font-bold">
+          <Button variant="outline" className="px-6 py-5 font-bold text-lg">
             Back to Home
           </Button>
         </Link>
       </div>
-      <p className="text-xs text-gray-400 mt-2">
+      <p className="text-xs text-muted-foreground mt-2">
         You&apos;ll be redirected to the homepage shortly.
       </p>
     </div>
@@ -64,7 +64,7 @@ export default function CheckoutSuccessPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex items-center justify-center min-h-[70vh] text-gray-400">
+        <div className="flex items-center justify-center min-h-[70vh] text-muted-foreground">
           Loading...
         </div>
       }

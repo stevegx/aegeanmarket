@@ -28,6 +28,7 @@ export default function RegisterPage() {
       setErrors(fieldErrors)
     } else {
       setErrors({})
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- destructured only to exclude it from userData
       const { confirmPassword, ...userData } = result.data
       await createUser(userData)
     }
@@ -39,7 +40,7 @@ export default function RegisterPage() {
         className="flex flex-col shadow-2xl rounded-4xl w-lg p-10 gap-4"
         onSubmit={handleSubmit}
       >
-        <h1 className="flex text-4xl my-5 font-bold justify-center text-aegean-dark">
+        <h1 className="flex text-3xl md:text-4xl my-5 font-bold justify-center text-aegean-dark">
           Register
         </h1>
 
@@ -113,7 +114,7 @@ export default function RegisterPage() {
         </Button>
         <p className="text-sm text-center">
           Already have an account?{' '}
-          <Link href="/login" className="text-blue-500 hover:underline">
+          <Link href="/login" className="text-aegean-dark hover:underline">
             Login
           </Link>
         </p>

@@ -35,7 +35,7 @@ export function Slider({
         className
       )}
     >
-      <div className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-gray-200">
+      <div className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-muted">
         <div
           className="absolute h-full bg-aegean-blue transition-all duration-75"
           style={{ width: `${percentage}%` }}

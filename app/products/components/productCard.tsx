@@ -102,7 +102,7 @@ export default function ProductCard({ product }: ProductProps) {
                     className={`text-lg leading-none ${
                       star <= product.rating
                         ? 'text-yellow-500'
-                        : 'text-gray-100'
+                        : 'text-muted'
                     }`}
                   >
                     ★
@@ -128,14 +128,17 @@ export default function ProductCard({ product }: ProductProps) {
               <Button
                 variant="buy"
                 className={
-                  'w-full transition-all duration-300 animate-in fade-in zoom-in-95 p-5'
+                  'w-full transition-all duration-300 animate-in fade-in zoom-in-95 p-5 font-bold text-lg'
                 }
                 onClick={() => buyItem(product)}
               >
                 BUY
               </Button>
             ) : (
-              <Button variant="disabledBuy" className={'p-5 w-full'}>
+              <Button
+                variant="disabledBuy"
+                className={'p-5 w-full font-bold text-lg'}
+              >
                 BUY
               </Button>
             )

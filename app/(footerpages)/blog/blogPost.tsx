@@ -1,4 +1,4 @@
-import { BlogPostType } from './page'
+import { BlogPostType } from './blogPostData'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
@@ -10,7 +10,7 @@ interface BlogPostProps {
 export default function BlogPost({ post }: BlogPostProps) {
   return (
     <Link href={`/blog/${post.id}`} className="group block w-full max-w-100">
-      <Card className="flex flex-col h-full overflow-hidden border border-gray-200 p-0 shadow-sm transition-all duration-300 hover:shadow-md">
+      <Card className="flex flex-col h-full overflow-hidden border border-border p-0 shadow-sm transition-all duration-300 hover:shadow-md">
         <div className="relative w-full aspect-video">
           <Image
             src={post.image}
@@ -27,7 +27,7 @@ export default function BlogPost({ post }: BlogPostProps) {
           <h1 className="text-xl font-bold text-aegean-dark line-clamp-2 leading-tight">
             {post.title}
           </h1>
-          <p className="line-clamp-3 text-gray-600 text-sm leading-relaxed">
+          <p className="line-clamp-3 text-muted-foreground text-sm leading-relaxed">
             {post.content}
           </p>
 

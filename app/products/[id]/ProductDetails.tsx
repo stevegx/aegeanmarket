@@ -1,13 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
+import ProductImage from '@/components/productImage'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { QuantityController } from '../components/productCard'
 import FavoriteButton from '../components/FavoriteButton'
 import ReviewSection from '../components/reviews/ReviewSection'
-import ProductRatingControl from '../components/reviews/ProductRatingControl'
+import StarRating from '../components/reviews/StarRating'
 import { ReviewData } from '../components/reviews/types'
 import { useCartStore } from '../store/useCartStore'
 import { useAuthStore } from '@/app/(auth)/store/useAuthStore'
@@ -44,34 +44,6 @@ export default function ProductDetails({
             10
         ) / 10
       : product.rating
-
-  const handleReviewSaved = (saved: {
-    _id: string
-    rating: number
-    text: string
-    createdAt: string
-  }) => {
-    const username = useAuthStore.getState().username
-    if (!currentUserId || !username) return
-    const reviewData: ReviewData = {
-      _id: saved._id,
-      user: { _id: currentUserId, username },
-      parent: null,
-      mentionedUser: null,
-      rating: saved.rating,
-      text: saved.text,
-      createdAt: saved.createdAt,
-      likes: [],
-    }
-    setReviews((prev) => {
-      const exists = prev.some((r) => r._id === reviewData._id)
-      return exists
-        ? prev.map((r) =>
-            r._id === reviewData._id ? { ...reviewData, likes: r.likes } : r
-          )
-        : [...prev, reviewData]
-    })
-  }
 
   const handleReplyAdded = (reply: ReviewData) => {
     setReviews((prev) => [...prev, reply])
@@ -114,7 +86,7 @@ export default function ProductDetails({
             productId={product._id}
             className="absolute top-4 right-4 z-10"
           />
-          <Image
+          <ProductImage
             src={product.image}
             alt={product.name}
             className="object-contain"
@@ -130,46 +102,44 @@ export default function ProductDetails({
             <div className="flex items-center space-x-2 mb-4">
               <Link
                 href="/products"
-                className="text-gray-500 hover:text-blue-600 text-sm font-medium uppercase tracking-wider transition-colors"
+                className="text-muted-foreground hover:text-aegean-dark text-sm font-medium uppercase tracking-wider transition-colors"
               >
                 Products
               </Link>
-              <span className="text-gray-400 text-sm">/</span>
+              <span className="text-muted-foreground text-sm">/</span>
               <Link
                 href={`/products?category=${product.category}`}
-                className="text-blue-600 hover:text-blue-700 text-sm font-semibold uppercase tracking-wider transition-colors"
+                className="text-aegean-dark hover:text-aegean-dark/80 text-sm font-semibold uppercase tracking-wider transition-colors"
               >
                 {product.category}
               </Link>
             </div>
-            <h1 className="font-bold text-3xl md:text-4xl text-gray-900 leading-tight">
+            <h1 className="font-bold text-3xl md:text-4xl text-aegean-dark leading-tight">
               {product.name}
             </h1>
             {product.stock === 0 && (
-              <div className="text-red-500 font-bold text-sm mt-2">
+              <div className="text-destructive font-bold text-sm mt-2">
                 ● OUT OF STOCK
               </div>
             )}
           </div>
 
           <div className="mt-6">
-            <h2 className="font-extrabold text-3xl text-gray-900">
+            <h2 className="font-extrabold text-3xl text-aegean-blue">
               {product.price} €
             </h2>
-            <ProductRatingControl
-              productId={product._id}
-              averageRating={averageRating}
-              isLoggedIn={isLoggedIn}
-              myReview={myReview}
-              onSaved={handleReviewSaved}
-              className="mt-2"
-            />
-            <p className="text-gray-600 font-light mt-4 leading-relaxed line-clamp-4 lg:line-clamp-none">
+            <div className="flex items-center gap-2 mt-2">
+              <span className="font-bold text-sm text-aegean-dark">
+                {averageRating}
+              </span>
+              <StarRating rating={averageRating} size="size-4" />
+            </div>
+            <p className="text-muted-foreground font-light mt-4 leading-relaxed line-clamp-4 lg:line-clamp-none">
               {product.description}
             </p>
           </div>
 
-          <hr className="my-6 border-gray-100" />
+          <hr className="my-6 border-border" />
 
           <div className="w-full">
             {quantity === 0 ? (
@@ -191,12 +161,12 @@ export default function ProductDetails({
             )}
           </div>
 
-          <hr className="my-6 border-gray-100" />
+          <hr className="my-6 border-border" />
 
-          <div className="border rounded-xl divide-y divide-gray-100 overflow-hidden">
+          <div className="border rounded-lg divide-y divide-border overflow-hidden">
             {/* Free Delivery Section */}
             <div className="flex items-start p-4 gap-4 bg-white">
-              <div className="mt-1 text-gray-600">
+              <div className="mt-1 text-muted-foreground">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -214,7 +184,7 @@ export default function ProductDetails({
               </div>
               <div>
                 <h3 className="font-bold text-lg">Free Delivery</h3>
-                <p className="text-sm text-gray-500 font-light">
+                <p className="text-sm text-muted-foreground font-light">
                   Enter your postal code for delivery Availability
                 </p>
               </div>
@@ -222,7 +192,7 @@ export default function ProductDetails({
 
             {/* Return Delivery Section */}
             <div className="flex items-start p-4 gap-4 bg-white">
-              <div className="mt-1 text-gray-600">
+              <div className="mt-1 text-muted-foreground">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -240,9 +210,9 @@ export default function ProductDetails({
               </div>
               <div>
                 <h3 className="font-bold text-lg">Return Delivery</h3>
-                <p className="text-sm text-gray-500 font-light">
+                <p className="text-sm text-muted-foreground font-light">
                   Free 30 Days Delivery Returns.{' '}
-                  <span className="underline cursor-pointer hover:text-black transition-colors">
+                  <span className="underline cursor-pointer hover:text-foreground transition-colors">
                     Details
                   </span>
                 </p>
@@ -251,12 +221,24 @@ export default function ProductDetails({
           </div>
         </div>
       </div>
+
+      {isLoggedIn && (
+        <div className="max-w-7xl mx-auto w-full px-5 md:px-10 pb-4">
+          <Link href={`/products/${product._id}/rate`}>
+            <Button
+              variant="buy"
+              className="w-full sm:w-auto px-8 py-5 font-bold text-lg"
+            >
+              {myReview ? 'Edit your rating' : 'Rate this product'}
+            </Button>
+          </Link>
+        </div>
+      )}
+
       <ReviewSection
-        productId={product._id}
         reviews={reviews}
         currentUserId={currentUserId}
         isLoggedIn={isLoggedIn}
-        onReviewSaved={handleReviewSaved}
         onReplyAdded={handleReplyAdded}
         onReplyDeleted={handleReplyDeleted}
         onToggleLike={handleToggleLike}

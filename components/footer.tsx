@@ -98,7 +98,7 @@ export default function Footer({ userId }: FooterProps) {
           </div>
         </div>
 
-        <hr className="border-t border-gray-50/20 my-8 w-full" />
+        <hr className="border-t border-white/20 my-8 w-full" />
 
         <div className="flex justify-center md:justify-start w-full">
           <h2 className="text-xs md:text-sm font-semibold opacity-80">

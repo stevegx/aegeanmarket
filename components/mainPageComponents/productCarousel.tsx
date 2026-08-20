@@ -8,7 +8,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel'
 import Autoplay from 'embla-carousel-autoplay'
-import Image from 'next/image'
+import ProductImage from '@/components/productImage'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { useCartStore } from '@/app/products/store/useCartStore'
@@ -38,10 +38,10 @@ export default function ProductCarousel({
   return (
     <div className="flex flex-col gap-6 w-full px-10 py-8">
       <div className="flex flex-col border-l-4 border-aegean-dark pl-4">
-        <h2 className="font-bold text-2xl md:text-3xl text-gray-800">
+        <h2 className="font-bold text-2xl md:text-3xl text-aegean-dark">
           {tittle}
         </h2>
-        <p className="text-gray-500 text-sm italic">
+        <p className="text-muted-foreground text-sm italic">
           Our latest selection for you
         </p>
       </div>
@@ -74,19 +74,19 @@ export default function ProductCarousel({
                       {/* Product Link Area */}
                       <Link href={`/products/${product._id}`} className="grow">
                         <div className="relative aspect-square w-full bg-white overflow-hidden">
-                          <Image
+                          <ProductImage
                             src={product.image}
                             alt={product.name}
                             className="object-contain p-6 group-hover:scale-105 transition-transform duration-500"
-                            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 320px"
                             fill
                           />
                         </div>
-                        <div className="flex flex-col p-4 gap-1 border-t border-gray-100">
-                          <span className="text-xs uppercase tracking-widest text-gray-400 font-bold">
+                        <div className="flex flex-col p-4 gap-1 border-t border-border">
+                          <span className="text-xs uppercase tracking-widest text-muted-foreground font-bold">
                             {product.category}
                           </span>
-                          <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 h-10">
+                          <h3 className="text-sm font-semibold text-aegean-dark line-clamp-2 h-10">
                             {product.name}
                           </h3>
                           <div className="mt-2 flex items-center justify-between">

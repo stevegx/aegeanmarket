@@ -5,7 +5,7 @@ import { jwtVerify, SignJWT } from 'jose'
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
 const REFRESH_SECRET = new TextEncoder().encode(process.env.REFRESH_SECRET)
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const authToken = request.cookies.get('auth_token')?.value
   const refreshToken = request.cookies.get('refresh_token')?.value

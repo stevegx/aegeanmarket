@@ -66,7 +66,7 @@ export default async function ProductList({
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
             <p className="text-xl font-semibold">No products found!</p>
           </div>
         )}

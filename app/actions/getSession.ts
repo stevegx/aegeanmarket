@@ -18,7 +18,7 @@ export async function getSession() {
       username: payload.username as string,
       userId: payload.userId as string,
     }
-  } catch (err) {
+  } catch {
     return null
   }
 }

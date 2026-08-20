@@ -38,6 +38,9 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
   const [isHydrated, setIsHydrated] = useState(false)
   useEffect(() => {
     if (initialSession) setLogin(initialSession.username)
+    // Must flip after mount: the client can't know this synchronously during
+    // SSR without causing a hydration mismatch on isLoggedIn/initialSession.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsHydrated(true)
   }, [initialSession, setLogin])
   return (
@@ -130,12 +133,12 @@ export function UserMenu({
           <NavigationMenuTrigger className="bg-transparent text-aegean-dark hover:text-aegean-green border-none text-sm px-2">
             {name}
           </NavigationMenuTrigger>
-          <NavigationMenuContent className="bg-white text-aegean-dark rounded-md shadow-xl mt-2 border border-gray-200">
+          <NavigationMenuContent className="bg-white text-aegean-dark rounded-md shadow-xl mt-2 border border-border">
             <ul className="p-2 min-w-35 flex flex-col gap-1">
               <li>
                 <Link
                   href={`/profile/${userId}`}
-                  className="block px-4 py-2 text-sm hover:bg-gray-100 rounded transition-colors"
+                  className="block px-4 py-2 text-sm hover:bg-muted rounded transition-colors"
                 >
                   Profile
                 </Link>
@@ -143,7 +146,7 @@ export function UserMenu({
               <li>
                 <Link
                   href={`/profile/${userId}?tab=orders`}
-                  className="block px-4 py-2 text-sm hover:bg-gray-100 rounded transition-colors"
+                  className="block px-4 py-2 text-sm hover:bg-muted rounded transition-colors"
                 >
                   Orders
                 </Link>
@@ -151,7 +154,7 @@ export function UserMenu({
               <li>
                 <Link
                   href={`/profile/${userId}?tab=favorites`}
-                  className="block px-4 py-2 text-sm hover:bg-gray-100 rounded transition-colors"
+                  className="block px-4 py-2 text-sm hover:bg-muted rounded transition-colors"
                 >
                   Favorites
                 </Link>
@@ -159,15 +162,15 @@ export function UserMenu({
               <li>
                 <Link
                   href={`/profile/${userId}?tab=reviews`}
-                  className="block px-4 py-2 text-sm hover:bg-gray-100 rounded transition-colors"
+                  className="block px-4 py-2 text-sm hover:bg-muted rounded transition-colors"
                 >
                   Reviews
                 </Link>
               </li>
-              <li className="border-t border-gray-100 mt-1 pt-1">
+              <li className="border-t border-border mt-1 pt-1">
                 <button
                   onClick={onLogout}
-                  className="w-full text-left block px-4 py-2 text-sm hover:bg-gray-100 rounded transition-colors text-red-600 cursor-pointer"
+                  className="w-full text-left block px-4 py-2 text-sm hover:bg-muted rounded transition-colors text-destructive cursor-pointer"
                 >
                   Logout
                 </button>
