@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono, Inter } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import Navbar from '@/components/navbar'
@@ -45,6 +46,7 @@ export default async function RootLayout({
         <main className="grow flex flex-col md:pt-12 pt-20"> {children}</main>
 
         <Footer userId={session?.userId ?? null} />
+        <Analytics />
       </body>
     </html>
   )

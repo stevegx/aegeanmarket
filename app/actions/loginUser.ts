@@ -25,6 +25,13 @@ export async function loginUser(data: LoginUserData) {
   if (!checkPassword)
     return { success: false, error: 'Invalid login credentials' }
 
+  if (!findUser.isActive) {
+    return {
+      success: false,
+      error: 'This account has been deactivated. Contact support.',
+    }
+  }
+
   const accessToken = await new SignJWT({
     userId: findUser._id.toString(),
     username: findUser.username,

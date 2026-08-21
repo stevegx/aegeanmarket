@@ -96,6 +96,58 @@ export const changePasswordSchema = z
     path: ['newPassword'],
   })
 
+export const adminUpdateUserSchema = z.object({
+  username: z.string().min(3, 'Username must be at least 3 characters long'),
+  email: z.string().email('Invalid email address'),
+  address: z.string().min(3, 'Address must be at least 3 characters long'),
+  phone: z
+    .string()
+    .length(10, 'Phone number must be exactly 10 digits')
+    .regex(/^\d+$/, 'Phone number must contain only digits')
+    .startsWith('69', 'Phone number must start with 69'),
+  role: z.enum(['customer', 'admin']),
+  isActive: z.boolean(),
+})
+
+export const adminCreateUserSchema = adminUpdateUserSchema.extend({
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
+})
+
+export const adminOrderItemSchema = z.object({
+  productId: z.string().min(1, 'Product is required'),
+  quantity: z.number().int().min(1, 'Quantity must be at least 1'),
+})
+
+export const adminUpdateOrderSchema = z.object({
+  status: z.enum(['pending', 'processing', 'shipped', 'delivered', 'cancelled']),
+  paymentStatus: z.enum(['paid', 'unpaid', 'refunded']),
+  shippingAddress: shippingAddressSchema,
+  items: z.array(adminOrderItemSchema).min(1, 'Order must have at least one item'),
+})
+
+export const adminCreateOrderSchema = z
+  .object({
+    customerType: z.enum(['registered', 'guest']),
+    userId: z.string().optional(),
+    guestName: z.string().min(3, 'Guest name is required').optional(),
+    guestEmail: z.string().email('Invalid email address').optional(),
+    status: z.enum(['pending', 'processing', 'shipped', 'delivered', 'cancelled']),
+    paymentMethod: z.enum(['credit_card', 'iris', 'paypal', 'klarna', 'cod']),
+    paymentStatus: z.enum(['paid', 'unpaid', 'refunded']),
+    shippingAddress: shippingAddressSchema,
+    items: z.array(adminOrderItemSchema).min(1, 'Order must have at least one item'),
+  })
+  .refine(
+    (data) =>
+      data.customerType === 'registered'
+        ? !!data.userId
+        : !!data.guestName && !!data.guestEmail,
+    {
+      message: 'Select a customer, or provide a guest name and email',
+      path: ['userId'],
+    }
+  )
+
 export type RegisterFormData = z.infer<typeof registerSchema>
 export type LoginFormData = z.infer<typeof LoginSchema>
 export type CartData = z.infer<typeof CartSchema>
@@ -105,3 +157,7 @@ export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>
 export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>
 export type ReviewFormData = z.infer<typeof reviewSchema>
 export type ReplyFormData = z.infer<typeof replySchema>
+export type AdminUpdateOrderData = z.infer<typeof adminUpdateOrderSchema>
+export type AdminCreateOrderData = z.infer<typeof adminCreateOrderSchema>
+export type AdminUpdateUserData = z.infer<typeof adminUpdateUserSchema>
+export type AdminCreateUserData = z.infer<typeof adminCreateUserSchema>

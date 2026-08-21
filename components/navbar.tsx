@@ -28,6 +28,7 @@ interface NavbarProps {
   initialSession: {
     username: string
     userId: string
+    role?: string
   } | null
   children?: React.ReactNode
 }
@@ -86,6 +87,7 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
           <UserMenu
             name={initialSession.username}
             userId={initialSession.userId}
+            isAdmin={initialSession.role === 'admin'}
             onLogout={async () => {
               await logoutUser()
               setLogout()
@@ -120,10 +122,12 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
 export function UserMenu({
   name,
   userId,
+  isAdmin,
   onLogout,
 }: {
   name: string
   userId: string
+  isAdmin?: boolean
   onLogout: () => void
 }) {
   return (
@@ -167,6 +171,16 @@ export function UserMenu({
                   Reviews
                 </Link>
               </li>
+              {isAdmin && (
+                <li>
+                  <Link
+                    href="/adminpage"
+                    className="block px-4 py-2 text-sm hover:bg-muted rounded transition-colors font-semibold"
+                  >
+                    Admin Panel
+                  </Link>
+                </li>
+              )}
               <li className="border-t border-border mt-1 pt-1">
                 <button
                   onClick={onLogout}
