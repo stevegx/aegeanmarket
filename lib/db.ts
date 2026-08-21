@@ -5,6 +5,7 @@ import Product from '@/models/Products'
 import Review from '@/models/Review'
 import Notification from '@/models/Notification'
 import '@/models/Products'
+import { escapeRegex } from '@/lib/utils'
 declare global {
   var mongoose:
     | {
@@ -149,6 +150,271 @@ export async function getUserNotifications(userId: string) {
   } catch (error) {
     console.error('Error fetching notifications:', error)
     return { notifications: [], unreadCount: 0 }
+  }
+}
+
+const ORDER_STATUSES = [
+  'pending',
+  'processing',
+  'shipped',
+  'delivered',
+  'cancelled',
+] as const
+
+export interface AdminStats {
+  totalUsers: number
+  newUsersToday: number
+  ordersByStatus: Record<(typeof ORDER_STATUSES)[number], number>
+  trends: { date: string; orders: number; newUsers: number; revenue: number }[]
+}
+
+export async function getAdminStats(): Promise<AdminStats> {
+  await connectDB()
+
+  const now = new Date()
+  const startOfToday = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+  )
+  const startOfWindow = new Date(startOfToday)
+  startOfWindow.setUTCDate(startOfWindow.getUTCDate() - 29) // 30-day window incl. today
+
+  const [
+    totalUsers,
+    newUsersToday,
+    orderStatusCounts,
+    orderDayCounts,
+    userDayCounts,
+  ] = await Promise.all([
+    User.countDocuments(),
+    User.countDocuments({ createdAt: { $gte: startOfToday } }),
+    Order.aggregate([
+      { $group: { _id: '$status', count: { $sum: 1 } } },
+    ]),
+    Order.aggregate([
+      { $match: { createdAt: { $gte: startOfWindow } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+          orders: { $sum: 1 },
+          // Cancelled orders never generated real revenue, so they're excluded.
+          revenue: {
+            $sum: {
+              $cond: [{ $ne: ['$status', 'cancelled'] }, '$totalPrice', 0],
+            },
+          },
+        },
+      },
+    ]),
+    User.aggregate([
+      { $match: { createdAt: { $gte: startOfWindow } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+          newUsers: { $sum: 1 },
+        },
+      },
+    ]),
+  ])
+
+  const ordersByStatus = ORDER_STATUSES.reduce(
+    (acc, status) => {
+      acc[status] = 0
+      return acc
+    },
+    {} as AdminStats['ordersByStatus']
+  )
+  for (const row of orderStatusCounts) {
+    if (row._id in ordersByStatus) {
+      ordersByStatus[row._id as (typeof ORDER_STATUSES)[number]] = row.count
+    }
+  }
+
+  const orderDayMap = new Map(
+    orderDayCounts.map((row) => [row._id as string, row])
+  )
+  const userDayMap = new Map(
+    userDayCounts.map((row) => [row._id as string, row.newUsers as number])
+  )
+
+  const trends: AdminStats['trends'] = []
+  for (let i = 0; i < 30; i++) {
+    const day = new Date(startOfWindow)
+    day.setUTCDate(day.getUTCDate() + i)
+    const key = day.toISOString().slice(0, 10)
+    const orderRow = orderDayMap.get(key)
+    trends.push({
+      date: key,
+      orders: orderRow?.orders ?? 0,
+      revenue: orderRow?.revenue ?? 0,
+      newUsers: userDayMap.get(key) ?? 0,
+    })
+  }
+
+  return { totalUsers, newUsersToday, ordersByStatus, trends }
+}
+
+export const ADMIN_PAGE_SIZE = 15
+
+export interface AdminOrderListItem {
+  _id: string
+  items: {
+    product: string
+    name: string
+    priceAtpurchase: number
+    quantity: number
+  }[]
+  totalPrice: number
+  status: (typeof ORDER_STATUSES)[number]
+  paymentMethod: string
+  paymentStatus: 'paid' | 'unpaid' | 'refunded'
+  shippingAddress: {
+    street: string
+    number: string
+    city: string
+    zipcode: string
+    country: string
+  }
+  guestName?: string
+  guestEmail?: string
+  createdAt: string
+  userDoc?: { _id: string; username: string; email: string }
+}
+
+export async function getAllOrdersAdmin({
+  page = 1,
+  status,
+  search,
+}: {
+  page?: number
+  status?: string
+  search?: string
+}) {
+  await connectDB()
+  const limit = ADMIN_PAGE_SIZE
+  const currentPage = Math.max(1, page)
+  const skip = (currentPage - 1) * limit
+
+  const match: Record<string, unknown> = {}
+  if (status && (ORDER_STATUSES as readonly string[]).includes(status)) {
+    match.status = status
+  }
+
+  const pipeline: mongoose.PipelineStage[] = [
+    { $match: match },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'userDoc',
+      },
+    },
+    { $unwind: { path: '$userDoc', preserveNullAndEmptyArrays: true } },
+  ]
+
+  const trimmedSearch = search?.trim()
+  if (trimmedSearch) {
+    const regex = new RegExp(escapeRegex(trimmedSearch), 'i')
+    pipeline.push({
+      $match: {
+        $or: [
+          { guestName: regex },
+          { guestEmail: regex },
+          { 'userDoc.username': regex },
+          { 'userDoc.email': regex },
+        ],
+      },
+    })
+  }
+
+  pipeline.push(
+    { $sort: { createdAt: -1 } },
+    {
+      $facet: {
+        data: [
+          { $skip: skip },
+          { $limit: limit },
+          {
+            $project: {
+              items: 1,
+              totalPrice: 1,
+              status: 1,
+              paymentMethod: 1,
+              paymentStatus: 1,
+              shippingAddress: 1,
+              guestName: 1,
+              guestEmail: 1,
+              createdAt: 1,
+              'userDoc._id': 1,
+              'userDoc.username': 1,
+              'userDoc.email': 1,
+            },
+          },
+        ],
+        totalCount: [{ $count: 'count' }],
+      },
+    }
+  )
+
+  const [result] = await Order.aggregate(pipeline)
+  const totalCount: number = result?.totalCount?.[0]?.count ?? 0
+
+  return {
+    orders: JSON.parse(JSON.stringify(result?.data ?? [])) as AdminOrderListItem[],
+    totalCount,
+    totalPages: Math.max(1, Math.ceil(totalCount / limit)),
+  }
+}
+
+export interface AdminUserListItem {
+  _id: string
+  username: string
+  email: string
+  address: string
+  phone: string
+  role: 'customer' | 'admin'
+  isActive: boolean
+  createdAt: string
+}
+
+export async function getAllUsersAdmin({
+  page = 1,
+  search,
+  role,
+}: {
+  page?: number
+  search?: string
+  role?: string
+}) {
+  await connectDB()
+  const limit = ADMIN_PAGE_SIZE
+  const currentPage = Math.max(1, page)
+  const skip = (currentPage - 1) * limit
+
+  const match: Record<string, unknown> = {}
+  if (role === 'customer' || role === 'admin') {
+    match.role = role
+  }
+  const trimmedSearch = search?.trim()
+  if (trimmedSearch) {
+    const regex = new RegExp(escapeRegex(trimmedSearch), 'i')
+    match.$or = [{ username: regex }, { email: regex }]
+  }
+
+  const [users, totalCount] = await Promise.all([
+    User.find(match)
+      .select('username email address phone role isActive createdAt')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    User.countDocuments(match),
+  ])
+
+  return {
+    users: JSON.parse(JSON.stringify(users)) as AdminUserListItem[],
+    totalCount,
+    totalPages: Math.max(1, Math.ceil(totalCount / limit)),
   }
 }
 

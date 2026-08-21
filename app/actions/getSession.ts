@@ -17,6 +17,7 @@ export async function getSession() {
     return {
       username: payload.username as string,
       userId: payload.userId as string,
+      role: payload.role as string,
     }
   } catch {
     return null

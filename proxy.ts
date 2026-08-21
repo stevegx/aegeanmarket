@@ -5,6 +5,10 @@ import { jwtVerify, SignJWT } from 'jose'
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
 const REFRESH_SECRET = new TextEncoder().encode(process.env.REFRESH_SECRET)
 
+function isAdminPath(pathname: string) {
+  return pathname === '/adminpage' || pathname.startsWith('/adminpage/')
+}
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const authToken = request.cookies.get('auth_token')?.value
@@ -66,7 +70,7 @@ export async function proxy(request: NextRequest) {
   // --- 3. ΠΡΟΣΤΑΣΙΑ ΔΙΑΔΡΟΜΩΝ (RBAC) ---
 
   // Αν δεν είναι συνδεδεμένος και πάει Admin
-  if (!payload && pathname.startsWith('/admin')) {
+  if (!payload && isAdminPath(pathname)) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
@@ -79,7 +83,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // Αν πάει Admin αλλά δεν είναι Admin
-  if (payload && pathname.startsWith('/admin') && payload.role !== 'admin') {
+  if (payload && isAdminPath(pathname) && payload.role !== 'admin') {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
@@ -88,7 +92,7 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/admin/:path*',
+    '/adminpage/:path*',
     '/login',
     '/register',
     '/profile/:path*',

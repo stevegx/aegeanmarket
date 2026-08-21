@@ -64,4 +64,5 @@ const OrderSchema = new mongoose.Schema(
   { timestamps: true }
 )
 OrderSchema.index({ user: 1, createdAt: -1 })
+OrderSchema.index({ createdAt: -1 })
 export default mongoose.models.Order || mongoose.model('Order', OrderSchema)

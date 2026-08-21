@@ -5,11 +5,13 @@ import { useSearchParams } from 'next/navigation'
 interface PaginationProps {
   currentPage: number
   totalPages: number
+  paramName?: string
 }
 
 const PaginationControls: FC<PaginationProps> = ({
   currentPage,
   totalPages,
+  paramName = 'page',
 }) => {
   const prevPage: number = Math.max(currentPage - 1, 1)
   const nextPage: number = Math.min(currentPage + 1, totalPages)
@@ -17,7 +19,7 @@ const PaginationControls: FC<PaginationProps> = ({
 
   const createPageUrl = (pageNumber: number) => {
     const params = new URLSearchParams(searchParams.toString())
-    params.set('page', pageNumber.toString())
+    params.set(paramName, pageNumber.toString())
     return `?${params.toString()}`
   }
 
