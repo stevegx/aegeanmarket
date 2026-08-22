@@ -169,7 +169,7 @@ const SafePaymentsIcon = ({ size = 100, color = 'currentColor' }) => {
 }
 const DeliveryTrackIcon = ({
   size = 100,
-  color = '#2563eb',
+  color = '#3E85B5',
   className = '',
 }) => {
   return (

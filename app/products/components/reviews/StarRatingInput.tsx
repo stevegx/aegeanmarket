@@ -25,7 +25,7 @@ export default function StarRatingInput({
           onClick={() => onChange(star)}
           onMouseEnter={() => setHovered(star)}
           className="cursor-pointer p-0.5"
-          aria-label={`${star} από 5 αστέρια`}
+          aria-label={`${star} out of 5 stars`}
         >
           <HugeiconsIcon
             icon={StarIcon}

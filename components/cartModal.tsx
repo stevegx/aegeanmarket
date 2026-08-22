@@ -65,7 +65,8 @@ export default function CartModal() {
             <Button
               type="submit"
               variant={'buy'}
-              className={'py-5 font-bold text-lg'}
+              size="lg"
+              className={'font-bold'}
               onClick={handleCheckout}
               disabled={isPending || cartItems.length === 0}
             >

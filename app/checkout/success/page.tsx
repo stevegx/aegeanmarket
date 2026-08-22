@@ -43,12 +43,12 @@ function CheckoutSuccessContent() {
       )}
       <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
         <Link href="/products">
-          <Button variant="buy" className="px-6 py-5 font-bold text-lg">
+          <Button variant="buy" size="lg" className="font-bold">
             Continue Shopping
           </Button>
         </Link>
         <Link href="/">
-          <Button variant="outline" className="px-6 py-5 font-bold text-lg">
+          <Button variant="outline" size="lg" className="font-bold">
             Back to Home
           </Button>
         </Link>

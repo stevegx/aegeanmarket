@@ -1,18 +1,24 @@
 import * as z from 'zod'
 
+const registerFields = {
+  username: z.string().min(3, 'Username must be at least 3 characters long'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
+  address: z.string().min(3, 'Address must be at least 3 characters long'),
+  phone: z
+    .string()
+    .length(10, 'Phone number must be exactly 10 digits')
+    .regex(/^\d+$/, 'Phone number must contain only digits')
+    .startsWith('69', 'Phone number must start with 69'),
+}
+
+// Shape actually persisted server-side (no confirmPassword) -- used to
+// re-validate on the server since Server Actions can be invoked directly,
+// bypassing the client-side registerSchema check below.
+export const createUserSchema = z.object(registerFields)
+
 export const registerSchema = z
-  .object({
-    username: z.string().min(3, 'Username must be at least 3 characters long'),
-    email: z.string().email('Invalid email address'),
-    password: z.string().min(8, 'Password must be at least 8 characters long'),
-    confirmPassword: z.string(),
-    address: z.string().min(3, 'Address must be at least 3 characters long'),
-    phone: z
-      .string()
-      .length(10, 'Phone number must be exactly 10 digits')
-      .regex(/^\d+$/, 'Phone number must contain only digits')
-      .startsWith('69', 'Phone number must start with 69'),
-  })
+  .object({ ...registerFields, confirmPassword: z.string() })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',
     path: ['confirmPassword'],
@@ -113,6 +119,25 @@ export const adminCreateUserSchema = adminUpdateUserSchema.extend({
   password: z.string().min(8, 'Password must be at least 8 characters long'),
 })
 
+export const adminBlogPostSchema = z.object({
+  title: z.string().trim().min(3, 'Title must be at least 3 characters long').max(200),
+  content: z.string().trim().min(10, 'Content must be at least 10 characters long'),
+  image: z.string().url('A valid image is required'),
+})
+
+export const adminProductSchema = z.object({
+  name: z.string().trim().min(2, 'Name must be at least 2 characters long').max(200),
+  description: z.string().trim().min(10, 'Description must be at least 10 characters long'),
+  category: z.string().trim().min(1, 'Category is required'),
+  price: z.number().min(0, 'Price must be at least 0'),
+  stock: z.number().int().min(0, 'Stock must be at least 0'),
+  image: z.string().url('A valid image is required'),
+  manufacturer: z.string().trim().optional(),
+  origin: z.string().trim().optional(),
+  volume: z.string().trim().optional(),
+  isFeatured: z.boolean().optional(),
+})
+
 export const adminOrderItemSchema = z.object({
   productId: z.string().min(1, 'Product is required'),
   quantity: z.number().int().min(1, 'Quantity must be at least 1'),
@@ -149,6 +174,7 @@ export const adminCreateOrderSchema = z
   )
 
 export type RegisterFormData = z.infer<typeof registerSchema>
+export type CreateUserData = z.infer<typeof createUserSchema>
 export type LoginFormData = z.infer<typeof LoginSchema>
 export type CartData = z.infer<typeof CartSchema>
 export type ShippingAddressData = z.infer<typeof shippingAddressSchema>
@@ -161,3 +187,5 @@ export type AdminUpdateOrderData = z.infer<typeof adminUpdateOrderSchema>
 export type AdminCreateOrderData = z.infer<typeof adminCreateOrderSchema>
 export type AdminUpdateUserData = z.infer<typeof adminUpdateUserSchema>
 export type AdminCreateUserData = z.infer<typeof adminCreateUserSchema>
+export type AdminBlogPostData = z.infer<typeof adminBlogPostSchema>
+export type AdminProductData = z.infer<typeof adminProductSchema>

@@ -2,33 +2,22 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Loading() {
   return (
-    <div className="max-w-7xl mx-auto px-4 pt-35 pb-10">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="aspect-square w-full">
-          <Skeleton className="h-full w-full rounded-lg" />
+    <div className="flex flex-col lg:flex-row p-5 md:p-10 max-w-7xl mx-auto w-full items-start mt-10 gap-6">
+      <div className="w-full aspect-square relative">
+        <Skeleton className="w-full h-full" />
+      </div>
+
+      <div className="w-full flex flex-col gap-4">
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-9 w-3/4" />
+        <Skeleton className="h-9 w-1/3 mt-2" />
+        <Skeleton className="h-5 w-24" />
+        <div className="space-y-2 mt-2">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-2/3" />
         </div>
-
-        <div className="flex flex-col gap-6">
-          <div className="space-y-4">
-            <Skeleton className="h-10 w-3/4" />
-            <Skeleton className="h-6 w-1/4" />
-          </div>
-
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-2/3" />
-          </div>
-
-          <div className="mt-4">
-            <Skeleton className="h-12 w-32" />
-          </div>
-
-          <div className="flex gap-4 mt-6">
-            <Skeleton className="h-14 flex-1 rounded-xl" />
-            <Skeleton className="h-14 w-14 rounded-xl" />
-          </div>
-        </div>
+        <Skeleton className="h-11 w-full mt-4 rounded-md" />
       </div>
     </div>
   )

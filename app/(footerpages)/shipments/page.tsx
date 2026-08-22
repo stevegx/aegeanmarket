@@ -1,4 +1,11 @@
 import Image from 'next/image'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Shipment Methods',
+  description:
+    'Reliable courier delivery, in-store pickup, and locker points for your Aegean Market orders throughout Greece.',
+}
 
 interface ShipmentsMethods {
   name: string
@@ -28,7 +35,7 @@ export default function ShipmentsPage() {
     },
   ] as ShipmentsMethods[]
   return (
-    <div className="flex flex-col gap-10 px-5 md:px-10 py-10 max-w-7xl mx-auto my-10">
+    <div className="flex flex-col gap-10 px-5 md:px-10 py-12 max-w-7xl mx-auto">
       <div className="text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark mb-2">
           Shipment Methods

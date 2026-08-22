@@ -48,7 +48,7 @@ export default function SecurityTab() {
     }
 
     setForm(emptyForm)
-    setSuccessMessage('Ο κωδικός σου άλλαξε με επιτυχία!')
+    setSuccessMessage('Your password was changed successfully!')
   }
 
   return (
@@ -91,7 +91,7 @@ export default function SecurityTab() {
         </div>
 
         {successMessage && (
-          <p className="text-sm font-medium text-aegean-green">
+          <p className="text-sm font-medium text-aegean-green-text">
             {successMessage}
           </p>
         )}

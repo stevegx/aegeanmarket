@@ -1,6 +1,7 @@
 import connectDB from '@/lib/db'
 import { NextResponse } from 'next/server'
 import { getSession } from '@/app/actions/getSession'
+import { CartSchema } from '@/lib/validate'
 import cart from '@/models/cart'
 
 // Αυτό θα διορθώσει το Error 405
@@ -26,22 +27,27 @@ export async function POST(req: Request) {
     if (!session)
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     await connectDB()
-    const data = await req.json()
+    const body = await req.json()
+    const parsed = CartSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid data' }, { status: 400 })
+    }
+    const { productId, quantity } = parsed.data
 
     const updatedCart = await cart.findOneAndUpdate(
-      { user: session.userId, 'items.product': data.productId },
-      { $inc: { 'items.$.quantity': data.quantity } },
-      { new: true }
+      { user: session.userId, 'items.product': productId },
+      { $inc: { 'items.$.quantity': quantity } },
+      { new: true, runValidators: true }
     )
     if (!updatedCart) {
       await cart.findOneAndUpdate(
         { user: session.userId },
         {
           $push: {
-            items: { product: data.productId, quantity: data.quantity },
+            items: { product: productId, quantity: quantity },
           },
         },
-        { upsert: true }
+        { upsert: true, runValidators: true }
       )
     }
     return NextResponse.json({ success: true })

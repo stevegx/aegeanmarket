@@ -1,6 +1,14 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Returns & Cancellations',
+  description:
+    "Everything you need to know about Aegean Market's order cancellation and return policies.",
+}
+
 export default function ReturnsPage() {
   return (
-    <div className="max-w-7xl mx-auto px-5 md:px-10 py-16">
+    <div className="max-w-7xl mx-auto px-5 md:px-10 py-12">
       {/* Header */}
       <div className="text-center mb-16">
         <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark mb-4">
@@ -112,17 +120,17 @@ export default function ReturnsPage() {
         <p className="text-muted-foreground mb-6">
           Our team is here to help you with the return process.
         </p>
-        <div className="flex justify-around">
+        <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-3">
           <h4 className="font-medium text-lg">
             Contact us at:{' '}
-            <span className="semi-bold text-aegean-green">
+            <span className="font-semibold text-aegean-green-text">
               {' +3069505939532959'}
             </span>
           </h4>
           <span className="font-bold text-2xl text-aegean-dark">OR</span>
           <h4 className="font-medium text-lg">
             Email us at:{' '}
-            <span className="semi-bold text-aegean-green">
+            <span className="font-semibold text-aegean-green-text">
               stevevetsikas85@gmail.com
             </span>
           </h4>

@@ -1,15 +1,24 @@
+import type { Metadata } from 'next'
 import BlogPost from './blogPost'
-import { blogPostData } from './blogPostData'
+import { getAllBlogPosts } from '@/lib/db'
 
-export default function BlogPage() {
+export const metadata: Metadata = {
+  title: 'Blog',
+  description:
+    'Stories, guides, and news from Aegean Market about wines, spirits, and Mediterranean culture.',
+}
+
+export default async function BlogPage() {
+  const posts = await getAllBlogPosts()
+
   return (
     <div className="container mx-auto px-4 py-10">
       <h1 className="text-3xl md:text-4xl text-center mb-10 font-bold text-aegean-dark">
         Blog
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-        {blogPostData.map((post) => (
-          <BlogPost key={post.id} post={post} />
+        {posts.map((post) => (
+          <BlogPost key={post._id} post={post} />
         ))}
       </div>
     </div>

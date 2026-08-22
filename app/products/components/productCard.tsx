@@ -69,7 +69,7 @@ export default function ProductCard({ product }: ProductProps) {
               productId={product._id}
               className="absolute top-2 right-2 z-10"
             />
-            <span className="z-10 absolute text-5xl font-bold text-black top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  text-center">
+            <span className="z-10 absolute text-2xl font-bold text-white bg-black/70 px-3 py-1.5 rounded top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
               OUT OF STOCK
             </span>
             <Image
@@ -127,18 +127,16 @@ export default function ProductCard({ product }: ProductProps) {
             stock > 0 ? (
               <Button
                 variant="buy"
+                size="lg"
                 className={
-                  'w-full transition-all duration-300 animate-in fade-in zoom-in-95 p-5 font-bold text-lg'
+                  'w-full transition-all duration-300 animate-in fade-in zoom-in-95 font-bold'
                 }
                 onClick={() => buyItem(product)}
               >
                 BUY
               </Button>
             ) : (
-              <Button
-                variant="disabledBuy"
-                className={'p-5 w-full font-bold text-lg'}
-              >
+              <Button variant="disabledBuy" size="lg" className="w-full font-bold">
                 BUY
               </Button>
             )
@@ -168,7 +166,8 @@ export function QuantityController({
     >
       <Button
         variant="buy"
-        className="font-bold text-xl rounded-xl "
+        size="icon-xs"
+        className="font-bold text-base rounded-xl"
         onClick={() => quantityHandler(product._id, -1)}
       >
         -
@@ -176,7 +175,8 @@ export function QuantityController({
       <span className="font-bold text-lg">{quantity}</span>
       <Button
         variant="buy"
-        className="font-bold text-xl rounded-xl"
+        size="icon-xs"
+        className="font-bold text-base rounded-xl"
         onClick={() => quantityHandler(product._id, +1)}
       >
         +

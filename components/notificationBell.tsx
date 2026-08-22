@@ -21,13 +21,13 @@ import {
 const POLL_INTERVAL = 30000
 
 function notificationText(notification: NotificationItem) {
-  const from = notification.fromUser?.username ?? 'Κάποιος'
-  const product = notification.product?.name ?? 'ένα προϊόν'
-  return `Ο/Η ${from} απάντησε στο σχόλιό σου στο "${product}"`
+  const from = notification.fromUser?.username ?? 'Someone'
+  const product = notification.product?.name ?? 'a product'
+  return `${from} replied to your comment on "${product}"`
 }
 
 function formatDate(date: string) {
-  return new Date(date).toLocaleDateString('el-GR', {
+  return new Date(date).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'short',
     hour: '2-digit',
@@ -76,11 +76,11 @@ export default function NotificationBell() {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle className="font-bold text-2xl">Ειδοποιήσεις</SheetTitle>
+          <SheetTitle className="font-bold text-2xl">Notifications</SheetTitle>
         </SheetHeader>
         <div className="flex flex-col overflow-y-auto w-full h-full px-6 gap-3">
           {notifications.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Δεν έχεις ειδοποιήσεις.</p>
+            <p className="text-sm text-muted-foreground">You have no notifications.</p>
           ) : (
             notifications.map((notification) => (
               <Link

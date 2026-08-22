@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -53,43 +54,48 @@
   --color-aegean-light: #AED6F1;
   --color-aegean-terracotta: #D98880;
   --color-aegean-green: #27AE60;
+  /* Darker green for small/normal-weight text on light backgrounds -- plain
+     aegean-green only hits ~2.9:1 on white, failing WCAG AA (4.5:1). Keep
+     aegean-green for accents/large headings/buttons where the 3:1 large-text
+     threshold applies; use this for body-sized green text/links. */
+  --color-aegean-green-text: #1E8449;
   --color-aegean-white: #FFFFFF;
   --color-aegean-gray: #F2F4F4;
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --background: #FFFFFF;
+  --foreground: #1A2E3D;
+  --card: #FFFFFF;
+  --card-foreground: #1A2E3D;
+  --popover: #FFFFFF;
+  --popover-foreground: #1A2E3D;
+  --primary: #21618C;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F2F4F4;
+  --secondary-foreground: #21618C;
+  --muted: #F2F4F4;
+  --muted-foreground: #4F6B7A;
+  --accent: #AED6F1;
+  --accent-foreground: #21618C;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #E2E8EC;
+  --input: #E2E8EC;
+  --ring: #3E85B5;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1A2E3D;
+  --sidebar-primary: #21618C;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #AED6F1;
+  --sidebar-accent-foreground: #21618C;
+  --sidebar-border: #E2E8EC;
+  --sidebar-ring: #3E85B5;
 }
 
 .dark {

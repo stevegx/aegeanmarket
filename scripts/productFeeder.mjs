@@ -17,6 +17,7 @@ const productSchema = new mongoose.Schema({
   rating: Number,
   volume: String,
   origin: String,
+  source: { type: String, default: 'feed' },
 })
 
 const Product =
@@ -26,7 +27,10 @@ async function feedProducts() {
   try {
     await mongoose.connect(process.env.MONGODB_URI)
     console.log('Connected to DB')
-    await Product.deleteMany({})
+    // Only wipe feed-sourced products - products created manually in the
+    // admin panel (source: 'admin') aren't part of the XML feed and must
+    // survive re-runs of this script.
+    await Product.deleteMany({ source: { $ne: 'admin' } })
     const xml = fs.readFileSync('./products/products.xml', 'utf-8')
     const result = await parseStringPromise(xml)
     const rawItems = result.dataroot.item
@@ -46,6 +50,7 @@ async function feedProducts() {
         description: item.description?.[0]?.trim() || '',
         origin: item.Origin?.[0]?.trim() || 'Unknown',
         volume: item.Volume?.[0]?.trim() || 'Unknown',
+        source: 'feed',
       }
 
       return {

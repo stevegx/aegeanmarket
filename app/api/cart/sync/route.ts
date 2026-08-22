@@ -1,6 +1,8 @@
+import { z } from 'zod'
 import connectDB from '@/lib/db'
 import { NextResponse } from 'next/server'
 import { getSession } from '@/app/actions/getSession'
+import { CartSchema } from '@/lib/validate'
 import cart from '@/models/cart'
 
 export async function POST(req: Request) {
@@ -10,12 +12,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     await connectDB()
-    const { items } = await req.json() // Παίρνει το array [{productId, quantity}, ...]
+    const body = await req.json()
+    const parsed = z.array(CartSchema).safeParse(body.items)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid data' }, { status: 400 })
+    }
+    const items = parsed.data
 
     for (const item of items) {
       const updated = await cart.findOneAndUpdate(
         { user: session.userId, 'items.product': item.productId },
-        { $set: { 'items.$.quantity': item.quantity } } // Χρησιμοποιούμε $set για να ταυτιστεί με το Zustand
+        { $set: { 'items.$.quantity': item.quantity } }, // Χρησιμοποιούμε $set για να ταυτιστεί με το Zustand
+        { runValidators: true }
       )
       if (!updated) {
         await cart.findOneAndUpdate(
@@ -25,7 +33,7 @@ export async function POST(req: Request) {
               items: { product: item.productId, quantity: item.quantity },
             },
           },
-          { upsert: true }
+          { upsert: true, runValidators: true }
         )
       }
     }

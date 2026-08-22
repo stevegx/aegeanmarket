@@ -4,6 +4,8 @@ import Order from '@/models/Orders'
 import Product from '@/models/Products'
 import Review from '@/models/Review'
 import Notification from '@/models/Notification'
+import BlogPost from '@/models/BlogPost'
+import Cart from '@/models/cart'
 import '@/models/Products'
 import { escapeRegex } from '@/lib/utils'
 declare global {
@@ -62,7 +64,9 @@ export async function getUserFromDb(id: string) {
 export async function getUserOrders(userId: string) {
   try {
     await connectDB()
-    const orders = await Order.find({ user: userId }).sort({ createdAt: -1 })
+    const orders = await Order.find({ user: userId })
+      .sort({ createdAt: -1 })
+      .limit(100)
     return JSON.parse(JSON.stringify(orders))
   } catch (error) {
     console.error('Error fetching orders:', error)
@@ -106,6 +110,7 @@ export async function getProductReviews(productId: string) {
     await connectDB()
     const reviews = await Review.find({ product: productId })
       .sort({ createdAt: 1 })
+      .limit(500)
       .populate({ path: 'user', select: 'username' })
       .populate({ path: 'mentionedUser', select: 'username' })
       .lean()
@@ -121,6 +126,7 @@ export async function getUserReviews(userId: string) {
     await connectDB()
     const reviews = await Review.find({ user: userId })
       .sort({ createdAt: -1 })
+      .limit(100)
       .populate({ path: 'product', select: 'name image' })
       .populate({ path: 'mentionedUser', select: 'username' })
       .lean()
@@ -416,6 +422,147 @@ export async function getAllUsersAdmin({
     totalCount,
     totalPages: Math.max(1, Math.ceil(totalCount / limit)),
   }
+}
+
+export interface BlogPostDoc {
+  _id: string
+  title: string
+  content: string
+  image: string
+  author: string
+  createdAt: string
+}
+
+export async function getAllBlogPosts() {
+  await connectDB()
+  const posts = await BlogPost.find().sort({ createdAt: -1 }).lean()
+  return JSON.parse(JSON.stringify(posts)) as BlogPostDoc[]
+}
+
+export async function getLatestBlogPosts(limit: number) {
+  await connectDB()
+  const posts = await BlogPost.find()
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .lean()
+  return JSON.parse(JSON.stringify(posts)) as BlogPostDoc[]
+}
+
+export async function getBlogPostById(id: string) {
+  await connectDB()
+  if (!mongoose.isValidObjectId(id)) return null
+  const post = await BlogPost.findById(id).lean()
+  return post ? (JSON.parse(JSON.stringify(post)) as BlogPostDoc) : null
+}
+
+export async function getAllBlogPostsAdmin({
+  page = 1,
+  search,
+}: {
+  page?: number
+  search?: string
+}) {
+  await connectDB()
+  const limit = ADMIN_PAGE_SIZE
+  const currentPage = Math.max(1, page)
+  const skip = (currentPage - 1) * limit
+
+  const match: Record<string, unknown> = {}
+  const trimmedSearch = search?.trim()
+  if (trimmedSearch) {
+    const regex = new RegExp(escapeRegex(trimmedSearch), 'i')
+    match.$or = [{ title: regex }, { author: regex }]
+  }
+
+  const [posts, totalCount] = await Promise.all([
+    BlogPost.find(match)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    BlogPost.countDocuments(match),
+  ])
+
+  return {
+    posts: JSON.parse(JSON.stringify(posts)) as BlogPostDoc[],
+    totalCount,
+    totalPages: Math.max(1, Math.ceil(totalCount / limit)),
+  }
+}
+
+export interface AdminProductListItem {
+  _id: string
+  name: string
+  description: string
+  category: string
+  stock: number
+  rating: number
+  price: number
+  image: string
+  manufacturer?: string
+  origin?: string
+  volume?: string
+  isFeatured?: boolean
+  source: 'feed' | 'admin'
+  createdAt: string
+}
+
+export async function getAllProductsAdmin({
+  page = 1,
+  search,
+}: {
+  page?: number
+  search?: string
+}) {
+  await connectDB()
+  const limit = ADMIN_PAGE_SIZE
+  const currentPage = Math.max(1, page)
+  const skip = (currentPage - 1) * limit
+
+  const match: Record<string, unknown> = {}
+  const trimmedSearch = search?.trim()
+  if (trimmedSearch) {
+    const regex = new RegExp(escapeRegex(trimmedSearch), 'i')
+    match.$or = [{ name: regex }, { category: regex }, { manufacturer: regex }]
+  }
+
+  const [products, totalCount] = await Promise.all([
+    Product.find(match)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    Product.countDocuments(match),
+  ])
+
+  return {
+    products: JSON.parse(JSON.stringify(products)) as AdminProductListItem[],
+    totalCount,
+    totalPages: Math.max(1, Math.ceil(totalCount / limit)),
+  }
+}
+
+export interface ProductDeleteImpact {
+  orders: number
+  carts: number
+  favorites: number
+  reviews: number
+}
+
+export async function getProductDeleteImpact(
+  productId: string
+): Promise<ProductDeleteImpact> {
+  await connectDB()
+  const id = new mongoose.Types.ObjectId(productId)
+
+  const [orders, carts, favorites, reviews] = await Promise.all([
+    Order.countDocuments({ 'items.product': id }),
+    Cart.countDocuments({ 'items.product': id }),
+    User.countDocuments({ favorites: id }),
+    Review.countDocuments({ product: id }),
+  ])
+
+  return { orders, carts, favorites, reviews }
 }
 
 export default connectDB

@@ -46,7 +46,7 @@ export default function LoginForm() {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen">
       <form
-        className="flex flex-col shadow-2xl rounded-4xl w-lg p-10 gap-4"
+        className="flex flex-col bg-white border border-aegean-gray shadow-2xl rounded-4xl w-full max-w-lg p-10 gap-4"
         onSubmit={handleSubmit}
       >
         <h1 className="flex text-3xl md:text-4xl my-5 font-bold justify-center text-aegean-dark">
@@ -75,10 +75,7 @@ export default function LoginForm() {
           />
         </div>
 
-        <Button
-          type="submit"
-          className="w-full mt-2 py-5 font-bold text-lg text-white"
-        >
+        <Button type="submit" size="lg" className="w-full mt-2 font-bold">
           Login
         </Button>
         <p className="text-sm text-center">
