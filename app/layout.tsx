@@ -23,8 +23,15 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Aegean Market',
-  description: 'This is my first next.js marketplace app!!',
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  ),
+  title: {
+    default: 'Aegean Market',
+    template: '%s | Aegean Market',
+  },
+  description:
+    'Aegean Market — an online marketplace for premium Mediterranean wines, spirits, and beverages.',
 }
 
 export default async function RootLayout({

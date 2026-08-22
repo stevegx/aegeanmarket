@@ -66,8 +66,8 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
               href={link.href}
               className={`text-sm font-bold px-3 py-1.5 rounded transition-colors ${
                 isActive
-                  ? 'text-aegean-green'
-                  : 'text-aegean-dark hover:text-aegean-green'
+                  ? 'text-aegean-green-text'
+                  : 'text-aegean-dark hover:text-aegean-green-text'
               }`}
             >
               {link.label}

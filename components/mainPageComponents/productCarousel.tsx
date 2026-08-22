@@ -102,7 +102,8 @@ export default function ProductCarousel({
                           <Button
                             variant={hasStock ? 'buy' : 'disabledBuy'}
                             disabled={!hasStock}
-                            className="w-full transition-all duration-300 p-5 text-lg"
+                            size="lg"
+                            className="w-full transition-all duration-300"
                             onClick={() => addItem(product)}
                           >
                             {hasStock ? 'BUY' : 'OUT OF STOCK'}

@@ -1,12 +1,21 @@
 import { NextResponse } from 'next/server'
 import connectDB from '@/lib/db'
 import product from '@/models/Products'
+import { escapeRegex } from '@/lib/utils'
+import { getClientIp, isRateLimited } from '@/lib/rateLimit'
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const q = searchParams.get('q')
   if (!q || q.length < 2)
     return NextResponse.json({ products: [], categories: [], brands: [] })
-  const regex = new RegExp(q, 'i')
+
+  const ip = getClientIp(req.headers)
+  if (isRateLimited(`quick-search:${ip}`, 30, 10_000)) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
+  const regex = new RegExp(escapeRegex(q), 'i')
 
   try {
     await connectDB()

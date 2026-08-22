@@ -1,23 +1,31 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'About Us',
+  description:
+    "Learn about Aegean Market's story, philosophy, and commitment to authentic Mediterranean wines and spirits.",
+}
+
 export default function AboutUsPage() {
   return (
-    <div className="flex flex-col w-full h-auto gap-12 p-8 md:p-20 justify-center items-center bg-white">
+    <div className="flex flex-col w-full h-auto gap-12 px-5 md:px-10 py-12 justify-center items-center bg-white">
       {/* Header με Underline */}
       <div className="text-center">
-        <h1 className="text-6xl md:text-7xl font-bold text-aegean-dark mb-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark mb-4">
           About us
         </h1>
         <div className="h-1.5 w-32 bg-aegean-green mx-auto rounded-full"></div>
       </div>
 
       {/* Main Content Container */}
-      <div className="max-w-4xl space-y-12 text-foreground">
+      <div className="w-full max-w-4xl space-y-12 text-foreground">
         {/* Section 1: Our Story */}
         <section>
           <h2 className="text-3xl font-bold text-aegean-dark mb-4">
             Our Story
           </h2>
-          <p className="text-lg leading-relaxed first-letter:text-6xl first-letter:font-bold first-letter:text-aegean-green first-letter:mr-3 first-letter:float-left">
-            <span className="text-aegean-green font-semibold">
+          <p className="text-lg leading-relaxed first-letter:text-5xl md:first-letter:text-6xl first-letter:font-bold first-letter:text-aegean-green first-letter:mr-3 first-letter:float-left">
+            <span className="text-aegean-green-text font-semibold">
               The Aegean Market
             </span>{' '}
             began with a simple vision: to capture the essence of the

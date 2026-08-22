@@ -17,13 +17,13 @@ export default function ReviewsTab({ reviews }: { reviews: UserReviewData[] }) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 border border-aegean-gray rounded-lg p-10 text-center">
         <p className="text-lg font-semibold text-aegean-dark">
-          Δεν έχεις αφήσει καμία κριτική ή σχόλιο ακόμα.
+          You haven&apos;t left any reviews or comments yet.
         </p>
         <Link
           href="/products"
           className="text-aegean-terracotta font-medium hover:underline"
         >
-          Δες τα προϊόντα μας
+          Browse our products
         </Link>
       </div>
     )
@@ -56,11 +56,11 @@ export default function ReviewsTab({ reviews }: { reviews: UserReviewData[] }) {
               </Link>
             ) : (
               <span className="font-semibold text-sm text-muted-foreground">
-                Το προϊόν δεν υπάρχει πια
+                This product no longer exists
               </span>
             )}
             <span className="text-xs text-muted-foreground shrink-0">
-              {new Date(review.createdAt).toLocaleDateString('el-GR', {
+              {new Date(review.createdAt).toLocaleDateString('en-GB', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
@@ -72,8 +72,8 @@ export default function ReviewsTab({ reviews }: { reviews: UserReviewData[] }) {
             <StarRating rating={review.rating} size="size-4" />
           ) : (
             <span className="text-xs font-medium text-aegean-terracotta w-fit px-2 py-0.5 rounded-full bg-aegean-terracotta/10">
-              Σχόλιο{' '}
-              {review.mentionedUser && `προς @${review.mentionedUser.username}`}
+              Comment{' '}
+              {review.mentionedUser && `to @${review.mentionedUser.username}`}
             </span>
           )}
 

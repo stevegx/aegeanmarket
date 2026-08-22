@@ -190,7 +190,7 @@ export function QrScanMock({ scanned, onScan }: QrScanMockProps) {
           Tap to Simulate Scan
         </button>
       ) : (
-        <p className="text-sm font-bold text-aegean-green">
+        <p className="text-sm font-bold text-aegean-green-text">
           ✓ Payment confirmed — This is a Stavros Vetsikas project
         </p>
       )}

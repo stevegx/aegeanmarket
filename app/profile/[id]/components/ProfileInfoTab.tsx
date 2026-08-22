@@ -69,7 +69,7 @@ export default function ProfileInfoTab({ user }: { user: ProfileUser }) {
       return
     }
 
-    setSuccessMessage('Τα στοιχεία σου ενημερώθηκαν!')
+    setSuccessMessage('Your information has been updated!')
     setIsEditing(false)
     router.refresh()
   }
@@ -130,7 +130,7 @@ export default function ProfileInfoTab({ user }: { user: ProfileUser }) {
         </div>
 
         {successMessage && (
-          <p className="text-sm font-medium text-aegean-green">
+          <p className="text-sm font-medium text-aegean-green-text">
             {successMessage}
           </p>
         )}

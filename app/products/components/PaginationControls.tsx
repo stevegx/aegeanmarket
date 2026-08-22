@@ -33,12 +33,12 @@ const PaginationControls: FC<PaginationProps> = ({
             : 'bg-aegean-green text-white hover:bg-opacity-90 shadow-md'
         }`}
       >
-        Προηγούμενη
+        Previous
       </Link>
 
       <div className="flex items-center gap-2">
         <span className="text-muted-foreground text-sm">Page</span>
-        <span className="font-black text-aegean-green">{currentPage}</span>
+        <span className="font-black text-aegean-green-text">{currentPage}</span>
         <span className="text-muted-foreground text-sm">from {totalPages}</span>
       </div>
 
@@ -50,7 +50,7 @@ const PaginationControls: FC<PaginationProps> = ({
             : 'bg-aegean-green text-white hover:bg-opacity-90 shadow-md'
         }`}
       >
-        Επόμενη
+        Next
       </Link>
     </div>
   )

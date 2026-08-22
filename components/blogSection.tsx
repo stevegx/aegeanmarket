@@ -1,6 +1,9 @@
 import BlogPost from '@/app/(footerpages)/blog/blogPost'
-import { blogPostData } from '@/app/(footerpages)/blog/blogPostData'
-export default function BlogSection() {
+import { getLatestBlogPosts } from '@/lib/db'
+
+export default async function BlogSection() {
+  const posts = await getLatestBlogPosts(3)
+
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-col items-center gap-3 pb-8">
@@ -12,8 +15,8 @@ export default function BlogSection() {
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-center justify-center w-full gap-10">
-        {blogPostData.map((post) => (
-          <BlogPost key={post.id} post={post} />
+        {posts.map((post) => (
+          <BlogPost key={post._id} post={post} />
         ))}
       </div>
     </div>

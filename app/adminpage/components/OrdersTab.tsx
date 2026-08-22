@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Table,
   TableBody,
@@ -68,6 +68,16 @@ export default function OrdersTab({
     router.push(`?${params.toString()}`, { scroll: false })
   }
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchInput !== (search ?? '')) {
+        updateParams({ orderSearch: searchInput })
+      }
+    }, 400)
+    return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchInput])
+
   return (
     <div className="w-full flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -95,10 +105,6 @@ export default function OrdersTab({
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') updateParams({ orderSearch: searchInput })
-            }}
-            onBlur={() => updateParams({ orderSearch: searchInput })}
             placeholder="Search by username, email or guest name..."
             className="flex-1 min-w-64 px-3 py-2 text-sm border rounded-md"
           />

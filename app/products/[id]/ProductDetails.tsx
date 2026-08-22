@@ -12,16 +12,19 @@ import { ReviewData } from '../components/reviews/types'
 import { useCartStore } from '../store/useCartStore'
 import { useAuthStore } from '@/app/(auth)/store/useAuthStore'
 import { toggleReviewLike } from '@/app/actions/toggleReviewLike'
+import ProductEditDialog from '@/app/adminpage/components/ProductEditDialog'
 import { PageProduct } from './page'
 
 export default function ProductDetails({
   product,
   reviews: initialReviews,
   currentUserId,
+  isAdmin,
 }: {
   product: PageProduct
   reviews: ReviewData[]
   currentUserId: string | null
+  isAdmin: boolean
 }) {
   const buyItem = useCartStore((state) => state.addItem)
   const cartItems = useCartStore((state) => state.items)
@@ -99,20 +102,23 @@ export default function ProductDetails({
 
         <div className="w-full flex flex-col">
           <div className="space-y-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <Link
-                href="/products"
-                className="text-muted-foreground hover:text-aegean-dark text-sm font-medium uppercase tracking-wider transition-colors"
-              >
-                Products
-              </Link>
-              <span className="text-muted-foreground text-sm">/</span>
-              <Link
-                href={`/products?category=${product.category}`}
-                className="text-aegean-dark hover:text-aegean-dark/80 text-sm font-semibold uppercase tracking-wider transition-colors"
-              >
-                {product.category}
-              </Link>
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <div className="flex items-center space-x-2">
+                <Link
+                  href="/products"
+                  className="text-muted-foreground hover:text-aegean-dark text-sm font-medium uppercase tracking-wider transition-colors"
+                >
+                  Products
+                </Link>
+                <span className="text-muted-foreground text-sm">/</span>
+                <Link
+                  href={`/products?category=${product.category}`}
+                  className="text-aegean-dark hover:text-aegean-dark/80 text-sm font-semibold uppercase tracking-wider transition-colors"
+                >
+                  {product.category}
+                </Link>
+              </div>
+              {isAdmin && <ProductEditDialog product={product} />}
             </div>
             <h1 className="font-bold text-3xl md:text-4xl text-aegean-dark leading-tight">
               {product.name}
@@ -146,13 +152,14 @@ export default function ProductDetails({
               product.stock > 0 ? (
                 <Button
                   variant="buy"
-                  className="w-full transition-all duration-300 animate-in fade-in zoom-in-95 p-5"
+                  size="lg"
+                  className="w-full transition-all duration-300 animate-in fade-in zoom-in-95"
                   onClick={() => buyItem(product)}
                 >
                   BUY
                 </Button>
               ) : (
-                <Button variant="disabledBuy" className="p-5 w-full" disabled>
+                <Button variant="disabledBuy" size="lg" className="w-full" disabled>
                   BUY
                 </Button>
               )
@@ -227,7 +234,8 @@ export default function ProductDetails({
           <Link href={`/products/${product._id}/rate`}>
             <Button
               variant="buy"
-              className="w-full sm:w-auto px-8 py-5 font-bold text-lg"
+              size="lg"
+              className="w-full sm:w-auto font-bold"
             >
               {myReview ? 'Edit your rating' : 'Rate this product'}
             </Button>

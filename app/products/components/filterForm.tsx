@@ -106,7 +106,7 @@ export default function FilterForm({
       {/* 2. RATING (Κάθετη διάταξη με αστεράκια) */}
       <div className="space-y-3">
         <h4 className="font-bold text-sm uppercase text-muted-foreground tracking-wider">
-          Βαθμολογία
+          Rating
         </h4>
         <div className="flex flex-col gap-1">
           {[5, 4, 3, 2, 1].map((starCount) => {
@@ -187,7 +187,7 @@ export default function FilterForm({
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <h4 className="font-bold text-sm uppercase text-muted-foreground tracking-wider">
-            Προέλευση
+            Origin
           </h4>
           {searchParams.get('origin') && (
             <button
@@ -219,8 +219,8 @@ export default function FilterForm({
               <span
                 className={`transition-colors ${
                   searchParams.get('origin') === o
-                    ? 'text-aegean-green font-bold'
-                    : 'text-muted-foreground hover:text-aegean-green'
+                    ? 'text-aegean-green-text font-bold'
+                    : 'text-muted-foreground hover:text-aegean-green-text'
                 }`}
               >
                 {o}
@@ -232,7 +232,7 @@ export default function FilterForm({
 
       {/* 6. VOLUME */}
       <div className="space-y-2">
-        <h4 className="font-bold text-sm">Χωρητικότητα</h4>
+        <h4 className="font-bold text-sm">Volume</h4>
         <div className="flex flex-wrap gap-2">
           {volume.map((v) => {
             const isSelected = searchParams.getAll('volume').includes(v)

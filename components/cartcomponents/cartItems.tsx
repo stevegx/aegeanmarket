@@ -40,7 +40,7 @@ export default function CartItems({ item }: CartItemsProps) {
               {item.name}
             </h1>
             <span className="sm:hidden text-xs text-muted-foreground mt-1">
-              {item.price.toFixed(2)}€ / μονάδα
+              {item.price.toFixed(2)}€ / unit
             </span>
           </div>
         </Link>
@@ -56,7 +56,7 @@ export default function CartItems({ item }: CartItemsProps) {
 
         <div className="flex-1 sm:col-span-2 text-center sm:text-right">
           <p className="text-[10px] uppercase text-muted-foreground font-medium sm:hidden">
-            Σύνολο
+            Total
           </p>
           <h3 className="font-bold text-base sm:text-sm text-aegean-dark">
             {(item.price * item.quantity).toFixed(2)}€

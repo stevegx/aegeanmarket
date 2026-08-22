@@ -1,15 +1,16 @@
-import { BlogPostType } from './blogPostData'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
+import { stripMarkdown } from '@/lib/utils'
+import type { BlogPostDoc } from '@/lib/db'
 
 interface BlogPostProps {
-  post: BlogPostType
+  post: BlogPostDoc
 }
 
 export default function BlogPost({ post }: BlogPostProps) {
   return (
-    <Link href={`/blog/${post.id}`} className="group block w-full max-w-100">
+    <Link href={`/blog/${post._id}`} className="group block w-full max-w-100">
       <Card className="flex flex-col h-full overflow-hidden border border-border p-0 shadow-sm transition-all duration-300 hover:shadow-md">
         <div className="relative w-full aspect-video">
           <Image
@@ -17,18 +18,20 @@ export default function BlogPost({ post }: BlogPostProps) {
             alt={post.title}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
             priority
           />
         </div>
         <div className="p-5 flex flex-col grow gap-3">
           <span className="text-[10px] uppercase tracking-widest text-aegean-terracotta font-bold">
-            {post.date} • {post.author}
+            {new Date(post.createdAt).toLocaleDateString('en-GB')} •{' '}
+            {post.author}
           </span>
-          <h1 className="text-xl font-bold text-aegean-dark line-clamp-2 leading-tight">
+          <h3 className="text-xl font-bold text-aegean-dark line-clamp-2 leading-tight">
             {post.title}
-          </h1>
+          </h3>
           <p className="line-clamp-3 text-muted-foreground text-sm leading-relaxed">
-            {post.content}
+            {stripMarkdown(post.content)}
           </p>
 
           <div className="flex items-center gap-2 mt-auto pt-2 text-aegean-dark font-bold text-sm">

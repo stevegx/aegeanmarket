@@ -1,8 +1,15 @@
+import type { Metadata } from 'next'
 import MapWidget from './mapWidget'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+
+export const metadata: Metadata = {
+  title: 'Communication',
+  description:
+    'Get in touch with Aegean Market — find our location, opening hours, contact details, and send us a message.',
+}
 
 export default function CommunicationPage() {
   return (
@@ -20,7 +27,7 @@ export default function CommunicationPage() {
             <h3 className="text-2xl font-bold text-aegean-dark mb-4">
               Our Location
             </h3>
-            <p className="text-lg font-medium text-aegean-green underline mb-4">
+            <p className="text-lg font-medium text-aegean-green-text underline mb-4">
               Mytilene, Lesvos, Greece
             </p>
 
@@ -51,13 +58,13 @@ export default function CommunicationPage() {
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 bg-white border border-border rounded-lg shadow-sm">
               <h3 className="font-bold text-aegean-dark">Telephone</h3>
-              <h4 className="text-aegean-green hover:underline">
+              <h4 className="text-aegean-green-text hover:underline">
                 +30 22510 12345
               </h4>
             </div>
             <div className="p-4 bg-white border border-border rounded-lg shadow-sm">
               <h3 className="font-bold text-aegean-dark">Email</h3>
-              <h4 className="text-aegean-green hover:underline break-all">
+              <h4 className="text-aegean-green-text hover:underline break-all">
                 info@mytilene.com
               </h4>
             </div>
@@ -107,7 +114,7 @@ export default function CommunicationPage() {
               />
             </div>
 
-            <Button type="submit" variant="buy" className="mt-4 py-5 font-bold text-lg">
+            <Button type="submit" variant="buy" size="lg" className="mt-4 font-bold">
               Send Message
             </Button>
           </form>

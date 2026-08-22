@@ -23,11 +23,11 @@ export interface OrderData {
 }
 
 const STATUS_STYLES: Record<OrderData['status'], string> = {
-  pending: 'bg-yellow-100 text-yellow-700',
-  processing: 'bg-blue-100 text-blue-700',
-  shipped: 'bg-purple-100 text-purple-700',
-  delivered: 'bg-green-100 text-green-700',
-  cancelled: 'bg-red-100 text-red-700',
+  pending: 'bg-aegean-terracotta/10 text-aegean-terracotta',
+  processing: 'bg-aegean-blue/10 text-aegean-blue',
+  shipped: 'bg-aegean-blue/10 text-aegean-blue',
+  delivered: 'bg-aegean-green/10 text-aegean-green-text',
+  cancelled: 'bg-destructive/10 text-destructive',
 }
 
 const PAYMENT_LABELS: Record<OrderData['paymentMethod'], string> = {
@@ -43,13 +43,13 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 border border-aegean-gray rounded-lg p-10 text-center">
         <p className="text-lg font-semibold text-aegean-dark">
-          Δεν έχεις κάνει καμία παραγγελία ακόμα.
+          You haven&apos;t placed any orders yet.
         </p>
         <Link
           href="/products"
           className="text-aegean-terracotta font-medium hover:underline"
         >
-          Δες τα προϊόντα μας
+          Browse our products
         </Link>
       </div>
     )
@@ -68,7 +68,7 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
                 #{order._id.slice(-8).toUpperCase()}
               </p>
               <p className="text-sm text-muted-foreground">
-                {new Date(order.createdAt).toLocaleDateString('el-GR', {
+                {new Date(order.createdAt).toLocaleDateString('en-GB', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
@@ -102,7 +102,7 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
           <div className="grid sm:grid-cols-2 gap-4 text-sm border-t border-aegean-gray/50 pt-4">
             <div>
               <p className="font-semibold text-aegean-dark mb-1">
-                Διεύθυνση Αποστολής
+                Shipping Address
               </p>
               <p className="text-muted-foreground">
                 {order.shippingAddress.street} {order.shippingAddress.number},{' '}
@@ -111,7 +111,7 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
               </p>
             </div>
             <div>
-              <p className="font-semibold text-aegean-dark mb-1">Πληρωμή</p>
+              <p className="font-semibold text-aegean-dark mb-1">Payment</p>
               <p className="text-muted-foreground">
                 {PAYMENT_LABELS[order.paymentMethod]} &middot;{' '}
                 <span className="capitalize">{order.paymentStatus}</span>
@@ -121,7 +121,7 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
 
           <div className="flex justify-end border-t border-aegean-gray/50 pt-3">
             <span className="font-bold text-lg text-aegean-blue">
-              Σύνολο: {order.totalPrice.toFixed(2)}€
+              Total: {order.totalPrice.toFixed(2)}€
             </span>
           </div>
         </div>

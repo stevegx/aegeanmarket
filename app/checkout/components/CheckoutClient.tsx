@@ -168,7 +168,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
           Add some products to your cart before checking out.
         </p>
         <Link href="/products">
-          <Button variant="buy" className="px-6 py-5 font-bold text-lg">
+          <Button variant="buy" size="lg" className="font-bold">
             Browse Products
           </Button>
         </Link>
@@ -386,7 +386,8 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
               <Button
                 type="submit"
                 variant="buy"
-                className="w-full py-5 font-bold text-lg mt-1"
+                size="lg"
+                className="w-full font-bold mt-1"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

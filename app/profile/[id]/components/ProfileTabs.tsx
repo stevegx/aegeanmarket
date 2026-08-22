@@ -44,16 +44,16 @@ export default function ProfileTabs({
 
       <Tabs defaultValue={initialTab} className="w-full items-center">
         <TabsList>
-          <TabsTrigger value="info">Στοιχεία</TabsTrigger>
-          <TabsTrigger value="security">Ασφάλεια</TabsTrigger>
+          <TabsTrigger value="info">Info</TabsTrigger>
+          <TabsTrigger value="security">Security</TabsTrigger>
           <TabsTrigger value="orders">
-            Παραγγελίες {orders.length > 0 && `(${orders.length})`}
+            Orders {orders.length > 0 && `(${orders.length})`}
           </TabsTrigger>
           <TabsTrigger value="favorites">
-            Αγαπημένα {favorites.length > 0 && `(${favorites.length})`}
+            Favorites {favorites.length > 0 && `(${favorites.length})`}
           </TabsTrigger>
           <TabsTrigger value="reviews">
-            Κριτικές {reviews.length > 0 && `(${reviews.length})`}
+            Reviews {reviews.length > 0 && `(${reviews.length})`}
           </TabsTrigger>
         </TabsList>
 

@@ -12,7 +12,7 @@ import StarRating from './StarRating'
 import { ReviewData } from './types'
 
 function formatDate(date: string) {
-  return new Date(date).toLocaleDateString('el-GR', {
+  return new Date(date).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
@@ -49,12 +49,12 @@ export default function ReviewSection({
   return (
     <div className="max-w-7xl mx-auto w-full px-5 md:px-10 py-10 flex flex-col gap-6">
       <h2 className="font-bold text-2xl text-aegean-dark">
-        Κριτικές {topLevel.length > 0 && `(${topLevel.length})`}
+        Reviews {topLevel.length > 0 && `(${topLevel.length})`}
       </h2>
 
       {topLevel.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          Δεν υπάρχουν κριτικές ακόμα. Γίνε ο πρώτος!
+          No reviews yet. Be the first!
         </p>
       ) : (
         <div className="flex flex-col">
@@ -146,7 +146,7 @@ function ReviewItem({
             }
             className="text-xs font-medium text-aegean-terracotta hover:underline cursor-pointer"
           >
-            Απάντηση
+            Reply
           </button>
         )}
       </div>
@@ -183,7 +183,7 @@ function ReviewItem({
                     }
                     className="text-xs font-medium text-aegean-terracotta hover:underline cursor-pointer"
                   >
-                    Απάντηση
+                    Reply
                   </button>
                 )}
                 {currentUserId === reply.user._id && (
@@ -195,7 +195,7 @@ function ReviewItem({
                     }}
                     className="text-xs font-medium text-destructive hover:underline cursor-pointer"
                   >
-                    Διαγραφή
+                    Delete
                   </button>
                 )}
               </div>
@@ -241,7 +241,7 @@ function ReplyForm({
     setIsPending(true)
     const result = await onSubmit(text)
     setIsPending(false)
-    if (!result.success) setError(result.error || 'Κάτι πήγε στραβά')
+    if (!result.success) setError(result.error || 'Something went wrong')
   }
 
   return (
@@ -250,19 +250,19 @@ function ReplyForm({
         autoFocus
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder={`Απάντηση στον/στην @${targetUsername}...`}
+        placeholder={`Reply to @${targetUsername}...`}
         maxLength={1000}
         className="text-sm"
       />
       {error && (
-        <p className="text-xs font-semibold text-aegean-green">{error}</p>
+        <p className="text-xs font-semibold text-aegean-green-text">{error}</p>
       )}
       <div className="flex items-center gap-2 self-end">
         <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
-          Άκυρο
+          Cancel
         </Button>
         <Button type="submit" variant="buy" size="sm" disabled={isPending}>
-          {isPending ? 'Αποστολή...' : 'Απάντηση'}
+          {isPending ? 'Sending...' : 'Reply'}
         </Button>
       </div>
     </form>

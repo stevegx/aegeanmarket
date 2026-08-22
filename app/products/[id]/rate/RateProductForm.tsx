@@ -30,11 +30,11 @@ export default function RateProductForm({
     setError(null)
 
     if (rating < 1) {
-      setError('Επίλεξε αριθμό αστεριών.')
+      setError('Please select a star rating.')
       return
     }
     if (!text.trim()) {
-      setError('Η γραπτή αξιολόγηση είναι υποχρεωτική.')
+      setError('A written review is required.')
       return
     }
 
@@ -57,11 +57,11 @@ export default function RateProductForm({
         href={`/products/${productId}`}
         className="text-sm text-muted-foreground hover:text-aegean-terracotta transition-colors"
       >
-        ← Πίσω στο προϊόν
+        ← Back to product
       </Link>
 
       <h1 className="font-bold text-2xl text-aegean-dark mt-4">
-        Αξιολόγησε το «{productName}»
+        Rate &quot;{productName}&quot;
       </h1>
 
       <form
@@ -70,35 +70,36 @@ export default function RateProductForm({
       >
         <div>
           <span className="font-semibold text-sm text-aegean-dark block mb-2">
-            Βαθμολογία *
+            Rating *
           </span>
           <StarRatingInput value={rating} onChange={setRating} size="size-8" />
         </div>
 
         <div>
           <span className="font-semibold text-sm text-aegean-dark block mb-2">
-            Γραπτή αξιολόγηση *
+            Written review *
           </span>
           <Textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Πες μας τη γνώμη σου για το προϊόν..."
+            placeholder="Tell us what you think about the product..."
             maxLength={1000}
             className="min-h-32"
           />
         </div>
 
         {error && (
-          <p className="text-sm font-semibold text-aegean-green">{error}</p>
+          <p className="text-sm font-semibold text-aegean-green-text">{error}</p>
         )}
 
         <Button
           type="submit"
           variant="buy"
-          className="self-end px-8 py-5 font-bold text-lg"
+          size="lg"
+          className="self-end font-bold"
           disabled={isPending}
         >
-          {isPending ? 'Αποθήκευση...' : 'Δημοσίευση'}
+          {isPending ? 'Saving...' : 'Post'}
         </Button>
       </form>
     </div>
