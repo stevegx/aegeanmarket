@@ -6,7 +6,7 @@ It covers the full feature set of a real online shop — product catalog with fi
 
 > This is a personal, non-commercial project built for learning and portfolio purposes. Payment processing is mocked and not connected to a real payment gateway.
 
-**🔗 Live demo:** [aegeanmarket-9ljuckjei-stevevetsikas85-1053s-projects.vercel.app](https://aegeanmarket-9ljuckjei-stevevetsikas85-1053s-projects.vercel.app/)
+**🔗 Live demo:** https://aegeanmarket.vercel.app/
 
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)](https://aegeanmarket-9ljuckjei-stevevetsikas85-1053s-projects.vercel.app/)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
