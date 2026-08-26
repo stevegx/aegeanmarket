@@ -37,7 +37,7 @@ export default function ShipmentsPage() {
   return (
     <div className="flex flex-col gap-10 px-5 md:px-10 py-12 max-w-7xl mx-auto">
       <div className="text-center">
-        <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark mb-2">
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
           Shipment Methods
         </h1>
         <p className="text-muted-foreground">
@@ -50,7 +50,7 @@ export default function ShipmentsPage() {
         {ShipmentMethods.map((method) => (
           <div
             key={method.name}
-            className="flex flex-col items-start border border-border rounded-lg p-6 shadow-sm hover:shadow-aegean-green hover:shadow-md transition-shadow bg-white w-full sm:w-72"
+            className="flex flex-col items-start border border-border rounded-lg p-6 shadow-sm hover:shadow-aegean-green hover:shadow-md transition-shadow bg-card w-full sm:w-72"
           >
             <div className="h-12 w-full mb-6 relative">
               <Image
@@ -60,7 +60,7 @@ export default function ShipmentsPage() {
                 className="object-contain"
               />
             </div>
-            <h2 className="font-bold text-aegean-dark text-xl mb-2">
+            <h2 className="font-bold text-foreground text-xl mb-2">
               {method.name}
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed font-normal">

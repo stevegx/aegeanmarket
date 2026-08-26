@@ -31,6 +31,7 @@ It covers the full feature set of a real online shop — product catalog with fi
 
 **Accounts & auth**
 - JWT-based authentication (access + refresh tokens) with `httpOnly` cookies, verified via `jose`
+- Google Sign-In (OAuth) alongside traditional email/password login, with automatic account linking by email
 - Edge-level route protection (Next.js Proxy/Middleware) for admin, profile, and auth pages, including silent access-token refresh
 - Registration, login, logout, and password change flows
 
@@ -45,6 +46,7 @@ It covers the full feature set of a real online shop — product catalog with fi
 
 **Other**
 - Wishlist/favorites with optimistic UI
+- Dark mode with a navbar toggle (light/dark/system), persisted to `localStorage` and synced to the user's account so it follows them across devices
 - Content pages (about, blog, shipping, payments, returns, contact)
 - Product data importable from an external XML feed via a seeder script
 
@@ -55,10 +57,10 @@ It covers the full feature set of a real online shop — product catalog with fi
 | Layer            | Technology |
 |-------------------|------------|
 | Framework         | [Next.js 16](https://nextjs.org/) (App Router, React Server Components, Server Actions) |
-| UI                | [React 19](https://react.dev/), [Tailwind CSS v4](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/) (`base-mira` style), [Hugeicons](https://hugeicons.com/), [Radix UI](https://www.radix-ui.com/), [Embla Carousel](https://www.embla-carousel.com/) |
+| UI                | [React 19](https://react.dev/), [Tailwind CSS v4](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/) (`base-mira` style), [Hugeicons](https://hugeicons.com/), [Radix UI](https://www.radix-ui.com/), [Embla Carousel](https://www.embla-carousel.com/), [next-themes](https://github.com/pacocoursey/next-themes) (dark mode) |
 | Client state       | [Zustand](https://zustand-demo.pmnd.rs/) (cart, favorites, notifications, auth) |
 | Database / ORM     | [MongoDB](https://www.mongodb.com/) via [Mongoose](https://mongoosejs.com/) |
-| Auth               | [jose](https://github.com/panva/jose) (JWT sign/verify), `bcryptjs` (password hashing), httpOnly cookies |
+| Auth               | [jose](https://github.com/panva/jose) (JWT sign/verify), `bcryptjs` (password hashing), httpOnly cookies, Google Sign-In (OAuth) |
 | Validation         | [Zod](https://zod.dev/) |
 | Data fetching (client) | [TanStack Query](https://tanstack.com/query) |
 | Language           | TypeScript |
@@ -71,6 +73,7 @@ It covers the full feature set of a real online shop — product catalog with fi
 - **Server-first data flow.** Products, users, orders, and reviews are fetched only in Server Components and Server Actions via direct Mongoose queries — there is no client-side fetching for primary page content. Listing, product detail, and profile pages are rendered directly from `searchParams`/`params`.
 - **Client stores as a thin sync layer.** Zustand stores mirror server state into interactive UI (cart badge, favorite hearts, notification bell). Only the cart store is persisted to `localStorage`; the others are re-populated on each page load by small client "handler" components mounted in the root layout, gated on auth state.
 - **Two-way cart sync.** Local optimistic cart updates are debounced (5s) and pushed to `/api/cart/sync`, while `/api/cart` is used to hydrate the store on login.
+- **Theme sync.** Dark/light/system preference is stored in `localStorage` for instant, flash-free theming, and synced to the user's account (`/api/theme`) on login/change so it follows them to a new device.
 - **Layered auth.** A Next.js Proxy (edge middleware) verifies/refreshes JWTs and guards `/admin`, `/login`, `/register`, and `/profile/*`; a `getSession()` server action is the source of truth inside Server Components/Actions/route handlers; lower-level token helpers back the login/refresh flows.
 - **Centralized DB read layer.** Cross-model aggregate queries (user data, orders, favorites, reviews, notifications, rating recalculation) live in `lib/db.ts` on top of a single cached Mongoose connection, keeping projection/`.lean()` patterns consistent across the app.
 - **Optimized external images.** Product photos are served from an external catalog host and routed through `next/image`'s optimizer/cache rather than served unoptimized.
@@ -126,7 +129,11 @@ MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 REFRESH_SECRET=your_refresh_token_secret
 JWT_EXPIRES_IN=15m
+
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_oauth_client_id
 ```
+
+`NEXT_PUBLIC_GOOGLE_CLIENT_ID` comes from a Google Cloud Console OAuth 2.0 Client ID (Web application type) — it's optional; if it's unset, the Google Sign-In button simply doesn't render.
 
 ### 3. (Optional) Seed the product catalog
 

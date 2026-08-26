@@ -10,7 +10,7 @@ export default async function BlogSection() {
         <h1 className="text-2xl md:text-4xl  font-bold  text-center">
           Ideas and Suggestions
         </h1>
-        <p className="text-lg font-mono text-aegean-dark">
+        <p className="text-lg font-mono text-muted-foreground">
           Visit our Blog and find usefull ideas and tips.
         </p>
       </div>

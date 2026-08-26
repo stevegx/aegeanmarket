@@ -9,6 +9,10 @@ import { CartSyncHandler } from '@/app/products/components/cart/handler/CartSync
 import { FavoritesSyncHandler } from '@/app/products/components/favorites/handler/FavoritesSyncHandler'
 import SearchComponent from '@/components/searchcomponents/searchComponent'
 import Footer from '@/components/footer'
+import MobileTabBar from '@/components/mobileTabBar'
+import CookieConsent from '@/components/CookieConsent'
+import { ThemeProvider } from '@/components/theme-provider'
+import { ThemeSyncHandler } from '@/components/ThemeSyncHandler'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -41,19 +45,28 @@ export default async function RootLayout({
 }>) {
   const session = await getSession()
   return (
-    <html lang="en" className={cn('h-full', 'antialiased', inter.variable)}>
+    <html
+      lang="en"
+      className={cn('antialiased', inter.variable)}
+      suppressHydrationWarning
+    >
       <body
-        className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} font-sans h-full flex flex-col`}
+        className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} font-sans min-h-screen flex flex-col pb-16 sm:pb-0`}
       >
-        <Navbar initialSession={session}>
-          <SearchComponent />
-        </Navbar>
-        <CartSyncHandler />
-        <FavoritesSyncHandler />
-        <main className="grow flex flex-col md:pt-12 pt-20"> {children}</main>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Navbar initialSession={session}>
+            <SearchComponent />
+          </Navbar>
+          <CartSyncHandler />
+          <FavoritesSyncHandler />
+          <ThemeSyncHandler />
+          <main className="grow flex flex-col">{children}</main>
 
-        <Footer userId={session?.userId ?? null} />
-        <Analytics />
+          <Footer userId={session?.userId ?? null} />
+          <MobileTabBar />
+          <CookieConsent />
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   )

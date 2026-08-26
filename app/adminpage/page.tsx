@@ -92,7 +92,7 @@ export default async function AdminPage({
 
   return (
     <div className="flex flex-col items-center m-10 max-w-[1600px] gap-8">
-      <h1 className="text-3xl md:text-4xl font-bold text-center text-aegean-dark">
+      <h1 className="text-3xl md:text-4xl font-bold text-center text-foreground">
         Admin Panel
       </h1>
       <AdminTabs

@@ -9,7 +9,7 @@ export const STATUS_META: Record<string, { label: string; tone: string }> = {
 export const TONE_CLASSES: Record<string, string> = {
   dark: 'bg-aegean-dark/10 text-aegean-dark',
   blue: 'bg-aegean-blue/10 text-aegean-blue',
-  light: 'bg-aegean-light/40 text-aegean-dark',
+  light: 'bg-white text-aegean-dark border border-aegean-blue/20',
   green: 'bg-aegean-green/10 text-aegean-green',
   terracotta: 'bg-aegean-terracotta/10 text-aegean-terracotta',
   destructive: 'bg-destructive/10 text-destructive',

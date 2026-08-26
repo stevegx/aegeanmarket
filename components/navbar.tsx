@@ -17,6 +17,7 @@ import { useAuthStore } from '@/app/(auth)/store/useAuthStore'
 import CartModal from './cartModal'
 import NotificationBell from './notificationBell'
 import { useNotificationsStore } from '@/app/store/useNotificationsStore'
+import ThemeToggle from './theme-toggle'
 
 const NAV_LINKS = [
   { href: '/products', label: 'Products' },
@@ -45,7 +46,7 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
     setIsHydrated(true)
   }, [initialSession, setLogin])
   return (
-    <div className="fixed top-0 left-0 w-full z-50 flex flex-wrap items-center justify-between gap-x-5 px-4 md:px-6 py-4 bg-white/80 text-aegean-dark shadow-md backdrop-filter backdrop-blur-sm bg-opacity-0">
+    <div className="sticky top-0 z-50 w-full flex flex-wrap items-center justify-between gap-x-5 px-4 md:px-6 py-4 bg-background/90 text-foreground shadow-md backdrop-filter backdrop-blur-sm">
       {' '}
       <Link href="/" className="shrink-0">
         <Image
@@ -67,7 +68,7 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
               className={`text-sm font-bold px-3 py-1.5 rounded transition-colors ${
                 isActive
                   ? 'text-aegean-green-text'
-                  : 'text-aegean-dark hover:text-aegean-green-text'
+                  : 'text-foreground hover:text-aegean-green-text'
               }`}
             >
               {link.label}
@@ -78,11 +79,12 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
       <div className="order-last md:order-0 w-full md:w-auto md:grow md:max-w-md mx-auto">
         {children}
       </div>
+      <ThemeToggle />
       <CartModal />
       {isHydrated && isLoggedIn && <NotificationBell />}
       <div className="flex items-center gap-3">
         {!isHydrated ? (
-          <div className="w-20 h-8 bg-white/10 animate-pulse rounded" />
+          <div className="w-20 h-8 bg-muted animate-pulse rounded" />
         ) : isLoggedIn && initialSession?.username ? (
           <UserMenu
             name={initialSession.username}
@@ -99,7 +101,7 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
           <div className="flex items-center gap-2">
             {!pathname.startsWith('/login') && (
               <Link href="/login">
-                <button className=" text-aegean-dark text-md font-bold bg-aegean-gray/40 hover:bg-aegean-gray  cursor-pointer px-4 py-1.5 rounded">
+                <button className=" text-foreground text-md font-bold bg-muted hover:bg-muted/70  cursor-pointer px-4 py-1.5 rounded">
                   Login
                 </button>
               </Link>
@@ -107,7 +109,7 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
 
             {!pathname.startsWith('/register') && (
               <Link href="/register">
-                <button className=" text-aegean-dark text-md font-bold bg-aegean-gray/40 hover:bg-aegean-gray cursor-pointer px-4 py-1.5 rounded">
+                <button className=" text-foreground text-md font-bold bg-muted hover:bg-muted/70 cursor-pointer px-4 py-1.5 rounded">
                   Register
                 </button>
               </Link>
@@ -134,10 +136,10 @@ export function UserMenu({
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="bg-transparent text-aegean-dark hover:text-aegean-green border-none text-sm px-2">
+          <NavigationMenuTrigger className="bg-transparent text-foreground hover:text-aegean-green border-none text-sm px-2">
             {name}
           </NavigationMenuTrigger>
-          <NavigationMenuContent className="bg-white text-aegean-dark rounded-md shadow-xl mt-2 border border-border">
+          <NavigationMenuContent className="bg-popover text-popover-foreground rounded-md shadow-xl mt-2 border border-border">
             <ul className="p-2 min-w-35 flex flex-col gap-1">
               <li>
                 <Link

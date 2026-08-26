@@ -70,7 +70,7 @@ export default function PaymentMethodSelector({
         {paymentMethods.map((method) => (
           <label
             key={method.value}
-            className="flex items-center gap-3 rounded-lg border border-border p-3 cursor-pointer transition-colors has-[:checked]:border-aegean-dark has-[:checked]:bg-aegean-light/20 hover:bg-aegean-gray/50"
+            className="flex items-center gap-3 rounded-lg border border-border p-3 cursor-pointer transition-colors has-[:checked]:border-aegean-dark has-[:checked]:bg-aegean-light/20 hover:bg-muted"
           >
             <input
               type="radio"
@@ -89,7 +89,7 @@ export default function PaymentMethodSelector({
               />
             </span>
             <span className="flex flex-col min-w-0">
-              <span className="font-bold text-sm text-aegean-dark">
+              <span className="font-bold text-sm text-foreground">
                 {method.label}
               </span>
               <span className="text-xs text-muted-foreground">

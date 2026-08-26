@@ -60,23 +60,23 @@ export default function RateProductForm({
         ← Back to product
       </Link>
 
-      <h1 className="font-bold text-2xl text-aegean-dark mt-4">
+      <h1 className="font-bold text-2xl text-foreground mt-4">
         Rate &quot;{productName}&quot;
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4 border border-aegean-gray rounded-lg p-6 bg-white mt-6"
+        className="flex flex-col gap-4 border border-border rounded-lg p-6 bg-card mt-6"
       >
         <div>
-          <span className="font-semibold text-sm text-aegean-dark block mb-2">
+          <span className="font-semibold text-sm text-foreground block mb-2">
             Rating *
           </span>
           <StarRatingInput value={rating} onChange={setRating} size="size-8" />
         </div>
 
         <div>
-          <span className="font-semibold text-sm text-aegean-dark block mb-2">
+          <span className="font-semibold text-sm text-foreground block mb-2">
             Written review *
           </span>
           <Textarea

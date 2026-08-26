@@ -39,7 +39,7 @@ export default function ProfileTabs({
       </div>
       <h2 className="font-bold text-xl">
         Hello {user.role},{' '}
-        <span className="text-aegean-dark">{user.username}</span>
+        <span className="text-foreground">{user.username}</span>
       </h2>
 
       <Tabs defaultValue={initialTab} className="w-full items-center">

@@ -72,7 +72,7 @@ export default function SearchBar({ categories }: SearchBarProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between w-full max-w-2xl mx-auto rounded-2xl bg-[#F3F4F6] shadow-sm border border-aegean-dark/20 focus-within:border-aegean-green/30 focus-within:bg-white focus-within:shadow-md transition-all duration-300 overflow-hidden cursor-pointer">
+      <div className="flex items-center justify-between w-full max-w-2xl mx-auto rounded-2xl bg-muted shadow-sm border border-border focus-within:border-aegean-green/30 focus-within:bg-background focus-within:shadow-md transition-all duration-300 overflow-hidden cursor-pointer">
         <div className="flex-1 cursor-pointer">
           <Button
             onClick={() => setOpen(true)}
@@ -93,12 +93,12 @@ export default function SearchBar({ categories }: SearchBarProps) {
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
             </svg>
-            <span className="text-aegean-dark font-medium text-sm tracking-tight hidden md:block cursor-pointer">
+            <span className="text-foreground font-medium text-sm tracking-tight hidden md:block cursor-pointer">
               Search for products
             </span>
           </Button>
         </div>
-        <div className="h-6 w-[1.5px] bg-linear-to-b from-transparent via-gray-300 to-transparent opacity-50 hidden sm:block" />
+        <div className="h-6 w-[1.5px] bg-linear-to-b from-transparent via-border to-transparent opacity-50 hidden sm:block" />
         <div className="px-1 py-1 cursor-pointer">
           <SearchCategories categories={categories} />
         </div>
@@ -204,7 +204,7 @@ export default function SearchBar({ categories }: SearchBarProps) {
                           height={40}
                           width={40}
                           alt={product.name}
-                          className="aspect-square object-contain bg-white rounded-md"
+                          className="aspect-square object-contain bg-muted rounded-md"
                         />
                         <span>{product.name}</span>
                       </div>

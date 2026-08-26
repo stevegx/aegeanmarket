@@ -43,7 +43,7 @@ export function InfoCarousel() {
   ]
 
   return (
-    <div className="w-screen h-12 bg-white/80 border-y border-aegean-gray/30 overflow-hidden flex items-center">
+    <div className="w-screen h-12 bg-background/80 border-y border-border overflow-hidden flex items-center">
       <Carousel
         opts={{
           loop: true,
@@ -58,7 +58,7 @@ export function InfoCarousel() {
             <CarouselItem key={index} className="pl-0 md:basis-1/2">
               <Card className="border-none shadow-none bg-transparent">
                 <CardContent className="flex flex-row items-center justify-center gap-3 p-1 h-10">
-                  <div className="text-aegean-dark shrink-0">{item.icon}</div>
+                  <div className="text-foreground shrink-0">{item.icon}</div>
                   <h3 className="text-xs md:text-sm font-medium leading-tight whitespace-nowrap">
                     {item.title}
                   </h3>

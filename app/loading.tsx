@@ -3,12 +3,12 @@ import { ProductCardSkeleton } from './products/components/productCardSkeleton'
 
 export default function Loading() {
   return (
-    <div className="w-full flex flex-col items-center justify-start overflow-x-hidden bg-white">
+    <div className="w-full flex flex-col items-center justify-start overflow-x-hidden bg-background">
       <div className="w-full mb-6">
         <Skeleton className="w-full aspect-[21/9] rounded-none" />
       </div>
 
-      <div className="w-full py-4 bg-aegean-gray border-y border-border">
+      <div className="w-full py-4 bg-muted border-y border-border">
         <div className="flex justify-center gap-8 px-4">
           <Skeleton className="h-10 w-40" />
           <Skeleton className="h-10 w-40 hidden sm:block" />

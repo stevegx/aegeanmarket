@@ -63,7 +63,7 @@ export default async function Page({
   if (!productRaw) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 min-h-[60vh] text-center px-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark">
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground">
           404 — Product not found
         </h1>
         <p className="text-muted-foreground">

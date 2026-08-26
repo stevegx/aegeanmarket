@@ -49,7 +49,7 @@ export default async function ProfilePage({
 
   return (
     <div className="flex flex-col items-center w-full px-4 py-10 gap-6">
-      <h1 className="text-3xl md:text-4xl font-bold text-center text-aegean-dark">
+      <h1 className="text-3xl md:text-4xl font-bold text-center text-foreground">
         Profile
       </h1>
       <ProfileTabs

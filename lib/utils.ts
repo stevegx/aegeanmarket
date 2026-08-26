@@ -22,3 +22,11 @@ export function stripMarkdown(markdown: string) {
     .replace(/\n+/g, ' ')
     .trim()
 }
+
+// Estimates reading time in whole minutes from Markdown content (~200 wpm).
+export function getReadingTime(markdown: string) {
+  const words = stripMarkdown(markdown)
+    .split(/\s+/)
+    .filter(Boolean).length
+  return Math.max(1, Math.round(words / 200))
+}

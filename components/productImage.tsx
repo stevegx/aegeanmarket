@@ -36,7 +36,7 @@ export default function ProductImage({
     return (
       <div
         className={cn(
-          'flex items-center justify-center bg-aegean-gray/20',
+          'flex items-center justify-center bg-muted',
           fill && 'absolute inset-0',
           className
         )}
@@ -49,7 +49,7 @@ export default function ProductImage({
           fill="none"
           stroke="currentColor"
           strokeWidth="1.25"
-          className="w-1/3 h-1/3 min-w-6 min-h-6 text-aegean-dark/25"
+          className="w-1/3 h-1/3 min-w-6 min-h-6 text-foreground/25"
         >
           <path
             d="M9.5 2h5M10 2v3.9c0 .4-.13.79-.38 1.1L8.1 8.9c-.71.9-1.1 2-1.1 3.14V20a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-7.96c0-1.14-.39-2.24-1.1-3.14l-1.52-1.9A1.77 1.77 0 0 1 14 5.9V2"

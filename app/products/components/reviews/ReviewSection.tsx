@@ -48,7 +48,7 @@ export default function ReviewSection({
 
   return (
     <div className="max-w-7xl mx-auto w-full px-5 md:px-10 py-10 flex flex-col gap-6">
-      <h2 className="font-bold text-2xl text-aegean-dark">
+      <h2 className="font-bold text-2xl text-foreground">
         Reviews {topLevel.length > 0 && `(${topLevel.length})`}
       </h2>
 
@@ -103,10 +103,10 @@ function ReviewItem({
   const isLiked = Boolean(currentUserId && review.likes.includes(currentUserId))
 
   return (
-    <div className="border-b border-aegean-gray/60 py-4 last:border-b-0">
+    <div className="border-b border-border py-4 last:border-b-0">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-sm text-aegean-dark">
+          <span className="font-semibold text-sm text-foreground">
             {review.user.username}
           </span>
           <StarRating rating={review.rating ?? 0} size="size-3.5" />
@@ -152,11 +152,11 @@ function ReviewItem({
       </div>
 
       {replies.length > 0 && (
-        <div className="mt-3 ml-4 flex flex-col gap-3 border-l-2 border-aegean-gray/40 pl-4">
+        <div className="mt-3 ml-4 flex flex-col gap-3 border-l-2 border-border pl-4">
           {replies.map((reply) => (
             <div key={reply._id}>
               <div className="flex items-center justify-between gap-2">
-                <span className="font-semibold text-sm text-aegean-dark">
+                <span className="font-semibold text-sm text-foreground">
                   {reply.user.username}
                 </span>
                 <span className="text-xs text-muted-foreground shrink-0">
