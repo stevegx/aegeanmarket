@@ -9,15 +9,26 @@ import { loginUser } from '@/app/actions/loginUser'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '../../store/useAuthStore'
 import { useCartStore } from '@/app/products/store/useCartStore'
+import GoogleSignInButton from '@/components/auth/GoogleSignInButton'
 export default function LoginForm() {
   const setLogin = useAuthStore((state) => state.setLogin)
   const router = useRouter()
   const [errors, setErrors] = useState<
     Partial<Record<keyof LoginFormData, string[]>>
   >({})
+  const [oauthError, setOauthError] = useState('')
 
   const { syncCart } = useCartStore()
   const { fetchCart } = useCartStore()
+
+  const handleOAuthSuccess = async (username: string) => {
+    setOauthError('')
+    setLogin(username)
+    await syncCart()
+    await fetchCart()
+    router.push('/')
+    router.refresh()
+  }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = {
@@ -46,10 +57,10 @@ export default function LoginForm() {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen">
       <form
-        className="flex flex-col bg-white border border-aegean-gray shadow-2xl rounded-4xl w-full max-w-lg p-10 gap-4"
+        className="flex flex-col bg-card border border-border shadow-2xl rounded-4xl w-full max-w-lg p-10 gap-4"
         onSubmit={handleSubmit}
       >
-        <h1 className="flex text-3xl md:text-4xl my-5 font-bold justify-center text-aegean-dark">
+        <h1 className="flex text-3xl md:text-4xl my-5 font-bold justify-center text-foreground">
           Login
         </h1>
 
@@ -78,9 +89,26 @@ export default function LoginForm() {
         <Button type="submit" size="lg" className="w-full mt-2 font-bold">
           Login
         </Button>
+
+        <div className="flex items-center gap-3 my-1 text-xs text-muted-foreground">
+          <span className="h-px flex-1 bg-border" />
+          or
+          <span className="h-px flex-1 bg-border" />
+        </div>
+
+        {oauthError && (
+          <p className="text-sm text-destructive text-center">{oauthError}</p>
+        )}
+        <div className="flex flex-col gap-3">
+          <GoogleSignInButton
+            onSuccess={handleOAuthSuccess}
+            onError={setOauthError}
+          />
+        </div>
+
         <p className="text-sm text-center">
           Dont have an account?{' '}
-          <Link href="/register" className="text-aegean-dark hover:underline">
+          <Link href="/register" className="text-foreground hover:underline">
             Register
           </Link>
         </p>

@@ -6,11 +6,28 @@ import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import { createUser } from '@/app/actions/createUser'
 import { registerSchema, RegisterFormData } from '@/lib/validate'
+import { useRouter } from 'next/navigation'
+import { useAuthStore } from '../../store/useAuthStore'
+import { useCartStore } from '@/app/products/store/useCartStore'
+import GoogleSignInButton from '@/components/auth/GoogleSignInButton'
 
 export default function RegisterPage() {
+  const setLogin = useAuthStore((state) => state.setLogin)
+  const router = useRouter()
+  const { syncCart, fetchCart } = useCartStore()
   const [errors, setErrors] = useState<
     Partial<Record<keyof RegisterFormData, string[]>>
   >({})
+  const [oauthError, setOauthError] = useState('')
+
+  const handleOAuthSuccess = async (username: string) => {
+    setOauthError('')
+    setLogin(username)
+    await syncCart()
+    await fetchCart()
+    router.push('/')
+    router.refresh()
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -37,12 +54,28 @@ export default function RegisterPage() {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen">
       <form
-        className="flex flex-col bg-white border border-aegean-gray shadow-2xl rounded-4xl w-full max-w-lg p-10 gap-4"
+        className="flex flex-col bg-card border border-border shadow-2xl rounded-4xl w-full max-w-lg p-10 gap-4"
         onSubmit={handleSubmit}
       >
-        <h1 className="flex text-3xl md:text-4xl my-5 font-bold justify-center text-aegean-dark">
+        <h1 className="flex text-3xl md:text-4xl my-5 font-bold justify-center text-foreground">
           Register
         </h1>
+
+        {oauthError && (
+          <p className="text-sm text-destructive text-center">{oauthError}</p>
+        )}
+        <div className="flex flex-col gap-3">
+          <GoogleSignInButton
+            onSuccess={handleOAuthSuccess}
+            onError={setOauthError}
+          />
+        </div>
+
+        <div className="flex items-center gap-3 my-1 text-xs text-muted-foreground">
+          <span className="h-px flex-1 bg-border" />
+          or register with email
+          <span className="h-px flex-1 bg-border" />
+        </div>
 
         <div className="flex flex-col gap-1">
           <Label htmlFor="username">Username</Label>
@@ -114,7 +147,7 @@ export default function RegisterPage() {
         </Button>
         <p className="text-sm text-center">
           Already have an account?{' '}
-          <Link href="/login" className="text-aegean-dark hover:underline">
+          <Link href="/login" className="text-foreground hover:underline">
             Login
           </Link>
         </p>
