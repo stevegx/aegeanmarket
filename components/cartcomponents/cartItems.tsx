@@ -18,14 +18,14 @@ interface CartItemsProps {
 export default function CartItems({ item }: CartItemsProps) {
   const removeCartItem = useCartStore((state) => state.removeItem)
   return (
-    <div className="relative flex flex-col sm:grid sm:grid-cols-12 items-center bg-aegean-gray p-4 sm:p-3 my-3 gap-3 rounded-xl shadow-sm border border-aegean-dark/5 hover:border-aegean-blue/20 transition-all">
+    <div className="relative flex flex-col sm:grid sm:grid-cols-12 items-center bg-muted p-4 sm:p-3 my-3 gap-3 rounded-xl shadow-sm border border-border hover:border-aegean-blue/20 transition-all">
       <SheetClose className="w-full sm:col-span-5">
         <Link
           href={`/products/${item._id}`}
           className="flex items-center gap-4 sm:grid sm:grid-cols-5 sm:gap-3 hover:opacity-80 transition-opacity"
         >
           <div className="sm:col-span-2 flex justify-center shrink-0">
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border border-border bg-white">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border border-border bg-card">
               <ProductImage
                 src={item.image}
                 alt={item.name}
@@ -36,7 +36,7 @@ export default function CartItems({ item }: CartItemsProps) {
           </div>
 
           <div className="sm:col-span-3 flex flex-col justify-center">
-            <h1 className="font-bold text-sm sm:text-xs md:text-sm leading-tight text-aegean-dark uppercase tracking-tight line-clamp-2">
+            <h1 className="font-bold text-sm sm:text-xs md:text-sm leading-tight text-foreground uppercase tracking-tight line-clamp-2">
               {item.name}
             </h1>
             <span className="sm:hidden text-xs text-muted-foreground mt-1">
@@ -50,7 +50,7 @@ export default function CartItems({ item }: CartItemsProps) {
         <div className="flex-1 sm:col-span-3 flex justify-center">
           <QuantityController
             product={item as CartItem}
-            className="w-full max-w-28 py-1.5 bg-aegean-blue text-black rounded-lg shadow-sm"
+            className="w-full max-w-28 py-1.5 bg-aegean-blue text-white rounded-lg shadow-sm"
           />
         </div>
 
@@ -58,7 +58,7 @@ export default function CartItems({ item }: CartItemsProps) {
           <p className="text-[10px] uppercase text-muted-foreground font-medium sm:hidden">
             Total
           </p>
-          <h3 className="font-bold text-base sm:text-sm text-aegean-dark">
+          <h3 className="font-bold text-base sm:text-sm text-foreground">
             {(item.price * item.quantity).toFixed(2)}€
           </h3>
         </div>

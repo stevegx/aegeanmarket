@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 
 export default function AboutUsPage() {
   return (
-    <div className="flex flex-col w-full h-auto gap-12 px-5 md:px-10 py-12 justify-center items-center bg-white">
+    <div className="flex flex-col w-full h-auto gap-12 px-5 md:px-10 py-12 justify-center items-center bg-background">
       {/* Header με Underline */}
       <div className="text-center">
-        <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark mb-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
           About us
         </h1>
         <div className="h-1.5 w-32 bg-aegean-green mx-auto rounded-full"></div>
@@ -21,7 +21,7 @@ export default function AboutUsPage() {
       <div className="w-full max-w-4xl space-y-12 text-foreground">
         {/* Section 1: Our Story */}
         <section>
-          <h2 className="text-3xl font-bold text-aegean-dark mb-4">
+          <h2 className="text-3xl font-bold text-foreground mb-4">
             Our Story
           </h2>
           <p className="text-lg leading-relaxed first-letter:text-5xl md:first-letter:text-6xl first-letter:font-bold first-letter:text-aegean-green first-letter:mr-3 first-letter:float-left">
@@ -39,7 +39,7 @@ export default function AboutUsPage() {
         {/* Section 2: Our Philosophy & Commitment */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 border-y border-border py-10">
           <section>
-            <h2 className="text-2xl font-bold text-aegean-dark mb-3">
+            <h2 className="text-2xl font-bold text-foreground mb-3">
               Our Philosophy
             </h2>
             <p className="leading-relaxed">
@@ -50,7 +50,7 @@ export default function AboutUsPage() {
             </p>
           </section>
           <section>
-            <h2 className="text-2xl font-bold text-aegean-dark mb-3">
+            <h2 className="text-2xl font-bold text-foreground mb-3">
               Our Commitment
             </h2>
             <p className="leading-relaxed">
@@ -83,7 +83,7 @@ export default function AboutUsPage() {
 
         {/* Closing Message */}
         <footer className="text-center pt-8">
-          <p className="text-2xl font-serif italic text-aegean-dark">
+          <p className="text-2xl font-serif italic text-foreground">
             &ldquo;Cheers to the Aegean spirit!&rdquo;
           </p>
         </footer>

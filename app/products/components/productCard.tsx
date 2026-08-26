@@ -160,7 +160,7 @@ export function QuantityController({
   return (
     <div
       className={cn(
-        'flex justify-around items-center w-full bg-aegean-dark text-primary-foreground rounded-2xl px-2 py-1 transition-all duration-300',
+        'flex justify-around items-center w-full bg-aegean-dark text-aegean-white rounded-2xl px-2 py-1 transition-all duration-300',
         className
       )}
     >

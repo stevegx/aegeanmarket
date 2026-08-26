@@ -66,7 +66,7 @@ export default function NotificationBell() {
         <HugeiconsIcon
           icon={Notification01Icon}
           strokeWidth={2}
-          className="size-5 text-aegean-dark"
+          className="size-5 text-foreground"
         />
         {unreadCount > 0 && (
           <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-aegean-terracotta text-[11px] text-aegean-gray font-bold">
@@ -91,13 +91,13 @@ export default function NotificationBell() {
                     : '#'
                 }
                 className={cn(
-                  'flex flex-col gap-1 rounded-lg border p-3 text-sm transition-colors hover:bg-aegean-gray/20',
+                  'flex flex-col gap-1 rounded-lg border p-3 text-sm transition-colors hover:bg-muted/40',
                   notification.read
-                    ? 'border-aegean-gray/50 bg-white'
+                    ? 'border-border bg-card'
                     : 'border-aegean-terracotta/40 bg-aegean-terracotta/5'
                 )}
               >
-                <span className="text-aegean-dark">
+                <span className="text-foreground">
                   {notificationText(notification)}
                 </span>
                 <span className="text-xs text-muted-foreground">

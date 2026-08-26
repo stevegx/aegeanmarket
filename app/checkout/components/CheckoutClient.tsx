@@ -161,7 +161,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 text-center px-4">
-        <h1 className="text-2xl font-bold text-aegean-dark">
+        <h1 className="text-2xl font-bold text-foreground">
           Your cart is empty
         </h1>
         <p className="text-muted-foreground">
@@ -178,7 +178,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
 
   return (
     <div className="max-w-7xl mx-auto w-full px-5 md:px-10 py-8 md:py-10">
-      <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark mb-8 text-center md:text-left">
+      <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-8 text-center md:text-left">
         Checkout
       </h1>
 
@@ -325,7 +325,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
                   key={item._id}
                   className="flex items-center gap-3 py-3 first:pt-0 last:pb-0"
                 >
-                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md border border-border bg-white">
+                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md border border-border bg-card">
                     <ProductImage
                       src={item.image}
                       alt={item.name}
@@ -334,7 +334,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
                     />
                   </div>
                   <div className="flex flex-1 flex-col gap-1.5 min-w-0">
-                    <span className="text-sm font-bold text-aegean-dark leading-tight line-clamp-2">
+                    <span className="text-sm font-bold text-foreground leading-tight line-clamp-2">
                       {item.name}
                     </span>
                     <span className="text-xs text-muted-foreground">
@@ -346,7 +346,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
                     />
                   </div>
                   <div className="flex flex-col items-end gap-2 shrink-0">
-                    <span className="text-sm font-bold text-aegean-dark">
+                    <span className="text-sm font-bold text-foreground">
                       {(item.price * item.quantity).toFixed(2)}€
                     </span>
                     <button
@@ -372,7 +372,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
                 <span className="font-medium text-foreground">Free</span>
               </div>
               <Separator />
-              <div className="flex items-center justify-between text-lg font-bold text-aegean-dark">
+              <div className="flex items-center justify-between text-lg font-bold text-foreground">
                 <span>Total</span>
                 <span>{totalPrice.toFixed(2)}€</span>
               </div>

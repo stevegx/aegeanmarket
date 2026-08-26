@@ -73,7 +73,7 @@ export function CardPaymentMock({
   onChange,
 }: CardPaymentMockProps) {
   return (
-    <div className="flex flex-col gap-4 rounded-lg border border-border p-4 bg-aegean-gray/20">
+    <div className="flex flex-col gap-4 rounded-lg border border-border p-4 bg-muted">
       <p className="text-xs text-muted-foreground">
         Demo card form only — no real payment is processed.
       </p>
@@ -167,7 +167,7 @@ interface QrScanMockProps {
 
 export function QrScanMock({ scanned, onScan }: QrScanMockProps) {
   return (
-    <div className="flex flex-col items-center gap-3 rounded-lg border border-border p-4 bg-aegean-gray/20 text-center">
+    <div className="flex flex-col items-center gap-3 rounded-lg border border-border p-4 bg-muted text-center">
       <p className="text-xs text-muted-foreground">
         Scan this code with your banking / wallet app to confirm payment.
       </p>
@@ -185,7 +185,7 @@ export function QrScanMock({ scanned, onScan }: QrScanMockProps) {
         <button
           type="button"
           onClick={onScan}
-          className="text-sm font-bold text-aegean-dark underline hover:text-aegean-green transition-colors cursor-pointer"
+          className="text-sm font-bold text-foreground underline hover:text-aegean-green transition-colors cursor-pointer"
         >
           Tap to Simulate Scan
         </button>

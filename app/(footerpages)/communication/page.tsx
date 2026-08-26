@@ -15,7 +15,7 @@ export default function CommunicationPage() {
   return (
     <div className="max-w-7xl mx-auto px-5 md:px-10 py-12">
       <div className="text-center mb-16">
-        <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark mb-2">
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
           Communication
         </h1>
         <div className="h-1 w-20 bg-aegean-green mx-auto rounded-full"></div>
@@ -24,14 +24,14 @@ export default function CommunicationPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
         <div className="flex flex-col gap-8">
           <div>
-            <h3 className="text-2xl font-bold text-aegean-dark mb-4">
+            <h3 className="text-2xl font-bold text-foreground mb-4">
               Our Location
             </h3>
-            <p className="text-lg font-medium text-aegean-green-text underline mb-4">
+            <p className="text-lg font-medium text-aegean-green-text dark:text-aegean-green underline mb-4">
               Mytilene, Lesvos, Greece
             </p>
 
-            <div className="space-y-2 text-muted-foreground bg-aegean-gray p-6 rounded-lg border border-border">
+            <div className="space-y-2 text-muted-foreground bg-muted p-6 rounded-lg border border-border">
               <p className="flex justify-between">
                 <span className="font-semibold">Mon - Tue:</span>
                 <span>
@@ -50,29 +50,29 @@ export default function CommunicationPage() {
             </div>
           </div>
 
-          <div className="rounded-lg overflow-hidden shadow-xl border-4 border-white">
+          <div className="rounded-lg overflow-hidden shadow-xl border-4 border-border">
             <MapWidget />
           </div>
 
           {/* Quick Contact Info */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-white border border-border rounded-lg shadow-sm">
-              <h3 className="font-bold text-aegean-dark">Telephone</h3>
-              <h4 className="text-aegean-green-text hover:underline">
+            <div className="p-4 bg-card border border-border rounded-lg shadow-sm">
+              <h3 className="font-bold text-foreground">Telephone</h3>
+              <h4 className="text-aegean-green-text dark:text-aegean-green hover:underline">
                 +30 22510 12345
               </h4>
             </div>
-            <div className="p-4 bg-white border border-border rounded-lg shadow-sm">
-              <h3 className="font-bold text-aegean-dark">Email</h3>
-              <h4 className="text-aegean-green-text hover:underline break-all">
+            <div className="p-4 bg-card border border-border rounded-lg shadow-sm">
+              <h3 className="font-bold text-foreground">Email</h3>
+              <h4 className="text-aegean-green-text dark:text-aegean-green hover:underline break-all">
                 info@mytilene.com
               </h4>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-12 rounded-lg shadow-2xl border border-border lg:w-full lg:max-w-200 justify-self-center">
-          <h3 className="text-3xl font-bold text-aegean-dark mb-8 text-center md:text-left">
+        <div className="bg-card p-12 rounded-lg shadow-2xl border border-border lg:w-full lg:max-w-200 justify-self-center">
+          <h3 className="text-3xl font-bold text-foreground mb-8 text-center md:text-left">
             Send us a Message
           </h3>
 

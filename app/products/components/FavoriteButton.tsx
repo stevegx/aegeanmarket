@@ -42,7 +42,7 @@ export default function FavoriteButton({
         isFavorite ? 'Remove from favorites' : 'Add to favorites'
       }
       className={cn(
-        'inline-flex items-center justify-center rounded-full bg-white/85 p-1.5 shadow-sm backdrop-blur-sm transition-transform cursor-pointer hover:scale-110',
+        'inline-flex items-center justify-center rounded-full bg-background/85 p-1.5 shadow-sm backdrop-blur-sm transition-transform cursor-pointer hover:scale-110',
         className
       )}
     >
@@ -53,7 +53,7 @@ export default function FavoriteButton({
           'size-5 transition-colors',
           isFavorite
             ? 'fill-aegean-terracotta text-aegean-terracotta'
-            : 'text-aegean-dark/50'
+            : 'text-foreground/50'
         )}
       />
     </button>

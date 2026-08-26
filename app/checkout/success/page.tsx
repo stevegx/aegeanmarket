@@ -29,7 +29,7 @@ function CheckoutSuccessContent() {
       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-aegean-green/10 text-aegean-green text-4xl">
         ✓
       </div>
-      <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark">
+      <h1 className="text-3xl md:text-4xl font-bold text-foreground">
         Order Completed!
       </h1>
       <p className="text-muted-foreground max-w-md">
@@ -38,7 +38,7 @@ function CheckoutSuccessContent() {
       </p>
       {orderId && (
         <p className="text-sm text-muted-foreground">
-          Order ID: <span className="font-mono text-aegean-dark">{orderId}</span>
+          Order ID: <span className="font-mono text-foreground">{orderId}</span>
         </p>
       )}
       <div className="flex flex-wrap items-center justify-center gap-3 mt-4">

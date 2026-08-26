@@ -19,8 +19,8 @@ export default function FavoritesTab({
 }) {
   if (favorites.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 border border-aegean-gray rounded-lg p-10 text-center">
-        <p className="text-lg font-semibold text-aegean-dark">
+      <div className="flex flex-col items-center justify-center gap-3 border border-border rounded-lg p-10 text-center">
+        <p className="text-lg font-semibold text-foreground">
           You haven&apos;t added any favorite products yet.
         </p>
         <p className="text-sm text-muted-foreground">

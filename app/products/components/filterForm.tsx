@@ -88,7 +88,7 @@ export default function FilterForm({
             value={priceInput}
             onChange={(e) => setPriceInput(e.target.value)}
             onBlur={() => updateURL({ maxPrice: priceInput })}
-            className="w-20 p-1 border rounded text-sm hover:cursor-pointer "
+            className="w-20 p-1 border border-border rounded text-sm bg-background text-foreground hover:cursor-pointer "
           />
           <span className="text-xs text-muted-foreground">Up to {maxPrice}€</span>
         </div>
@@ -244,7 +244,7 @@ export default function FilterForm({
                 className={`px-3 py-1 text-xs rounded-full border transition-all ${
                   isSelected
                     ? 'bg-aegean-green text-white border-aegean-green'
-                    : 'bg-white text-muted-foreground border-border hover:border-aegean-green'
+                    : 'bg-background text-muted-foreground border-border hover:border-aegean-green'
                 }`}
               >
                 {v}

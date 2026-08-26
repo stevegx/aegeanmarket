@@ -19,7 +19,7 @@ export default async function FilterCategories() {
 
   return (
     <div>
-      <h3 className="font-bold mb-4 text-aegean-dark">Categories</h3>
+      <h3 className="font-bold mb-4 text-foreground">Categories</h3>
       <CategoryButtons categories={categories} />
     </div>
   )

@@ -175,7 +175,7 @@ export default function SearchCategories({ categories }: SearchBarProps) {
                     </div>
 
                     {isExpanded && subcategories.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 p-2 bg-white">
+                      <div className="flex flex-wrap gap-1.5 p-2 bg-muted">
                         {subcategories.map((sub) => {
                           const key = `${cat}-${sub.label}`
                           const isSubActive =

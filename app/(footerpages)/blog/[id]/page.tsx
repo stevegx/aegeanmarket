@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import { getBlogPostById } from '@/lib/db'
 import { requireAdmin } from '@/app/actions/requireAdmin'
 import BlogEditDialog from '@/app/adminpage/components/BlogEditDialog'
-import { stripMarkdown } from '@/lib/utils'
+import { stripMarkdown, getReadingTime } from '@/lib/utils'
 
 export async function generateMetadata({
   params,
@@ -43,7 +43,7 @@ export default async function BlogPostPage({
   if (!post) {
     return (
       <div className="grow flex flex-col items-center justify-center gap-3 min-h-[60vh] text-center px-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-aegean-dark">
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground">
           404 — Post not found
         </h1>
         <p className="text-muted-foreground">
@@ -64,7 +64,7 @@ export default async function BlogPostPage({
       <div className="flex items-center justify-between gap-4">
         <Link href="/blog">
           <div className="mt-12 pt-8 border-t border-border p-3">
-            <button className="text-aegean-dark font-bold hover:text-aegean-green transition-colors flex items-center gap-2 hover:cursor-pointer hover:underline">
+            <button className="text-foreground font-bold hover:text-aegean-green transition-colors flex items-center gap-2 hover:cursor-pointer hover:underline">
               ← Back to Blog
             </button>
           </div>
@@ -75,22 +75,24 @@ export default async function BlogPostPage({
           </div>
         )}
       </div>
-      <article className="max-w-4xl mx-auto py-12 px-6">
+      <article className="max-w-3xl mx-auto py-12 px-6">
         <header className="mb-8 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-bold text-aegean-dark mb-4 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
             {post.title}
           </h1>
           <div className="flex items-center justify-center md:justify-start gap-3 text-muted-foreground text-sm">
-            <span className="bg-aegean-green/10 text-aegean-green-text px-3 py-1 rounded-full font-semibold">
+            <span className="bg-aegean-green/10 text-aegean-green-text dark:text-aegean-green px-3 py-1 rounded-full font-semibold">
               {new Date(post.createdAt).toLocaleDateString('en-GB')}
             </span>
             <span>•</span>
             <span>
               By{' '}
-              <span className="text-aegean-dark font-bold">
+              <span className="text-foreground font-bold">
                 {post.author}
               </span>
             </span>
+            <span>•</span>
+            <span>{getReadingTime(post.content)} min read</span>
           </div>
         </header>
         <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-2xl mb-10">
@@ -104,7 +106,7 @@ export default async function BlogPostPage({
           />
         </div>
 
-        <div className="prose prose-lg max-w-none">
+        <div className="prose prose-lg dark:prose-invert max-w-none">
           <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
       </article>

@@ -41,8 +41,8 @@ const PAYMENT_LABELS: Record<OrderData['paymentMethod'], string> = {
 export default function OrdersTab({ orders }: { orders: OrderData[] }) {
   if (orders.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 border border-aegean-gray rounded-lg p-10 text-center">
-        <p className="text-lg font-semibold text-aegean-dark">
+      <div className="flex flex-col items-center justify-center gap-3 border border-border rounded-lg p-10 text-center">
+        <p className="text-lg font-semibold text-foreground">
           You haven&apos;t placed any orders yet.
         </p>
         <Link
@@ -60,7 +60,7 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
       {orders.map((order) => (
         <div
           key={order._id}
-          className="border border-aegean-gray shadow-md rounded-lg p-5 flex flex-col gap-4 shadow-aegean-green/10"
+          className="bg-card border border-border shadow-md rounded-lg p-5 flex flex-col gap-4 shadow-aegean-green/10"
         >
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
@@ -82,13 +82,13 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
             </span>
           </div>
 
-          <div className="flex flex-col divide-y divide-aegean-gray/50">
+          <div className="flex flex-col divide-y divide-border">
             {order.items.map((item, idx) => (
               <div
                 key={idx}
                 className="flex items-center justify-between py-2 text-sm"
               >
-                <span className="text-aegean-dark">
+                <span className="text-foreground">
                   {item.name}{' '}
                   <span className="text-muted-foreground">x{item.quantity}</span>
                 </span>
@@ -99,9 +99,9 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
             ))}
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-4 text-sm border-t border-aegean-gray/50 pt-4">
+          <div className="grid sm:grid-cols-2 gap-4 text-sm border-t border-border pt-4">
             <div>
-              <p className="font-semibold text-aegean-dark mb-1">
+              <p className="font-semibold text-foreground mb-1">
                 Shipping Address
               </p>
               <p className="text-muted-foreground">
@@ -111,7 +111,7 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
               </p>
             </div>
             <div>
-              <p className="font-semibold text-aegean-dark mb-1">Payment</p>
+              <p className="font-semibold text-foreground mb-1">Payment</p>
               <p className="text-muted-foreground">
                 {PAYMENT_LABELS[order.paymentMethod]} &middot;{' '}
                 <span className="capitalize">{order.paymentStatus}</span>
@@ -119,7 +119,7 @@ export default function OrdersTab({ orders }: { orders: OrderData[] }) {
             </div>
           </div>
 
-          <div className="flex justify-end border-t border-aegean-gray/50 pt-3">
+          <div className="flex justify-end border-t border-border pt-3">
             <span className="font-bold text-lg text-aegean-blue">
               Total: {order.totalPrice.toFixed(2)}€
             </span>

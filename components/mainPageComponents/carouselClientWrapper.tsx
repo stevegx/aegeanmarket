@@ -24,6 +24,19 @@ const AUTOPLAY_DELAY = 6000
 export default function CarouselClientWrapper({ products }: CarouselProps) {
   const [api, setApi] = React.useState<CarouselApi>()
   const [current, setCurrent] = React.useState(0)
+  // Must stay referentially stable across renders — a fresh Autoplay()
+  // instance on every render makes embla-carousel-react tear down and
+  // reinit the whole carousel each time (e.g. every autoplay tick, since
+  // that triggers a 'select' -> setCurrent -> re-render loop), which was
+  // silently cancelling manual scrollNext/scrollPrev/drag before they
+  // could finish animating.
+  const autoplay = React.useRef(
+    Autoplay({
+      delay: AUTOPLAY_DELAY,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
+    })
+  )
 
   React.useEffect(() => {
     if (!api) return
@@ -40,20 +53,14 @@ export default function CarouselClientWrapper({ products }: CarouselProps) {
         setApi={setApi}
         opts={{ align: 'start', loop: true }}
         className="w-full"
-        plugins={[
-          Autoplay({
-            delay: AUTOPLAY_DELAY,
-            stopOnInteraction: false,
-            stopOnMouseEnter: true,
-          }),
-        ]}
+        plugins={[autoplay.current]}
       >
         <CarouselContent className="ml-0">
           {products.map((product, index) => (
             <CarouselItem key={product._id} className="pl-0 basis-full">
               <Link
                 href={`/products/${product._id}`}
-                className="group relative block h-[60vh] max-h-[620px] min-h-[380px] w-full overflow-hidden bg-gradient-to-br from-white via-aegean-gray/60 to-aegean-light/25"
+                className="group relative block h-[60vh] max-h-[620px] min-h-[380px] w-full overflow-hidden bg-gradient-to-br from-background via-muted/60 to-aegean-light/25"
               >
                 <div
                   className={cn(
@@ -73,16 +80,16 @@ export default function CarouselClientWrapper({ products }: CarouselProps) {
                   />
                 </div>
 
-                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/95 via-white/40 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background/95 via-background/40 to-transparent" />
 
                 <div className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-2 p-8 md:p-16">
                   <span className="text-xs md:text-sm uppercase tracking-[0.3em] text-aegean-blue font-medium">
                     {product.category}
                   </span>
-                  <h2 className="max-w-2xl font-serif text-3xl md:text-5xl font-semibold leading-tight text-aegean-dark">
+                  <h2 className="max-w-2xl font-serif text-3xl md:text-5xl font-semibold leading-tight text-foreground">
                     {product.name}
                   </h2>
-                  <span className="mt-1 text-xs md:text-sm uppercase tracking-widest text-aegean-dark/60 group-hover:text-aegean-dark transition-colors">
+                  <span className="mt-1 text-xs md:text-sm uppercase tracking-widest text-foreground/60 group-hover:text-foreground transition-colors">
                     View product →
                   </span>
                 </div>
@@ -91,8 +98,8 @@ export default function CarouselClientWrapper({ products }: CarouselProps) {
           ))}
         </CarouselContent>
 
-        <CarouselPrevious className="left-4 md:left-8 h-11 w-11 border-aegean-dark/20 bg-white/80 text-aegean-dark backdrop-blur-sm hover:bg-aegean-dark hover:text-white cursor-pointer" />
-        <CarouselNext className="right-4 md:right-8 h-11 w-11 border-aegean-dark/20 bg-white/80 text-aegean-dark backdrop-blur-sm hover:bg-aegean-dark hover:text-white cursor-pointer" />
+        <CarouselPrevious className="left-4 md:left-8 h-11 w-11 border-border bg-background/80 text-foreground backdrop-blur-sm hover:bg-aegean-dark hover:text-white cursor-pointer" />
+        <CarouselNext className="right-4 md:right-8 h-11 w-11 border-border bg-background/80 text-foreground backdrop-blur-sm hover:bg-aegean-dark hover:text-white cursor-pointer" />
 
         <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 gap-2">
           {products.map((_, index) => (

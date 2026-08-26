@@ -15,8 +15,8 @@ export interface UserReviewData {
 export default function ReviewsTab({ reviews }: { reviews: UserReviewData[] }) {
   if (reviews.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 border border-aegean-gray rounded-lg p-10 text-center">
-        <p className="text-lg font-semibold text-aegean-dark">
+      <div className="flex flex-col items-center justify-center gap-3 border border-border rounded-lg p-10 text-center">
+        <p className="text-lg font-semibold text-foreground">
           You haven&apos;t left any reviews or comments yet.
         </p>
         <Link
@@ -34,7 +34,7 @@ export default function ReviewsTab({ reviews }: { reviews: UserReviewData[] }) {
       {reviews.map((review) => (
         <div
           key={review._id}
-          className="border border-aegean-gray shadow-md rounded-lg p-5 flex flex-col gap-3 shadow-aegean-green/10"
+          className="bg-card border border-border shadow-md rounded-lg p-5 flex flex-col gap-3 shadow-aegean-green/10"
         >
           <div className="flex items-center justify-between gap-2 flex-wrap">
             {review.product ? (
@@ -42,7 +42,7 @@ export default function ReviewsTab({ reviews }: { reviews: UserReviewData[] }) {
                 href={`/products/${review.product._id}`}
                 className="flex items-center gap-3 group"
               >
-                <div className="relative size-10 shrink-0 rounded-md overflow-hidden bg-aegean-gray/30">
+                <div className="relative size-10 shrink-0 rounded-md overflow-hidden bg-muted">
                   <ProductImage
                     src={review.product.image}
                     alt={review.product.name}
@@ -50,7 +50,7 @@ export default function ReviewsTab({ reviews }: { reviews: UserReviewData[] }) {
                     className="object-contain"
                   />
                 </div>
-                <span className="font-semibold text-sm text-aegean-dark group-hover:text-aegean-terracotta transition-colors">
+                <span className="font-semibold text-sm text-foreground group-hover:text-aegean-terracotta transition-colors">
                   {review.product.name}
                 </span>
               </Link>

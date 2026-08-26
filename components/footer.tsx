@@ -79,6 +79,12 @@ export default function Footer({ userId }: FooterProps) {
             >
               Returns/Cancelations
             </Link>
+            <Link
+              href="/cookies"
+              className="font-extralight pt-2 hover:text-aegean-green cursor-pointer"
+            >
+              Cookies Policy
+            </Link>
           </div>
 
           <div className="flex flex-col">

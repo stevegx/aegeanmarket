@@ -27,6 +27,7 @@ interface CartState {
   isSyncing: boolean
 
   toggleCart: () => void
+  setCartOpen: (open: boolean) => void
   addItem: (product: Omit<CartItem, 'quantity'>) => void
   removeItem: (productId: string) => void
   updateQuantity: (productId: string, amount: number) => void
@@ -46,6 +47,7 @@ export const useCartStore = create<CartState>()(
       isSyncing: false,
 
       toggleCart: () => set((state: CartState) => ({ isOpen: !state.isOpen })),
+      setCartOpen: (open: boolean) => set({ isOpen: open }),
 
       addItem: (product) => {
         const items = get().items
