@@ -15,6 +15,7 @@ import { logoutUser } from '@/app/actions/logoutUser'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuthStore } from '@/app/(auth)/store/useAuthStore'
 import CartModal from './cartModal'
+import FavoritesNavButton from './favoritesNavButton'
 import NotificationBell from './notificationBell'
 import { useNotificationsStore } from '@/app/store/useNotificationsStore'
 import ThemeToggle from './theme-toggle'
@@ -80,6 +81,7 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
         {children}
       </div>
       <ThemeToggle />
+      <FavoritesNavButton userId={initialSession?.userId} />
       <CartModal />
       {isHydrated && isLoggedIn && <NotificationBell />}
       <div className="flex items-center gap-3">

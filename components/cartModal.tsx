@@ -11,6 +11,8 @@ import { useCartStore } from '@/app/products/store/useCartStore'
 import CartItems from './cartcomponents/cartItems'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { cn } from '@/lib/utils'
+import { usePulseOnIncrease } from '@/lib/usePulseOnIncrease'
 export default function CartModal() {
   const cartTotalItems = useCartStore((state) => state.getTotalItems())
   const isCartOpen = useCartStore((state) => state.isOpen)
@@ -20,6 +22,7 @@ export default function CartModal() {
   const [isPending, setIsPending] = useState(false)
   const [isHydrated, setIsHydrated] = useState(false)
   const router = useRouter()
+  const { pulsing, pulseKey } = usePulseOnIncrease(cartTotalItems)
   useEffect(() => {
     // Must flip after mount: cartTotalItems comes from a localStorage-persisted
     // store, so the client's first render can already differ from the SSR
@@ -44,15 +47,35 @@ export default function CartModal() {
         render={
           <Button
             variant="ghost"
-            className="hidden sm:inline-flex relative size-10 rounded-full bg-aegean-light/30 hover:bg-aegean-light/30 active:bg-aegean-light"
+            className={cn(
+              'hidden sm:inline-flex relative size-10 rounded-full bg-aegean-light/30 hover:bg-aegean-light/30 active:bg-aegean-light',
+              pulsing && 'animate-icon-glow'
+            )}
           />
         }
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <svg
+          key={pulseKey}
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className={cn(
+            'transition-colors duration-700 ease-out',
+            pulsing &&
+              'text-aegean-terracotta drop-shadow-[0_0_8px_rgba(217,136,128,0.95)]'
+          )}
+        >
           <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2h-11.42c-.14 0-.25-.11-.25-.25l.03-.12 .9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49a1 1 0 0 0-.87-1.48h-14.31l-.94-2zm3 16a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
         </svg>
         {isHydrated && cartTotalItems > 0 && (
-          <span className="absolute -top-1.5 -right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-aegean-terracotta text-[11px] text-aegean-gray font-bold">
+          <span
+            key={`badge-${pulseKey}`}
+            className={cn(
+              'absolute -top-1.5 -right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-aegean-terracotta text-[11px] text-aegean-gray font-bold',
+              pulsing && 'animate-badge-flash'
+            )}
+          >
             {cartTotalItems}
           </span>
         )}
@@ -72,7 +95,12 @@ export default function CartModal() {
           <div className="flex items-center justify-between">
             <span className="text-l">
               Your Total is:{' '}
-              <span className="font-bold text-xl">
+              <span
+                className={cn(
+                  'inline-block font-bold text-xl transition-all duration-700 ease-out',
+                  pulsing && 'text-aegean-terracotta scale-115'
+                )}
+              >
                 {Math.floor(cartTotal * 100) / 100} €
               </span>
             </span>

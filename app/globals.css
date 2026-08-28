@@ -61,6 +61,60 @@
   --color-aegean-green-text: #1E8449;
   --color-aegean-white: #FFFFFF;
   --color-aegean-gray: #F2F4F4;
+
+  /* Feedback pulses for "added to cart / favorites" -- the glow ramps up as the
+     basket fills and then fades slowly back to rest. */
+  --animate-heart-pop: heart-pop 1200ms ease-out;
+  --animate-icon-glow: icon-glow 1200ms ease-out;
+  --animate-badge-flash: badge-flash 1200ms ease-out;
+}
+
+@keyframes heart-pop {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1.45);
+  }
+  45% {
+    transform: scale(0.9);
+  }
+  70% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes icon-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(217, 136, 128, 0);
+    transform: scale(1);
+  }
+  35% {
+    box-shadow: 0 0 16px 4px rgba(217, 136, 128, 0.85);
+    transform: scale(1.12);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 136, 128, 0);
+    transform: scale(1);
+  }
+}
+
+@keyframes badge-flash {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  30% {
+    transform: scale(1.6);
+    filter: brightness(1.6);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
 }
 
 :root {

@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { FavouriteIcon } from '@hugeicons/core-free-icons'
@@ -22,6 +23,22 @@ export default function FavoriteButton({
     state.isFavorite(productId)
   )
   const toggle = useFavoritesStore((state) => state.toggle)
+
+  // Pulse the heart each time this product *becomes* a favorite.
+  const wasFavorite = useRef(isFavorite)
+  const [pulseKey, setPulseKey] = useState(0)
+  const [pulsing, setPulsing] = useState(false)
+
+  useEffect(() => {
+    if (isFavorite && !wasFavorite.current) {
+      setPulsing(true)
+      setPulseKey((k) => k + 1)
+      const timeout = setTimeout(() => setPulsing(false), 1200)
+      wasFavorite.current = isFavorite
+      return () => clearTimeout(timeout)
+    }
+    wasFavorite.current = isFavorite
+  }, [isFavorite])
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -46,16 +63,22 @@ export default function FavoriteButton({
         className
       )}
     >
-      <HugeiconsIcon
-        icon={FavouriteIcon}
-        strokeWidth={2}
-        className={cn(
-          'size-5 transition-colors',
-          isFavorite
-            ? 'fill-aegean-terracotta text-aegean-terracotta'
-            : 'text-foreground/50'
-        )}
-      />
+      <span
+        key={pulseKey}
+        className={cn('inline-flex', pulsing && 'animate-heart-pop')}
+      >
+        <HugeiconsIcon
+          icon={FavouriteIcon}
+          strokeWidth={2}
+          className={cn(
+            'size-5 transition-all duration-700 ease-out',
+            isFavorite
+              ? 'fill-aegean-terracotta text-aegean-terracotta'
+              : 'text-foreground/50',
+            pulsing && 'drop-shadow-[0_0_8px_rgba(217,136,128,0.95)]'
+          )}
+        />
+      </span>
     </button>
   )
 }
