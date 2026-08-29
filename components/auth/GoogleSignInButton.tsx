@@ -60,7 +60,11 @@ export default function GoogleSignInButton({
       <Script
         src="https://accounts.google.com/gsi/client"
         strategy="afterInteractive"
-        onLoad={() => setReady(true)}
+        // onReady (not onLoad) fires on first load AND on every subsequent
+        // remount. onLoad only fires once, so after a client-side nav away
+        // and back (e.g. Google login -> logout -> /login) the button would
+        // never re-render.
+        onReady={() => setReady(true)}
       />
       <div ref={containerRef} className="flex w-full justify-center" />
     </>

@@ -14,17 +14,18 @@ import GoogleSignInButton from '@/components/auth/GoogleSignInButton'
 export default function RegisterPage() {
   const setLogin = useAuthStore((state) => state.setLogin)
   const router = useRouter()
-  const { syncCart, fetchCart } = useCartStore()
+  const reconcileAfterLogin = useCartStore((state) => state.reconcileAfterLogin)
   const [errors, setErrors] = useState<
     Partial<Record<keyof RegisterFormData, string[]>>
   >({})
+  const [formError, setFormError] = useState('')
   const [oauthError, setOauthError] = useState('')
 
   const handleOAuthSuccess = async (username: string) => {
     setOauthError('')
+    const guestItems = useCartStore.getState().items
     setLogin(username)
-    await syncCart()
-    await fetchCart()
+    await reconcileAfterLogin(guestItems)
     router.push('/')
     router.refresh()
   }
@@ -45,9 +46,13 @@ export default function RegisterPage() {
       setErrors(fieldErrors)
     } else {
       setErrors({})
+      setFormError('')
       // eslint-disable-next-line @typescript-eslint/no-unused-vars -- destructured only to exclude it from userData
       const { confirmPassword, ...userData } = result.data
-      await createUser(userData)
+      // On success createUser redirects; on failure (e.g. duplicate
+      // email/username) it returns { error } that we must surface.
+      const response = await createUser(userData)
+      if (response?.error) setFormError(response.error)
     }
   }
 
@@ -61,6 +66,9 @@ export default function RegisterPage() {
           Register
         </h1>
 
+        {formError && (
+          <p className="text-sm text-destructive text-center">{formError}</p>
+        )}
         {oauthError && (
           <p className="text-sm text-destructive text-center">{oauthError}</p>
         )}
@@ -142,7 +150,12 @@ export default function RegisterPage() {
           />
         </div>
 
-        <Button type="submit" size="lg" className="w-full mt-2 font-bold">
+        <Button
+          type="submit"
+          variant="buy"
+          size="lg"
+          className="w-full mt-2 font-bold"
+        >
           Register
         </Button>
         <p className="text-sm text-center">

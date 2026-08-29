@@ -29,28 +29,13 @@ export interface RandomProduct {
 interface ProductCarouselProps {
   products: RandomProduct[]
   tittle: string
-}
-
-// Deterministic accent color per category (categories come from the DB, not
-// a fixed enum) so each tile's top bar visually groups by category.
-const CATEGORY_ACCENTS = [
-  'bg-aegean-dark',
-  'bg-aegean-blue',
-  'bg-aegean-green',
-  'bg-aegean-terracotta',
-]
-
-function categoryAccent(category: string) {
-  let hash = 0
-  for (let i = 0; i < category.length; i++) {
-    hash = (hash * 31 + category.charCodeAt(i)) >>> 0
-  }
-  return CATEGORY_ACCENTS[hash % CATEGORY_ACCENTS.length]
+  compact?: boolean
 }
 
 export default function ProductCarousel({
   products,
   tittle,
+  compact = false,
 }: ProductCarouselProps) {
   const addItem = useCartStore((state) => state.addItem)
   const cartItems = useCartStore((state) => state.items)
@@ -86,9 +71,9 @@ export default function ProductCarousel({
 
   if (!products || products.length === 0) return null
   return (
-    <div className="flex flex-col gap-6 w-full px-10 py-8">
+    <div className={cn('flex flex-col w-full', compact ? 'gap-4 px-10 py-4' : 'gap-6 px-10 py-8')}>
       <div className="flex flex-col border-l-4 border-aegean-dark pl-4">
-        <h2 className="font-bold text-2xl md:text-3xl text-foreground">
+        <h2 className={cn('font-bold text-foreground', compact ? 'text-xl md:text-2xl' : 'text-2xl md:text-3xl')}>
           {tittle}
         </h2>
         <p className="text-muted-foreground text-sm italic">
@@ -112,45 +97,76 @@ export default function ProductCarousel({
               return (
                 <CarouselItem
                   key={product._id}
-                  className="pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+                  className={cn(
+                    'pl-4',
+                    compact
+                      ? 'basis-1/3 sm:basis-1/4 md:basis-1/5 lg:basis-1/6 xl:basis-1/8'
+                      : 'basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
+                  )}
                 >
                   <Card className="h-full overflow-hidden pt-0 hover:shadow-xl transition-all duration-300 border-none bg-card group flex flex-col">
-                    <div className={cn('h-1.5 w-full', categoryAccent(product.category))} />
                     <CardContent className="flex flex-col h-full p-0">
                       {/* Product Link Area */}
                       <Link href={`/products/${product._id}`} className="grow">
-                        <div className="p-4">
+                        <div className={compact ? 'p-2' : 'p-4'}>
                           <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-border/50">
                             <ProductImage
                               src={product.image}
                               alt={product.name}
-                              className="object-contain p-6 group-hover:scale-105 transition-transform duration-500"
-                              sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 320px"
+                              className={cn(
+                                'object-contain group-hover:scale-105 transition-transform duration-500',
+                                compact ? 'p-2' : 'p-6'
+                              )}
+                              sizes={
+                                compact
+                                  ? '(max-width: 640px) 30vw, (max-width: 1024px) 16vw, 140px'
+                                  : '(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 320px'
+                              }
                               fill
                             />
                           </div>
                         </div>
-                        <div className="flex flex-col px-4 pb-2 gap-1">
-                          <span className="text-xs uppercase tracking-widest text-muted-foreground font-bold">
+                        <div
+                          className={cn(
+                            'flex flex-col gap-0.5',
+                            compact ? 'px-2 pb-1' : 'px-4 pb-2'
+                          )}
+                        >
+                          <span
+                            className={cn(
+                              'uppercase tracking-widest text-muted-foreground font-bold',
+                              compact ? 'text-[9px]' : 'text-xs'
+                            )}
+                          >
                             {product.category}
                           </span>
-                          <h3 className="text-sm font-semibold text-card-foreground line-clamp-2 h-10">
+                          <h3
+                            className={cn(
+                              'font-semibold text-card-foreground line-clamp-2',
+                              compact ? 'text-[11px] leading-tight h-7' : 'text-sm h-10'
+                            )}
+                          >
                             {product.name}
                           </h3>
-                          <div className="mt-2 flex items-center justify-between">
-                            <span className="text-lg font-bold text-card-foreground">
+                          <div className={cn('flex items-center justify-between', compact ? 'mt-1' : 'mt-2')}>
+                            <span
+                              className={cn(
+                                'font-bold text-card-foreground',
+                                compact ? 'text-xs' : 'text-lg'
+                              )}
+                            >
                               {product.price.toFixed(2)}€
                             </span>
                           </div>
                         </div>
                       </Link>
 
-                      <div className="px-4 pb-4">
+                      <div className={compact ? 'px-2 pb-2' : 'px-4 pb-4'}>
                         {quantity === 0 ? (
                           <Button
                             variant={hasStock ? 'buy' : 'disabledBuy'}
                             disabled={!hasStock}
-                            size="lg"
+                            size={compact ? 'xs' : 'lg'}
                             className="w-full transition-all duration-300"
                             onClick={() => addItem(product)}
                           >
@@ -158,7 +174,10 @@ export default function ProductCarousel({
                           </Button>
                         ) : (
                           <div className="w-full animate-in fade-in zoom-in-95">
-                            <QuantityController product={product} />
+                            <QuantityController
+                              product={product}
+                              className="w-full justify-center"
+                            />
                           </div>
                         )}
                       </div>
@@ -169,8 +188,18 @@ export default function ProductCarousel({
             })}
           </CarouselContent>
 
-          <CarouselPrevious className="-left-4 md:-left-12 h-11 w-11 border-none bg-aegean-dark text-white shadow-md hover:bg-aegean-dark/90 hover:text-white dark:bg-aegean-dark dark:hover:bg-aegean-dark/90" />
-          <CarouselNext className="-right-4 md:-right-12 h-11 w-11 border-none bg-aegean-dark text-white shadow-md hover:bg-aegean-dark/90 hover:text-white dark:bg-aegean-dark dark:hover:bg-aegean-dark/90" />
+          <CarouselPrevious
+            className={cn(
+              'border-none bg-aegean-dark text-white shadow-md hover:bg-aegean-dark/90 hover:text-white dark:bg-aegean-dark dark:hover:bg-aegean-dark/90',
+              compact ? '-left-3 md:-left-8 h-9 w-9' : '-left-4 md:-left-12 h-11 w-11'
+            )}
+          />
+          <CarouselNext
+            className={cn(
+              'border-none bg-aegean-dark text-white shadow-md hover:bg-aegean-dark/90 hover:text-white dark:bg-aegean-dark dark:hover:bg-aegean-dark/90',
+              compact ? '-right-3 md:-right-8 h-9 w-9' : '-right-4 md:-right-12 h-11 w-11'
+            )}
+          />
         </Carousel>
 
         {scrollSnaps.length > 1 && (

@@ -48,7 +48,7 @@ export default function CreateBlogPostDialog() {
       }}
     >
       <DialogTrigger
-        render={<Button className="gap-1.5 rounded-full px-4 font-semibold" />}
+        render={<Button className="gap-1.5 rounded-md px-4 font-semibold" />}
       >
         <HugeiconsIcon icon={Add01Icon} strokeWidth={2} className="size-4" />
         New post

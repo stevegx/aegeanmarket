@@ -43,6 +43,7 @@ export default function CartModal() {
       <SheetTrigger
         render={
           <Button
+            aria-label="Open cart"
             variant="ghost"
             className="hidden sm:inline-flex relative size-10 rounded-full bg-aegean-light/30 hover:bg-aegean-light/30 active:bg-aegean-light"
           />

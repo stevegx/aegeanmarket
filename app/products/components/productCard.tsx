@@ -141,7 +141,10 @@ export default function ProductCard({ product }: ProductProps) {
               </Button>
             )
           ) : (
-            <QuantityController product={product} />
+            <QuantityController
+              product={product}
+              className="w-full justify-center"
+            />
           )}
         </div>
       </CardFooter>
@@ -157,30 +160,39 @@ export function QuantityController({
     (state) => state.items.find((i) => i._id === product._id)?.quantity || 0
   )
   const quantityHandler = useCartStore((state) => state.updateQuantity)
+
+  // Minimal, borderless stepper: two round hit-areas with a soft light-blue
+  // fill so they read as buttons against the near-white page, a plain numeral
+  // between them. Sized to stay tidy in a card footer or order row.
+  const stepBtn =
+    'flex size-8 shrink-0 items-center justify-center rounded-full bg-aegean-light/35 text-lg leading-none text-aegean-dark transition-colors hover:bg-aegean-light/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 active:translate-y-px cursor-pointer dark:bg-aegean-light/10 dark:text-aegean-light dark:hover:bg-aegean-light/20'
+
   return (
     <div
       className={cn(
-        'flex justify-around items-center w-full bg-aegean-dark text-aegean-white rounded-2xl px-2 py-1 transition-all duration-300',
+        'inline-flex items-center gap-1.5 transition-all duration-300',
         className
       )}
     >
-      <Button
-        variant="buy"
-        size="icon-xs"
-        className="font-bold text-base rounded-xl"
+      <button
+        type="button"
+        aria-label="Decrease quantity"
+        className={stepBtn}
         onClick={() => quantityHandler(product._id, -1)}
       >
-        -
-      </Button>
-      <span className="font-bold text-lg">{quantity}</span>
-      <Button
-        variant="buy"
-        size="icon-xs"
-        className="font-bold text-base rounded-xl"
+        {'−'}
+      </button>
+      <span className="min-w-8 text-center text-base font-semibold tabular-nums text-foreground">
+        {quantity}
+      </span>
+      <button
+        type="button"
+        aria-label="Increase quantity"
+        className={stepBtn}
         onClick={() => quantityHandler(product._id, +1)}
       >
         +
-      </Button>
+      </button>
     </div>
   )
 }

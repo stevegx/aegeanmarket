@@ -1,50 +1,38 @@
 'use client'
-import { useEffect, useRef } from 'react' // Πρόσθεσε το useRef
+import { useEffect } from 'react'
 import { useCartStore } from '../../../store/useCartStore'
 import { useAuthStore } from '@/app/(auth)/store/useAuthStore'
 
 export const CartSyncHandler = () => {
   const items = useCartStore((state) => state.items)
-  const fetchCart = useCartStore((state) => state.fetchCart) // Πάρε την fetchCart από το store
+  const fetchCart = useCartStore((state) => state.fetchCart)
+  const pushCart = useCartStore((state) => state.pushCart)
+  const hasHydratedFromDb = useCartStore((state) => state.hasHydratedFromDb)
+  const pendingMerge = useCartStore((state) => state.pendingMerge)
   const { isLoggedIn } = useAuthStore()
 
-  // Ref για να ξέρουμε αν κάναμε το πρώτο download
-  const isFetched = useRef(false)
-
-  // Φέρε το καλάθι από τη DB όταν γίνει login
+  // Pull the DB cart once per session. On a fresh login the login form calls
+  // reconcileAfterLogin (which also sets hasHydratedFromDb), so this only fires
+  // on a plain page load where the user is already authenticated.
   useEffect(() => {
-    if (isLoggedIn && !isFetched.current) {
-      fetchCart().then(() => {
-        isFetched.current = true
-      })
+    if (isLoggedIn && !hasHydratedFromDb) {
+      fetchCart()
     }
-  }, [isLoggedIn, fetchCart])
+  }, [isLoggedIn, hasHydratedFromDb, fetchCart])
 
-  // Στείλε τις αλλαγές στη DB (Debounce 5s)
+  // Push local changes to the DB, debounced 5s. Full-replace, so removals and
+  // "empty the cart" propagate too. Gated on hasHydratedFromDb so we never
+  // overwrite the DB before the initial pull.
   useEffect(() => {
-    // Μην στέλνεις αν δεν είσαι logged in ή αν δεν έχει τελειώσει το download
-    if (!isLoggedIn || !isFetched.current || items.length === 0) return
+    // Hold off while the merge modal is open — resolveMerge does its own push.
+    if (!isLoggedIn || !hasHydratedFromDb || pendingMerge) return
 
-    const timeoutId = setTimeout(async () => {
-      try {
-        await fetch('/api/cart/sync', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            items: items.map((i) => ({
-              productId: i._id,
-              quantity: i.quantity,
-            })),
-          }),
-        })
-        console.log('Cart synced to DB!')
-      } catch (error) {
-        console.error('Cart sync failed', error)
-      }
+    const timeoutId = setTimeout(() => {
+      pushCart()
     }, 5000)
 
     return () => clearTimeout(timeoutId)
-  }, [isLoggedIn, items])
+  }, [isLoggedIn, hasHydratedFromDb, pendingMerge, items, pushCart])
 
   return null
 }

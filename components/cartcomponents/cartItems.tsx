@@ -48,10 +48,7 @@ export default function CartItems({ item }: CartItemsProps) {
 
       <div className="flex items-center justify-between w-full sm:col-span-7 gap-2 mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-none border-border">
         <div className="flex-1 sm:col-span-3 flex justify-center">
-          <QuantityController
-            product={item as CartItem}
-            className="w-full max-w-28 py-1.5 bg-aegean-blue text-white rounded-lg shadow-sm"
-          />
+          <QuantityController product={item as CartItem} />
         </div>
 
         <div className="flex-1 sm:col-span-2 text-center sm:text-right">

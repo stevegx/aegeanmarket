@@ -3,6 +3,7 @@ import getProducts from '../actions/getProducts'
 import ProductCard from '../components/productCard'
 import PaginationControls from '../components/PaginationControls'
 import FilterCategories from './filterCategories'
+import Breadcrumbs from './Breadcrumbs'
 
 export interface IProduct {
   _id: string
@@ -21,6 +22,7 @@ export interface IProduct {
 interface ProductListProps {
   currentPage: number
   category?: string
+  minPrice?: number
   maxPrice?: number
   manufacturers?: string[]
   minRating?: number
@@ -33,6 +35,7 @@ interface ProductListProps {
 export default async function ProductList({
   currentPage,
   category,
+  minPrice,
   maxPrice,
   manufacturers,
   minRating,
@@ -41,9 +44,10 @@ export default async function ProductList({
   volume,
   origin,
 }: ProductListProps) {
-  const { products, totalPages } = await getProducts({
+  const { products, totalPages, total } = await getProducts({
     page: currentPage,
     category,
+    minPrice,
     maxPrice,
     manufacturers,
     minRating,
@@ -55,8 +59,24 @@ export default async function ProductList({
   return (
     <div className="flex flex-col lg:flex-row w-full max-w-360 mx-auto min-h-screen gap-2">
       <main className="flex-1 flex flex-col min-w-0">
+        <Breadcrumbs category={category} />
+
         <div className="w-full mb-8">
           <FilterCategories />
+        </div>
+
+        <div className="mb-4 flex items-baseline justify-between gap-4">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            {category
+              ? category.charAt(0).toUpperCase() +
+                category.slice(1).toLowerCase()
+              : searchTerm
+                ? `Results for “${searchTerm}”`
+                : 'All Products'}
+          </h1>
+          <p className="shrink-0 text-sm text-muted-foreground">
+            {total} {total === 1 ? 'product' : 'products'}
+          </p>
         </div>
 
         {products.length > 0 ? (

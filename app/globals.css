@@ -64,7 +64,7 @@
 }
 
 :root {
-  --background: #F2F4F4;
+  --background: #F7F9F9;
   --foreground: #1A2E3D;
   --card: #FFFFFF;
   --card-foreground: #1A2E3D;
@@ -141,5 +141,22 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer utilities {
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 9999px;
   }
 }

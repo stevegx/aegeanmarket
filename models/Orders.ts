@@ -60,6 +60,8 @@ const OrderSchema = new mongoose.Schema(
       enum: ['paid', 'unpaid', 'refunded'],
       default: 'unpaid',
     },
+    stripeCheckoutSessionId: { type: String, index: true },
+    stripePaymentIntentId: { type: String, index: true },
   },
   { timestamps: true }
 )

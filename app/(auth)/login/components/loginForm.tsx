@@ -18,14 +18,13 @@ export default function LoginForm() {
   >({})
   const [oauthError, setOauthError] = useState('')
 
-  const { syncCart } = useCartStore()
-  const { fetchCart } = useCartStore()
+  const reconcileAfterLogin = useCartStore((state) => state.reconcileAfterLogin)
 
   const handleOAuthSuccess = async (username: string) => {
     setOauthError('')
+    const guestItems = useCartStore.getState().items
     setLogin(username)
-    await syncCart()
-    await fetchCart()
+    await reconcileAfterLogin(guestItems)
     router.push('/')
     router.refresh()
   }
@@ -45,9 +44,9 @@ export default function LoginForm() {
       if (response && !response.success) {
         setErrors({ loginCredentials: [response.error || 'Wrong Credentials'] })
       } else {
+        const guestItems = useCartStore.getState().items
         setLogin(response.username)
-        await syncCart()
-        await fetchCart()
+        await reconcileAfterLogin(guestItems)
         router.push('/')
         router.refresh()
       }
@@ -86,7 +85,12 @@ export default function LoginForm() {
           />
         </div>
 
-        <Button type="submit" size="lg" className="w-full mt-2 font-bold">
+        <Button
+          type="submit"
+          variant="buy"
+          size="lg"
+          className="w-full mt-2 font-bold"
+        >
           Login
         </Button>
 

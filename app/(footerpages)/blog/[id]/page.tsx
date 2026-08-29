@@ -64,7 +64,10 @@ export default async function BlogPostPage({
       <div className="flex items-center justify-between gap-4">
         <Link href="/blog">
           <div className="mt-12 pt-8 border-t border-border p-3">
-            <button className="text-foreground font-bold hover:text-aegean-green transition-colors flex items-center gap-2 hover:cursor-pointer hover:underline">
+            <button
+              type="button"
+              className="text-foreground font-bold hover:text-aegean-dark transition-colors flex items-center gap-2 hover:cursor-pointer hover:underline"
+            >
               ← Back to Blog
             </button>
           </div>

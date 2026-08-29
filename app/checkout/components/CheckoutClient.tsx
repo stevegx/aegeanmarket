@@ -1,7 +1,10 @@
 'use client'
 
-import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTheme } from 'next-themes'
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
 import ProductImage from '@/components/productImage'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -19,16 +22,21 @@ import { Separator } from '@/components/ui/separator'
 import { useCartStore } from '@/app/products/store/useCartStore'
 import { checkoutSchema, CheckoutFormData } from '@/lib/validate'
 import { createOrder } from '@/app/actions/createOrder'
+import {
+  initiateCardPayment,
+  getCheckoutAmount,
+} from '@/app/actions/initiateCardPayment'
 import PaymentMethodSelector, {
   PaymentMethodValue,
 } from './PaymentMethodSelector'
-import {
-  CardPaymentMock,
-  QrScanMock,
-  validateCardDetails,
-  CardDetails,
-  CardErrors,
-} from './PaymentMethodMock'
+import { QrScanMock } from './PaymentMethodMock'
+import StripePaymentForm, {
+  StripePaymentFormHandle,
+} from './StripePaymentForm'
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+)
 
 interface CheckoutClientProps {
   isLoggedIn: boolean
@@ -38,6 +46,13 @@ type CheckoutErrors = Partial<Record<keyof CheckoutFormData, string[]>>
 
 export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
   const router = useRouter()
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true)
+  }, [])
 
   const items = useCartStore((state) => state.items)
   const removeItem = useCartStore((state) => state.removeItem)
@@ -54,13 +69,14 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodValue | ''>(
     ''
   )
-  const [cardDetails, setCardDetails] = useState<CardDetails>({
-    cardName: '',
-    cardNumber: '',
-    expiry: '',
-    cvc: '',
-  })
-  const [cardErrors, setCardErrors] = useState<CardErrors>({})
+  // Authoritative cart total (in cents) for sizing the Stripe <Elements>
+  // instance up-front, tagged with the cart snapshot it was computed for so a
+  // stale amount is ignored while a refetch is in flight.
+  const [amountState, setAmountState] = useState<{
+    key: string
+    amount: number
+  } | null>(null)
+  const stripePaymentFormRef = useRef<StripePaymentFormHandle>(null)
   const [qrScanned, setQrScanned] = useState(false)
   const [errors, setErrors] = useState<CheckoutErrors>({})
   const [serverError, setServerError] = useState<string | null>(null)
@@ -69,19 +85,49 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
   const handlePaymentMethodChange = (method: PaymentMethodValue) => {
     setPaymentMethod(method)
     setQrScanned(false)
-    setCardErrors({})
+    setServerError(null)
   }
 
-  const requiresQrConfirmation =
-    paymentMethod === 'iris' ||
-    paymentMethod === 'paypal' ||
-    paymentMethod === 'klarna'
+  const requiresQrConfirmation = paymentMethod === 'iris'
+
+  // Key that changes whenever the cart contents/quantities change, so the
+  // Stripe amount is refetched and <Elements> re-initialised to match.
+  const cartKey = items
+    .map((item) => `${item._id}:${item.quantity}`)
+    .join(',')
+
+  // Only trust the fetched amount if it belongs to the current cart snapshot.
+  const stripeAmount =
+    amountState && amountState.key === cartKey ? amountState.amount : null
 
   useEffect(() => {
     if (hasHydrated && items.length === 0) {
       router.replace('/products')
     }
   }, [hasHydrated, items.length, router])
+
+  useEffect(() => {
+    if (paymentMethod !== 'credit_card' || !hasHydrated || items.length === 0) {
+      return
+    }
+    let cancelled = false
+    const cartItems = items.map((item) => ({
+      _id: item._id,
+      quantity: item.quantity,
+    }))
+    getCheckoutAmount(cartItems).then((res) => {
+      if (cancelled) return
+      if (res.success) {
+        setAmountState({ key: cartKey, amount: res.amount })
+      } else {
+        setServerError(res.error)
+      }
+    })
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paymentMethod, hasHydrated, cartKey])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -116,14 +162,6 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
     setErrors({})
     setServerError(null)
 
-    // Mock payment step — purely client-side theater, never sent to createOrder.
-    if (paymentMethod === 'credit_card') {
-      const mockErrors = validateCardDetails(cardDetails)
-      if (Object.keys(mockErrors).length > 0) {
-        setCardErrors(mockErrors)
-        return
-      }
-    }
     if (requiresQrConfirmation && !qrScanned) {
       setServerError('Please confirm the payment by simulating the scan above.')
       return
@@ -135,6 +173,19 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
       _id: item._id,
       quantity: item.quantity,
     }))
+
+    if (paymentMethod === 'credit_card') {
+      const payResult = await stripePaymentFormRef.current?.pay(() =>
+        initiateCardPayment(result.data, cartItems)
+      )
+      if (!payResult || !payResult.success) {
+        setServerError(payResult?.error ?? 'Payment failed')
+        setIsSubmitting(false)
+        return
+      }
+      router.push(`/checkout/success?orderId=${payResult.orderId}`)
+      return
+    }
 
     const response = await createOrder(result.data, cartItems)
 
@@ -175,6 +226,13 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
       </div>
     )
   }
+
+  const isDark = mounted && resolvedTheme === 'dark'
+
+  const buttonLabel =
+    paymentMethod === 'credit_card'
+      ? `Pay ${totalPrice.toFixed(2)}€`
+      : 'Complete Order'
 
   return (
     <div className="max-w-7xl mx-auto w-full px-5 md:px-10 py-8 md:py-10">
@@ -291,11 +349,33 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
               />
 
               {paymentMethod === 'credit_card' && (
-                <CardPaymentMock
-                  details={cardDetails}
-                  errors={cardErrors}
-                  onChange={setCardDetails}
-                />
+                <div className="flex flex-col gap-4 rounded-lg border border-border p-4 bg-muted">
+                  <p className="text-xs text-muted-foreground">
+                    Stripe test mode — use card 4242 4242 4242 4242, any future
+                    expiry, any CVC/ZIP. No real payment is processed.
+                  </p>
+                  {stripeAmount != null ? (
+                    <Elements
+                      key={`${stripeAmount}-${isDark}`}
+                      stripe={stripePromise}
+                      options={{
+                        mode: 'payment',
+                        amount: stripeAmount,
+                        currency: 'eur',
+                        // Keep in sync with `payment_method_types` in
+                        // initiateCardPayment — only card and Klarna online.
+                        paymentMethodTypes: ['card', 'klarna'],
+                        appearance: { theme: isDark ? 'night' : 'stripe' },
+                      }}
+                    >
+                      <StripePaymentForm ref={stripePaymentFormRef} />
+                    </Elements>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Loading payment options…
+                    </p>
+                  )}
+                </div>
               )}
 
               {requiresQrConfirmation && (
@@ -319,7 +399,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
             <CardHeader>
               <CardTitle className="text-lg">Your Order</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col divide-y divide-border">
+            <CardContent className="flex flex-col divide-y divide-border max-h-[45vh] overflow-y-auto overflow-x-clip">
               {items.map((item) => (
                 <div
                   key={item._id}
@@ -340,10 +420,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
                     <span className="text-xs text-muted-foreground">
                       {item.price.toFixed(2)}€ / unit
                     </span>
-                    <QuantityController
-                      product={item}
-                      className="w-fit gap-1 px-1.5 py-1"
-                    />
+                    <QuantityController product={item} />
                   </div>
                   <div className="flex flex-col items-end gap-2 shrink-0">
                     <span className="text-sm font-bold text-foreground">
@@ -388,7 +465,10 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
                 variant="buy"
                 size="lg"
                 className="w-full font-bold mt-1"
-                disabled={isSubmitting}
+                disabled={
+                  isSubmitting ||
+                  (paymentMethod === 'credit_card' && stripeAmount == null)
+                }
               >
                 {isSubmitting ? (
                   <svg
@@ -411,7 +491,7 @@ export default function CheckoutClient({ isLoggedIn }: CheckoutClientProps) {
                     />
                   </svg>
                 ) : (
-                  'Complete Order'
+                  buttonLabel
                 )}
               </Button>
             </CardFooter>

@@ -44,7 +44,7 @@ export default function CookieConsent() {
             See our{' '}
             <Link
               href="/cookies"
-              className="underline underline-offset-2 decoration-white/40 hover:text-aegean-green hover:decoration-aegean-green"
+              className="underline underline-offset-2 decoration-white/40 hover:text-white hover:decoration-white"
             >
               Cookies Policy
             </Link>{' '}
@@ -62,7 +62,7 @@ export default function CookieConsent() {
           </Button>
           <Button
             size="lg"
-            className="bg-aegean-green text-white font-semibold hover:bg-aegean-green/85"
+            className="bg-white text-aegean-dark font-semibold hover:bg-white/90"
             onClick={() => respond('accepted')}
           >
             Accept

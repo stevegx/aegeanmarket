@@ -12,6 +12,7 @@ interface PageProps {
   searchParams: Promise<{
     page?: string
     category?: string
+    minPrice?: string
     maxPrice?: string
     manufacturer?: string | string[]
     minRating?: string
@@ -58,11 +59,12 @@ async function ProductPageContent({
     <SidebarProvider>
       <FilterSideBar />
       <SidebarInset className="w-full">
-        <SidebarTrigger className="md:hidden fixed top-35 left-4 z-50 flex h-11 w-auto items-center px-4 gap-2 bg-aegean-green! text-white! shadow-xl rounded-full border-none transition-transform active:scale-95 after:content-['Filters'] after:text-sm after:font-bold after:ml-1" />
+        <SidebarTrigger className="md:hidden fixed top-35 left-4 z-50 flex h-11 w-auto items-center px-4 gap-2 bg-aegean-dark! text-white! shadow-xl rounded-full border-none transition-transform active:scale-95 after:content-['Filters'] after:text-sm after:font-bold after:ml-1" />
         <main className="p-4 w-full">
           <ProductList
             currentPage={currentPage}
             category={sParams.category}
+            minPrice={sParams.minPrice ? Number(sParams.minPrice) : undefined}
             maxPrice={sParams.maxPrice ? Number(sParams.maxPrice) : undefined}
             searchTerm={sParams.q}
             manufacturers={manufacturers}

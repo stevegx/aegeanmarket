@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import Navbar from '@/components/navbar'
 import { getSession } from '@/app/actions/getSession'
 import { CartSyncHandler } from '@/app/products/components/cart/handler/CartSyncHandler'
+import { CartMergeModal } from '@/app/products/components/cart/handler/CartMergeModal'
 import { FavoritesSyncHandler } from '@/app/products/components/favorites/handler/FavoritesSyncHandler'
 import SearchComponent from '@/components/searchcomponents/searchComponent'
 import Footer from '@/components/footer'
@@ -58,6 +59,7 @@ export default async function RootLayout({
             <SearchComponent />
           </Navbar>
           <CartSyncHandler />
+          <CartMergeModal />
           <FavoritesSyncHandler />
           <ThemeSyncHandler />
           <main className="grow flex flex-col">{children}</main>

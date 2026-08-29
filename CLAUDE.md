@@ -16,7 +16,27 @@ npm run lint     # eslint (flat config, eslint-config-next core-web-vitals + typ
 npm run feed     # npx tsx scripts/productFeeder.mjs — wipes and reseeds the Product collection from products/products.xml
 ```
 
-There is no test suite/framework configured in this repo (no test script, no Jest/Vitest/Playwright).
+```bash
+npm run test:e2e         # Playwright E2E (login/register/OAuth) -- see below
+npm run test:e2e:ui      # same, in Playwright's watch UI
+npm run test:e2e:report  # open the last HTML report
+```
+
+The only automated tests are the Playwright E2E specs in `e2e/`: the auth surface
+(`register.spec.ts`, `login.spec.ts`, `oauth.spec.ts`) and cart sync
+(`cart-sync.spec.ts` — login merge/replace modal, logout clearing, full-replace
+push; it seeds products / carts directly via `e2e/db.ts` against the same
+`aegeanmarket_e2e` database). There is no unit-test framework (no Jest/Vitest).
+`e2e/` and `playwright.config.ts` are excluded from `tsconfig.json` and ESLint.
+
+`npm run test:e2e` needs a git-ignored `.env.test` (already present locally) pointing
+`MONGODB_URI` at a dedicated `aegeanmarket_e2e` database — `global-setup`/`global-teardown`
+**drop that database** around every run, so never point it at real data. `.env.test` also
+sets two test-only escape hatches honoured by production code when set:
+`DISABLE_RATE_LIMIT=1` (short-circuits `lib/rateLimit.ts`) and `E2E_GOOGLE_BYPASS=1`
+(lets `lib/oauth.ts` accept a forged `e2e.<base64url-claims>` token instead of a real
+Google id token). Playwright's `webServer` runs its own `next build && next start` on
+**port 3100** (so it coexists with a running `npm run dev` on :3000).
 
 Type-checking: `npx tsc --noEmit` (no dedicated script; `tsconfig.json` has `noEmit: true`).
 
@@ -34,7 +54,7 @@ Product/user/order/review data is fetched **only** in Server Components or Serve
 
 Client Zustand stores (`app/products/store/useCartStore.ts`, `app/products/store/useFavoritesStore.ts`, `app/store/useNotificationsStore.ts`, `app/(auth)/store/useAuthStore.ts`) exist to mirror server state into interactive UI (cart badge, favorite hearts, notification bell, nav auth state). Only `useCartStore` is persisted to localStorage (via `zustand/middleware persist`); the others are populated fresh on each full page load by small `'use client'` "handler" components mounted in `app/layout.tsx` (`CartSyncHandler`, `FavoritesSyncHandler`) which gate their fetch on `useAuthStore.isLoggedIn`. `useAuthStore` itself is seeded synchronously from the `initialSession` prop that `RootLayout` computes server-side via `getSession()` and passes down through `Navbar` — don't reintroduce a client-side `getSession()` call there, it was removed deliberately to avoid a redundant JWT verification + request waterfall.
 
-Cart state has a two-way sync: local optimistic updates in `useCartStore`/`useCartStore.addItem` etc., plus a debounced (5s) POST to `/api/cart/sync` from `CartSyncHandler`, and a `fetchCart()`/`fetchFavorites()`/`fetchNotifications()` pull from `/api/cart`, `/api/favorites`, `/api/notifications` respectively on login. `NotificationBell` additionally polls `/api/notifications` every 30s while mounted.
+Cart state has a two-way sync: local optimistic updates in `useCartStore`/`useCartStore.addItem` etc., plus a debounced (5s) `pushCart()` — a full-replace `PUT /api/cart` (missing items are deleted; an empty array clears the DB cart) — from `CartSyncHandler`, and a `fetchCart()`/`fetchFavorites()`/`fetchNotifications()` pull from `/api/cart`, `/api/favorites`, `/api/notifications` respectively on login. `NotificationBell` additionally polls `/api/notifications` every 30s while mounted. On login, `loginForm`/`registerForm` snapshot the guest cart, then call `useCartStore.reconcileAfterLogin(guestItems)`: guest-only or DB-only carts merge silently; if BOTH are non-empty it sets `pendingMerge`, which opens `CartMergeModal` (KEEP BOTH = union keeping the larger quantity per product / USE THIS DEVICE = guest cart wins, DB cart discarded; dismiss = KEEP BOTH). `CartSyncHandler` gates its initial pull and its debounced push on the store's `hasHydratedFromDb` flag (set by `fetchCart`/`reconcileAfterLogin`, reset by `resetForLogout`). Logout (`navbar` `onLogout`) calls `useCartStore.resetForLogout()` — the cart is cleared so it never leaks to the next user on a shared device.
 
 ### Auth
 
@@ -64,4 +84,4 @@ Product images are hosted externally on `ekava.gr`/`www.ekava.gr` (whitelisted v
 - `app/products/` — listing (`page.tsx`, server-rendered from `searchParams`: page/category/maxPrice/manufacturer/minRating/onlyInStock/q/volume/origin) and `[id]/` product detail + reviews.
 - `app/checkout/` — `CheckoutClient.tsx` drives the checkout form/payment method selection (`PaymentMethodMock`/`PaymentMethodSelector` — payment is mocked, not a real gateway).
 - `app/profile/[id]/` — tabbed profile (`components/ProfileTabs.tsx`: info/security/orders/favorites/reviews), all data fetched server-side in parallel in `page.tsx`.
-- `app/api/` — route handlers used only where a Server Action doesn't fit (client polling/mutation endpoints): `cart`, `cart/sync`, `favorites`, `notifications`, `quick-search`.
+- `app/api/` — route handlers used only where a Server Action doesn't fit (client polling/mutation endpoints): `cart` (`GET` populated cart / `PUT` full-replace write), `favorites`, `notifications`, `quick-search`.

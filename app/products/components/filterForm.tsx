@@ -2,7 +2,10 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
-import { Slider } from '@/components/ui/slider'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { ArrowDown01Icon, Search01Icon } from '@hugeicons/core-free-icons'
+import { cn } from '@/lib/utils'
+
 interface FilterFormProps {
   minPrice: number
   maxPrice: number
@@ -11,6 +14,41 @@ interface FilterFormProps {
   maxRating: number
   origin: string[]
   volume: string[]
+}
+
+function FilterSection({
+  title,
+  children,
+  defaultOpen = true,
+}: {
+  title: string
+  children: React.ReactNode
+  defaultOpen?: boolean
+}) {
+  const [open, setOpen] = useState(defaultOpen)
+  return (
+    <div className="border-b border-border last:border-0">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between py-3 hover:cursor-pointer"
+      >
+        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+          {title}
+        </span>
+        <HugeiconsIcon
+          icon={ArrowDown01Icon}
+          strokeWidth={2}
+          className={cn(
+            'size-4 text-muted-foreground transition-transform',
+            open && 'rotate-180'
+          )}
+        />
+      </button>
+      {open && <div className="pb-4 pt-1">{children}</div>}
+    </div>
+  )
 }
 
 export default function FilterForm({
@@ -27,15 +65,8 @@ export default function FilterForm({
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  // --- STATE ΓΙΑ ΤΙΜΗ (Slider + Input) ---
-  const [priceInput, setPriceInput] = useState(
-    searchParams.get('maxPrice') || maxPrice.toString()
-  )
-
-  // --- HELPER ΓΙΑ URL UPDATE ---
   const updateURL = (newParams: Record<string, string | string[] | null>) => {
     const params = new URLSearchParams(searchParams.toString())
-
     Object.entries(newParams).forEach(([key, value]) => {
       if (value === null || value === '') {
         params.delete(key)
@@ -46,10 +77,38 @@ export default function FilterForm({
         params.set(key, value)
       }
     })
-
     params.set('page', '1')
     router.push(`?${params.toString()}`, { scroll: false })
   }
+
+  // --- PRICE RANGE (dual handle) ---
+  const [range, setRange] = useState<[number, number]>([
+    Number(searchParams.get('minPrice')) || minPrice,
+    Number(searchParams.get('maxPrice')) || maxPrice,
+  ])
+
+  const commitRange = ([lo, hi]: [number, number]) => {
+    const clampedLo = Math.max(minPrice, Math.min(lo, maxPrice))
+    const clampedHi = Math.min(maxPrice, Math.max(hi, clampedLo))
+    if (clampedLo !== range[0] || clampedHi !== range[1]) {
+      setRange([clampedLo, clampedHi])
+    }
+    updateURL({
+      minPrice: clampedLo > minPrice ? String(clampedLo) : null,
+      maxPrice: clampedHi < maxPrice ? String(clampedHi) : null,
+    })
+  }
+
+  const clamp = (n: number) =>
+    Math.max(0, Math.min(((n - minPrice) / (maxPrice - minPrice)) * 100, 100))
+  const lowPct = clamp(range[0])
+  const highPct = clamp(range[1])
+
+  // --- MANUFACTURER SEARCH ---
+  const [brandQuery, setBrandQuery] = useState('')
+  const filteredBrands = manufacturers.filter((m) =>
+    m.toLowerCase().includes(brandQuery.toLowerCase())
+  )
 
   // --- HANDLERS ---
   const handleManufacturerToggle = (brand: string) => {
@@ -62,11 +121,7 @@ export default function FilterForm({
 
   const handleOriginSelect = (selectedOrigin: string) => {
     const current = searchParams.get('origin')
-    if (current === selectedOrigin) {
-      updateURL({ origin: null })
-    } else {
-      updateURL({ origin: selectedOrigin })
-    }
+    updateURL({ origin: current === selectedOrigin ? null : selectedOrigin })
   }
 
   const handleVolumeToggle = (vol: string) => {
@@ -78,41 +133,79 @@ export default function FilterForm({
   }
 
   return (
-    <div className="flex flex-col gap-8 py-4">
-      {/* 1. PRICE (Slider & Number Input) */}
-      <div className="space-y-4">
-        <h4 className="font-bold text-sm">Price Range</h4>
-        <div className="flex items-center gap-4">
-          <input
-            type="number"
-            value={priceInput}
-            onChange={(e) => setPriceInput(e.target.value)}
-            onBlur={() => updateURL({ maxPrice: priceInput })}
-            className="w-20 p-1 border border-border rounded text-sm bg-background text-foreground hover:cursor-pointer "
-          />
-          <span className="text-xs text-muted-foreground">Up to {maxPrice}€</span>
-        </div>
-        <Slider
-          min={minPrice}
-          max={maxPrice}
-          step={1}
-          value={priceInput}
-          onChange={(e) => setPriceInput(e.target.value)}
-          onMouseUp={() => updateURL({ maxPrice: priceInput })}
-          className="w-full"
-        />
-      </div>
+    <div className="flex flex-col">
+      {/* PRICE */}
+      <FilterSection title="Price">
+        <div className="space-y-4 px-1">
+          <div className="flex items-center justify-between text-sm font-semibold text-foreground">
+            <span className="tabular-nums">{range[0]}€</span>
+            <span className="tabular-nums">{range[1]}€</span>
+          </div>
 
-      {/* 2. RATING (Κάθετη διάταξη με αστεράκια) */}
-      <div className="space-y-3">
-        <h4 className="font-bold text-sm uppercase text-muted-foreground tracking-wider">
-          Rating
-        </h4>
+          <div className="relative h-5">
+            <div className="absolute top-1/2 h-1.5 w-full -translate-y-1/2 rounded-full bg-muted" />
+            <div
+              className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-aegean-green"
+              style={{ left: `${lowPct}%`, right: `${100 - highPct}%` }}
+            />
+            <input
+              type="range"
+              min={minPrice}
+              max={maxPrice}
+              value={range[0]}
+              onChange={(e) => {
+                const lo = Math.min(Number(e.target.value), range[1] - 1)
+                setRange([lo, range[1]])
+              }}
+              onMouseUp={() => commitRange(range)}
+              onTouchEnd={() => commitRange(range)}
+              className="pointer-events-none absolute h-5 w-full appearance-none bg-transparent accent-aegean-green [&::-moz-range-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:cursor-pointer"
+            />
+            <input
+              type="range"
+              min={minPrice}
+              max={maxPrice}
+              value={range[1]}
+              onChange={(e) => {
+                const hi = Math.max(Number(e.target.value), range[0] + 1)
+                setRange([range[0], hi])
+              }}
+              onMouseUp={() => commitRange(range)}
+              onTouchEnd={() => commitRange(range)}
+              className="pointer-events-none absolute h-5 w-full appearance-none bg-transparent accent-aegean-green [&::-moz-range-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:cursor-pointer"
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              min={minPrice}
+              max={range[1]}
+              value={range[0]}
+              onChange={(e) => setRange([Number(e.target.value), range[1]])}
+              onBlur={() => commitRange(range)}
+              className="w-full rounded border border-border bg-background p-1.5 text-sm text-foreground"
+            />
+            <span className="text-muted-foreground">–</span>
+            <input
+              type="number"
+              min={range[0]}
+              max={maxPrice}
+              value={range[1]}
+              onChange={(e) => setRange([range[0], Number(e.target.value)])}
+              onBlur={() => commitRange(range)}
+              className="w-full rounded border border-border bg-background p-1.5 text-sm text-foreground"
+            />
+          </div>
+        </div>
+      </FilterSection>
+
+      {/* RATING */}
+      <FilterSection title="Rating">
         <div className="flex flex-col gap-1">
           {[5, 4, 3, 2, 1].map((starCount) => {
             const isSelected =
               searchParams.get('minRating') === starCount.toString()
-
             return (
               <button
                 key={starCount}
@@ -122,117 +215,121 @@ export default function FilterForm({
                     minRating: isSelected ? null : starCount.toString(),
                   })
                 }
-                className={`flex items-center gap-3 p-2 rounded-md transition-all group hover:bg-muted hover:cursor-pointer ${
-                  isSelected
-                    ? 'bg-aegean-green/10 ring-1 ring-aegean-green/30'
-                    : ''
-                }`}
+                className={cn(
+                  'flex items-center gap-2 rounded-md p-2 transition-all hover:cursor-pointer hover:bg-muted',
+                  isSelected && 'bg-aegean-dark/10 ring-1 ring-aegean-dark/30'
+                )}
               >
                 <div className="flex gap-0.5">
                   {[1, 2, 3, 4, 5].map((index) => (
                     <span
                       key={index}
-                      className={`text-lg transition-colors ${
+                      className={cn(
+                        'text-lg',
                         index <= starCount ? 'text-yellow-400' : 'text-muted'
-                      }`}
+                      )}
                     >
                       ★
                     </span>
                   ))}
                 </div>
+                <span className="text-xs text-muted-foreground">& up</span>
               </button>
             )
           })}
         </div>
-      </div>
+      </FilterSection>
 
-      {/* 3. STOCK (Checkbox) */}
-      <div className="space-y-2">
-        <h4 className="font-bold text-sm">Availability</h4>
-        <label className="flex items-center gap-2 cursor-pointer text-sm">
+      {/* AVAILABILITY */}
+      <FilterSection title="Availability">
+        <label className="flex cursor-pointer items-center gap-2 text-sm">
           <input
             type="checkbox"
             checked={searchParams.get('onlyInStock') === 'true'}
             onChange={(e) =>
               updateURL({ onlyInStock: e.target.checked ? 'true' : null })
             }
-            className="w-4 h-4 accent-aegean-green"
+            className="h-4 w-4 accent-aegean-green"
           />
           Show only in-stock items
         </label>
-      </div>
+      </FilterSection>
 
-      {/* 4. MANUFACTURERS (Multiple Selection) */}
-      <div className="space-y-2">
-        <h4 className="font-bold text-sm">Manufacturers</h4>
-        <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-2">
-          {manufacturers.map((m) => (
-            <label
-              key={m}
-              className="flex items-center gap-2 text-sm cursor-pointer group"
-            >
-              <input
-                type="checkbox"
-                checked={searchParams.getAll('manufacturer').includes(m)}
-                onChange={() => handleManufacturerToggle(m)}
-                className="w-4 h-4 accent-aegean-green"
-              />
-              <span className="hover:text-aegean-green">{m}</span>
-            </label>
-          ))}
+      {/* MANUFACTURERS */}
+      <FilterSection title="Manufacturers">
+        <div className="space-y-2">
+          <div className="relative">
+            <HugeiconsIcon
+              icon={Search01Icon}
+              strokeWidth={2}
+              className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+            />
+            <input
+              type="text"
+              value={brandQuery}
+              onChange={(e) => setBrandQuery(e.target.value)}
+              placeholder="Search brands…"
+              className="w-full rounded border border-border bg-background py-1.5 pl-8 pr-2 text-sm text-foreground"
+            />
+          </div>
+          <div className="custom-scrollbar flex max-h-48 flex-col gap-2 overflow-y-auto pr-2">
+            {filteredBrands.length === 0 ? (
+              <p className="py-2 text-xs text-muted-foreground">No matches</p>
+            ) : (
+              filteredBrands.map((m) => (
+                <label
+                  key={m}
+                  className="flex cursor-pointer items-center gap-2 text-sm"
+                >
+                  <input
+                    type="checkbox"
+                    checked={searchParams.getAll('manufacturer').includes(m)}
+                    onChange={() => handleManufacturerToggle(m)}
+                    className="h-4 w-4 shrink-0 accent-aegean-green"
+                  />
+                  <span className="hover:text-aegean-green-text">{m}</span>
+                </label>
+              ))
+            )}
+          </div>
         </div>
-      </div>
+      </FilterSection>
 
-      {/* 5. ORIGIN */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <h4 className="font-bold text-sm uppercase text-muted-foreground tracking-wider">
-            Origin
-          </h4>
-          {searchParams.get('origin') && (
-            <button
-              onClick={() => updateURL({ origin: null })}
-              className="text-[10px] text-destructive hover:underline cursor-pointer font-medium"
-            >
-              Clear
-            </button>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
-          {origin.map((o) => (
-            <label
-              key={o}
-              className="flex items-center gap-2 text-sm cursor-pointer group"
-            >
-              <input
-                type="radio"
-                name="origin-group"
-                checked={searchParams.get('origin') === o}
-                onChange={() => handleOriginSelect(o)}
-                className="w-3.5 h-3.5
-                       text-aegean-green
-                       border-border
-                       focus:ring-aegean-green/30
-                       cursor-pointer"
-              />
-              <span
-                className={`transition-colors ${
-                  searchParams.get('origin') === o
-                    ? 'text-aegean-green-text font-bold'
-                    : 'text-muted-foreground hover:text-aegean-green-text'
-                }`}
+      {/* ORIGIN */}
+      <FilterSection title="Origin" defaultOpen={false}>
+        <div className="custom-scrollbar flex max-h-48 flex-col gap-2 overflow-y-auto pr-2">
+          {origin.map((o) => {
+            const isSelected = searchParams.get('origin') === o
+            return (
+              <label
+                key={o}
+                className="flex cursor-pointer items-center gap-2 text-sm"
               >
-                {o}
-              </span>
-            </label>
-          ))}
+                <input
+                  type="radio"
+                  name="origin-group"
+                  checked={isSelected}
+                  onChange={() => handleOriginSelect(o)}
+                  className="h-3.5 w-3.5 accent-aegean-green"
+                />
+                <span
+                  className={cn(
+                    'transition-colors',
+                    isSelected
+                      ? 'font-bold text-aegean-green-text'
+                      : 'text-muted-foreground hover:text-aegean-green-text'
+                  )}
+                >
+                  {o}
+                </span>
+              </label>
+            )
+          })}
         </div>
-      </div>
+      </FilterSection>
 
-      {/* 6. VOLUME */}
-      <div className="space-y-2">
-        <h4 className="font-bold text-sm">Volume</h4>
+      {/* VOLUME */}
+      <FilterSection title="Volume" defaultOpen={false}>
         <div className="flex flex-wrap gap-2">
           {volume.map((v) => {
             const isSelected = searchParams.getAll('volume').includes(v)
@@ -241,18 +338,19 @@ export default function FilterForm({
                 key={v}
                 type="button"
                 onClick={() => handleVolumeToggle(v)}
-                className={`px-3 py-1 text-xs rounded-full border transition-all ${
+                className={cn(
+                  'rounded-full border px-3 py-1 text-xs transition-all hover:cursor-pointer',
                   isSelected
-                    ? 'bg-aegean-green text-white border-aegean-green'
-                    : 'bg-background text-muted-foreground border-border hover:border-aegean-green'
-                }`}
+                    ? 'border-aegean-dark bg-aegean-dark text-white'
+                    : 'border-border bg-background text-muted-foreground hover:border-aegean-dark'
+                )}
               >
                 {v}
               </button>
             )
           })}
         </div>
-      </div>
+      </FilterSection>
     </div>
   )
 }

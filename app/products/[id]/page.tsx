@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Product from '@/models/Products'
-import connectDB, { getProductReviews } from '@/lib/db'
+import connectDB, { getProductReviews, getRelatedProducts } from '@/lib/db'
 import { getSession } from '@/app/actions/getSession'
 import ProductDetails from './ProductDetails'
 
@@ -83,9 +83,14 @@ export default async function Page({
   // Next.js fix: Τα MongoDB objects πρέπει να γίνουν JSON safe
   const product = JSON.parse(JSON.stringify(productRaw))
 
-  const [reviews, session] = await Promise.all([
+  const [reviews, session, relatedProducts] = await Promise.all([
     getProductReviews(id),
     getSession(),
+    getRelatedProducts({
+      productId: id,
+      category: product.category,
+      manufacturer: product.manufacturer,
+    }),
   ])
 
   return (
@@ -94,6 +99,7 @@ export default async function Page({
       reviews={reviews}
       currentUserId={session?.userId ?? null}
       isAdmin={session?.role === 'admin'}
+      relatedProducts={relatedProducts}
     />
   )
 }

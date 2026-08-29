@@ -9,6 +9,16 @@ function isAdminPath(pathname: string) {
   return pathname === '/adminpage' || pathname.startsWith('/adminpage/')
 }
 
+function isProfilePath(pathname: string) {
+  return pathname === '/profile' || pathname.startsWith('/profile/')
+}
+
+// Routes that require *some* authenticated session (the profile page itself
+// enforces per-user ownership; admin role is checked separately below).
+function isProtectedPath(pathname: string) {
+  return isAdminPath(pathname) || isProfilePath(pathname)
+}
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const authToken = request.cookies.get('auth_token')?.value
@@ -60,7 +70,9 @@ export async function proxy(request: NextRequest) {
       return response
     } catch (err) {
       // Αν και το refresh απέτυχε, καθάρισε τα πάντα
-      const response = NextResponse.next()
+      const response = isProtectedPath(pathname)
+        ? NextResponse.redirect(new URL('/login', request.url))
+        : NextResponse.next()
       response.cookies.delete('auth_token')
       response.cookies.delete('refresh_token')
       return response
@@ -69,8 +81,8 @@ export async function proxy(request: NextRequest) {
 
   // --- 3. ΠΡΟΣΤΑΣΙΑ ΔΙΑΔΡΟΜΩΝ (RBAC) ---
 
-  // Αν δεν είναι συνδεδεμένος και πάει Admin
-  if (!payload && isAdminPath(pathname)) {
+  // Αν δεν είναι συνδεδεμένος και πάει σε προστατευμένη διαδρομή (Admin ή Profile)
+  if (!payload && isProtectedPath(pathname)) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
