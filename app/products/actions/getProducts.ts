@@ -1,5 +1,6 @@
 import connectDB from '@/lib/db'
 import Product from '@/models/Products'
+import { escapeRegex } from '@/lib/utils'
 export interface IProduct {
   _id: string
   name: string
@@ -14,6 +15,7 @@ export interface IProduct {
 interface GetProductsArgs {
   page?: number
   category?: string
+  minPrice?: number
   maxPrice?: number
   manufacturers?: string[]
   minRating?: number
@@ -25,6 +27,7 @@ interface GetProductsArgs {
 export default async function getProducts({
   page = 1,
   category,
+  minPrice,
   maxPrice,
   manufacturers,
   minRating,
@@ -43,12 +46,15 @@ export default async function getProducts({
 
     // Φίλτρο Κατηγορίας
     if (category) {
-      query.category = { $regex: new RegExp(`^${category}$`, 'i') }
+      query.category = { $regex: new RegExp(`^${escapeRegex(category)}$`, 'i') }
     }
 
-    // Φίλτρο Τιμής (Μικρότερη ή ίση)
-    if (maxPrice) {
-      query.price = { $lte: maxPrice }
+    // Φίλτρο Τιμής (range)
+    if (minPrice || maxPrice) {
+      const priceRange: Record<string, number> = {}
+      if (minPrice) priceRange.$gte = minPrice
+      if (maxPrice) priceRange.$lte = maxPrice
+      query.price = priceRange
     }
 
     // Φίλτρο Πολλαπλών Κατασκευαστών
@@ -68,7 +74,7 @@ export default async function getProducts({
 
     // Φίλτρο Αναζήτησης (searchTerm)
     if (searchTerm) {
-      const searchRegex = new RegExp(searchTerm, 'i')
+      const searchRegex = new RegExp(escapeRegex(searchTerm), 'i')
       query.$or = [
         { name: searchRegex },
         { manufacturer: searchRegex },
@@ -94,7 +100,7 @@ export default async function getProducts({
     ])
 
     if (!products || products.length === 0) {
-      return { products: [], totalPages: 0 }
+      return { products: [], totalPages: 0, total: 0 }
     }
 
     // 3. Serialization (Μετατροπή _id σε string για το Frontend)
@@ -106,9 +112,10 @@ export default async function getProducts({
     return {
       products: serializedProducts,
       totalPages: Math.ceil(total / limit),
+      total,
     }
   } catch (error) {
     console.error('Database error in getProducts:', error)
-    return { products: [], totalPages: 0 }
+    return { products: [], totalPages: 0, total: 0 }
   }
 }

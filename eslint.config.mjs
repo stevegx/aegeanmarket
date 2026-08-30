@@ -14,7 +14,7 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
   ]),
   {
-    ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"]
+    ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts", "e2e/**", "playwright.config.ts"]
   }
 ]);
 

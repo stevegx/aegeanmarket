@@ -112,7 +112,7 @@ export default function SearchCategories({ categories }: SearchBarProps) {
                         onClick={() => handleFilter(cat)}
                         className={`flex-1 justify-between uppercase text-xs hover:cursor-pointer p-2 py-6 rounded-none ${
                           isCatActive
-                            ? 'bg-aegean-green text-white'
+                            ? 'bg-aegean-dark text-white'
                             : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                         }`}
                       >
@@ -231,10 +231,10 @@ export default function SearchCategories({ categories }: SearchBarProps) {
           </div>
 
           <SheetFooter>
-            <SheetClose>
-              <Button variant="outline" className="w-full">
-                Close
-              </Button>
+            <SheetClose
+              render={<Button variant="outline" className="w-full" />}
+            >
+              Close
             </SheetClose>
           </SheetFooter>
         </SheetContent>

@@ -58,6 +58,24 @@ export async function verifyGoogleIdToken(idToken: string) {
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
   if (!clientId) throw new Error('NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set')
 
+  // E2E bypass: accept a locally-forged token of the form
+  // `e2e.<base64url(JSON {sub,email,name,email_verified})>` so tests can
+  // exercise the OAuth success path without a real Google round-trip.
+  // Guarded by an env flag that is never set in production.
+  if (process.env.E2E_GOOGLE_BYPASS === '1' && idToken.startsWith('e2e.')) {
+    const claims = JSON.parse(
+      Buffer.from(idToken.slice(4), 'base64url').toString()
+    )
+    if (!claims.email || claims.email_verified !== true) {
+      throw new Error('Google account has no verified email')
+    }
+    return {
+      id: String(claims.sub),
+      email: String(claims.email),
+      name: String(claims.name || String(claims.email).split('@')[0]),
+    }
+  }
+
   const { payload } = await jwtVerify(idToken, GOOGLE_JWKS, {
     issuer: ['https://accounts.google.com', 'accounts.google.com'],
     audience: clientId,

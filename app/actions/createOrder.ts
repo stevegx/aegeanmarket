@@ -17,6 +17,9 @@ type CreateOrderResult =
   | { success: true; orderId: string }
   | { success: false; error: string }
 
+// Credit-card orders are created by initiateCardPayment + the Stripe webhook
+// instead (app/api/webhooks/stripe) so fulfillment survives a client that
+// never returns after a successful charge.
 export async function createOrder(
   data: CheckoutFormData,
   cartItems: CartItemInput[]
@@ -28,6 +31,10 @@ export async function createOrder(
     return { success: false, error: 'Invalid checkout data' }
   }
   const checkoutData = parsed.data
+
+  if (checkoutData.paymentMethod === 'credit_card') {
+    return { success: false, error: 'Invalid checkout data' }
+  }
 
   const session = await getSession()
 

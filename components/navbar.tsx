@@ -16,7 +16,9 @@ import { useRouter, usePathname } from 'next/navigation'
 import { useAuthStore } from '@/app/(auth)/store/useAuthStore'
 import CartModal from './cartModal'
 import NotificationBell from './notificationBell'
+import { Button } from './ui/button'
 import { useNotificationsStore } from '@/app/store/useNotificationsStore'
+import { useCartStore } from '@/app/products/store/useCartStore'
 import ThemeToggle from './theme-toggle'
 
 const NAV_LINKS = [
@@ -94,25 +96,32 @@ export default function Navbar({ initialSession, children }: NavbarProps) {
               await logoutUser()
               setLogout()
               useNotificationsStore.getState().reset()
+              useCartStore.getState().resetForLogout()
               router.refresh()
             }}
           />
         ) : (
           <div className="flex items-center gap-2">
             {!pathname.startsWith('/login') && (
-              <Link href="/login">
-                <button className=" text-foreground text-md font-bold bg-muted hover:bg-muted/70  cursor-pointer px-4 py-1.5 rounded">
-                  Login
-                </button>
-              </Link>
+              <Button
+                render={<Link href="/login" />}
+                variant="ghost"
+                size="sm"
+                className="font-bold"
+              >
+                Login
+              </Button>
             )}
 
             {!pathname.startsWith('/register') && (
-              <Link href="/register">
-                <button className=" text-foreground text-md font-bold bg-muted hover:bg-muted/70 cursor-pointer px-4 py-1.5 rounded">
-                  Register
-                </button>
-              </Link>
+              <Button
+                render={<Link href="/register" />}
+                variant="buy"
+                size="sm"
+                className="font-bold"
+              >
+                Register
+              </Button>
             )}
           </div>
         )}
@@ -184,12 +193,14 @@ export function UserMenu({
                 </li>
               )}
               <li className="border-t border-border mt-1 pt-1">
-                <button
+                <Button
                   onClick={onLogout}
-                  className="w-full text-left block px-4 py-2 text-sm hover:bg-muted rounded transition-colors text-destructive cursor-pointer"
+                  variant="ghost"
+                  size="sm"
+                  className="w-full justify-start px-4 py-2 text-sm font-normal text-destructive hover:bg-muted hover:text-destructive"
                 >
                   Logout
-                </button>
+                </Button>
               </li>
             </ul>
           </NavigationMenuContent>

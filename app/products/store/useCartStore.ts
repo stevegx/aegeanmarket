@@ -18,6 +18,42 @@ type FetchedCartItem = {
     price: number
     image: string
     stock: number
+  } | null
+}
+
+/** Union two carts, keeping the larger quantity for products in both. */
+function mergeByMax(a: CartItem[], b: CartItem[]): CartItem[] {
+  const map = new Map<string, CartItem>()
+  for (const it of a) map.set(it._id, { ...it })
+  for (const it of b) {
+    const existing = map.get(it._id)
+    if (existing) existing.quantity = Math.max(existing.quantity, it.quantity)
+    else map.set(it._id, { ...it })
+  }
+  return Array.from(map.values())
+}
+
+/** GET /api/cart -> normalized CartItem[]. Never throws. */
+async function fetchDbCart(): Promise<CartItem[]> {
+  try {
+    const res = await fetch('/api/cart')
+    if (!res.ok) return []
+    const data: { items?: FetchedCartItem[] } = await res.json()
+    return (data.items || [])
+      .filter((item): item is FetchedCartItem & { product: object } =>
+        Boolean(item.product)
+      )
+      .map((item) => ({
+        _id: item.product._id,
+        name: item.product.name,
+        price: item.product.price,
+        image: item.product.image,
+        stock: item.product.stock,
+        quantity: item.quantity,
+      }))
+  } catch (error) {
+    console.error('Failed to fetch cart:', error)
+    return []
   }
 }
 
@@ -25,6 +61,14 @@ interface CartState {
   items: CartItem[]
   isOpen: boolean
   isSyncing: boolean
+  /**
+   * True once the DB cart has been pulled for the current session. Gates the
+   * debounced push in CartSyncHandler so we never PUT an empty cart over the
+   * DB before the initial fetch lands. Reset on logout, not persisted.
+   */
+  hasHydratedFromDb: boolean
+  /** Set when a logging-in user has BOTH a guest cart and a saved cart. */
+  pendingMerge: { dbItems: CartItem[] } | null
 
   toggleCart: () => void
   setCartOpen: (open: boolean) => void
@@ -35,8 +79,11 @@ interface CartState {
   setItems: (items: CartItem[]) => void
   getTotalPrice: () => number
   getTotalItems: () => number
-  syncCart: () => Promise<void>
+  pushCart: () => Promise<void>
   fetchCart: () => Promise<void>
+  reconcileAfterLogin: (guestItems: CartItem[]) => Promise<'done' | 'conflict'>
+  resolveMerge: (mode: 'merge' | 'replace') => Promise<void>
+  resetForLogout: () => void
 }
 
 export const useCartStore = create<CartState>()(
@@ -45,6 +92,8 @@ export const useCartStore = create<CartState>()(
       items: [],
       isOpen: false,
       isSyncing: false,
+      hasHydratedFromDb: false,
+      pendingMerge: null,
 
       toggleCart: () => set((state: CartState) => ({ isOpen: !state.isOpen })),
       setCartOpen: (open: boolean) => set({ isOpen: open }),
@@ -114,42 +163,81 @@ export const useCartStore = create<CartState>()(
           (acc: number, item: CartItem) => acc + item.quantity,
           0
         ),
-      syncCart: async () => {
+
+      // Full-replace push of the local cart to the DB. Safe to call with an
+      // empty cart (that clears the DB cart, which is what we want after a
+      // local "remove all").
+      pushCart: async () => {
         const items = get().items
-        if (items.length === 0) return
+        set({ isSyncing: true })
         try {
-          await fetch('/api/cart/sync', {
-            method: 'POST',
+          await fetch('/api/cart', {
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ items }),
+            body: JSON.stringify({
+              items: items.map((i) => ({
+                productId: i._id,
+                quantity: i.quantity,
+              })),
+            }),
           })
         } catch (error) {
-          console.log('Failed to sync cart', error)
+          console.error('Failed to push cart', error)
+        } finally {
+          set({ isSyncing: false })
         }
       },
-      fetchCart: async () => {
-        try {
-          const res = await fetch('/api/cart')
-          if (res.ok) {
-            const data: { items?: FetchedCartItem[] } = await res.json()
-            const formattedItems = (data.items || []).map((item) => ({
-              _id: item.product._id,
-              name: item.product.name,
-              price: item.product.price,
-              image: item.product.image,
-              stock: item.product.stock,
-              quantity: item.quantity,
-            }))
 
-            set({ items: formattedItems })
-          }
-        } catch (error) {
-          console.error('Failed to fetch cart:', error)
-        }
+      fetchCart: async () => {
+        const dbItems = await fetchDbCart()
+        set({ items: dbItems, hasHydratedFromDb: true })
       },
+
+      // Called right after setLogin(). `guestItems` is the cart snapshot taken
+      // BEFORE login flipped, so a racing fetch in CartSyncHandler can't have
+      // wiped it. Returns 'conflict' when the caller should show the merge
+      // modal (both carts non-empty); otherwise resolves silently.
+      reconcileAfterLogin: async (guestItems) => {
+        // Set synchronously so CartSyncHandler's own fetch effect skips.
+        set({ hasHydratedFromDb: true, pendingMerge: null })
+        const dbItems = await fetchDbCart()
+
+        if (guestItems.length === 0) {
+          set({ items: dbItems })
+          return 'done'
+        }
+        if (dbItems.length === 0) {
+          set({ items: guestItems })
+          await get().pushCart()
+          return 'done'
+        }
+        set({ pendingMerge: { dbItems } })
+        return 'conflict'
+      },
+
+      resolveMerge: async (mode) => {
+        const pending = get().pendingMerge
+        if (!pending) return
+        const guest = get().items
+        const final =
+          mode === 'merge' ? mergeByMax(guest, pending.dbItems) : guest
+        set({ items: final, pendingMerge: null })
+        await get().pushCart()
+      },
+
+      resetForLogout: () =>
+        set({
+          items: [],
+          isOpen: false,
+          hasHydratedFromDb: false,
+          pendingMerge: null,
+        }),
     }),
     {
       name: 'aegean-cart-storage',
+      // Only the cart contents belong in localStorage. UI/session flags
+      // (isOpen, hasHydratedFromDb, pendingMerge) must start fresh each load.
+      partialize: (state) => ({ items: state.items }),
     }
   )
 )

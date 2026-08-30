@@ -19,39 +19,40 @@ export default function CartItems({ item }: CartItemsProps) {
   const removeCartItem = useCartStore((state) => state.removeItem)
   return (
     <div className="relative flex flex-col sm:grid sm:grid-cols-12 items-center bg-muted p-4 sm:p-3 my-3 gap-3 rounded-xl shadow-sm border border-border hover:border-aegean-blue/20 transition-all">
-      <SheetClose className="w-full sm:col-span-5">
-        <Link
-          href={`/products/${item._id}`}
-          className="flex items-center gap-4 sm:grid sm:grid-cols-5 sm:gap-3 hover:opacity-80 transition-opacity"
-        >
-          <div className="sm:col-span-2 flex justify-center shrink-0">
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border border-border bg-card">
-              <ProductImage
-                src={item.image}
-                alt={item.name}
-                fill
-                className="object-contain p-1"
-              />
-            </div>
+      <SheetClose
+        className="w-full sm:col-span-5"
+        render={
+          <Link
+            href={`/products/${item._id}`}
+            className="flex items-center gap-4 sm:grid sm:grid-cols-5 sm:gap-3 hover:opacity-80 transition-opacity"
+          />
+        }
+      >
+        <div className="sm:col-span-2 flex justify-center shrink-0">
+          <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border border-border bg-card">
+            <ProductImage
+              src={item.image}
+              alt={item.name}
+              fill
+              sizes="80px"
+              className="object-contain p-1"
+            />
           </div>
+        </div>
 
-          <div className="sm:col-span-3 flex flex-col justify-center">
-            <h1 className="font-bold text-sm sm:text-xs md:text-sm leading-tight text-foreground uppercase tracking-tight line-clamp-2">
-              {item.name}
-            </h1>
-            <span className="sm:hidden text-xs text-muted-foreground mt-1">
-              {item.price.toFixed(2)}€ / unit
-            </span>
-          </div>
-        </Link>
+        <div className="sm:col-span-3 flex flex-col justify-center">
+          <h1 className="font-bold text-sm sm:text-xs md:text-sm leading-tight text-foreground uppercase tracking-tight line-clamp-2">
+            {item.name}
+          </h1>
+          <span className="sm:hidden text-xs text-muted-foreground mt-1">
+            {item.price.toFixed(2)}€ / unit
+          </span>
+        </div>
       </SheetClose>
 
       <div className="flex items-center justify-between w-full sm:col-span-7 gap-2 mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-none border-border">
         <div className="flex-1 sm:col-span-3 flex justify-center">
-          <QuantityController
-            product={item as CartItem}
-            className="w-full max-w-28 py-1.5 bg-aegean-blue text-white rounded-lg shadow-sm"
-          />
+          <QuantityController product={item as CartItem} />
         </div>
 
         <div className="flex-1 sm:col-span-2 text-center sm:text-right">

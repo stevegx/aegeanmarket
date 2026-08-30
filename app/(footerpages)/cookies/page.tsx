@@ -132,7 +132,7 @@ export default function CookiesPage() {
           <h4 className="font-medium text-lg">
             Contact us at:{' '}
             <span className="font-semibold text-aegean-green-text dark:text-aegean-green">
-              {' +3069505939532959'}
+              {' +30 691 234 5678'}
             </span>
           </h4>
           <span className="font-bold text-2xl text-foreground">OR</span>

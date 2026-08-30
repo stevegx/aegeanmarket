@@ -90,7 +90,7 @@ export default function Footer({ userId }: FooterProps) {
           <div className="flex flex-col">
             <h3 className="font-semibold text-lg pb-2">Contact</h3>
             <h4 className="font-extralight pt-2 hover:text-aegean-green">
-              Telephone: +3069505939532959
+              Telephone: +30 691 234 5678
             </h4>
             <h4 className="font-extralight pt-2 hover:text-aegean-green">
               Email: stevevetsikas85@gmail.com

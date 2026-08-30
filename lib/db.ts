@@ -565,4 +565,86 @@ export async function getProductDeleteImpact(
   return { orders, carts, favorites, reviews }
 }
 
+export interface RelatedProduct {
+  _id: string
+  name: string
+  image: string
+  price: number
+  category: string
+  stock: number
+}
+
+// Related-products rail on the product detail page: same category first,
+// topped up with same-manufacturer picks, then random products, so it's
+// never empty even for a lightly-populated category.
+export async function getRelatedProducts({
+  productId,
+  category,
+  manufacturer,
+  limit = 10,
+}: {
+  productId: string
+  category: string
+  manufacturer?: string
+  limit?: number
+}): Promise<RelatedProduct[]> {
+  await connectDB()
+  const projection = 'name image price category stock'
+  const excludeIds = [new mongoose.Types.ObjectId(productId)]
+
+  const sameCategory = await Product.find({
+    _id: { $nin: excludeIds },
+    category,
+  })
+    .select(projection)
+    .limit(limit)
+    .lean()
+  const results = [...sameCategory]
+  excludeIds.push(...results.map((p) => p._id))
+
+  if (results.length < limit && manufacturer) {
+    const sameManufacturer = await Product.find({
+      _id: { $nin: excludeIds },
+      manufacturer,
+    })
+      .select(projection)
+      .limit(limit - results.length)
+      .lean()
+    results.push(...sameManufacturer)
+    excludeIds.push(...sameManufacturer.map((p) => p._id))
+  }
+
+  if (results.length < limit) {
+    const random = await Product.aggregate([
+      { $match: { _id: { $nin: excludeIds } } },
+      { $sample: { size: limit - results.length } },
+      { $project: { name: 1, image: 1, price: 1, category: 1, stock: 1 } },
+    ])
+    results.push(...random)
+  }
+
+  return JSON.parse(JSON.stringify(results))
+}
+
+export async function computeCartTotal(
+  cartItems: { _id: string; quantity: number }[]
+): Promise<number> {
+  await connectDB()
+  let total = 0
+  for (const item of cartItems) {
+    if (!mongoose.isValidObjectId(item._id)) {
+      throw new Error('Invalid product in cart')
+    }
+    if (!Number.isInteger(item.quantity) || item.quantity < 1) {
+      throw new Error('Invalid cart item')
+    }
+    const product = await Product.findById(item._id).select('price').lean()
+    if (!product) {
+      throw new Error('One of the products in your cart no longer exists')
+    }
+    total += product.price * item.quantity
+  }
+  return total
+}
+
 export default connectDB

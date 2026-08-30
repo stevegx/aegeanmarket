@@ -17,6 +17,10 @@ function sweep(now: number) {
 }
 
 export function isRateLimited(key: string, limit: number, windowMs: number) {
+  // Escape hatch for E2E tests, which fire many login/register attempts in
+  // quick succession from a single IP. Never set in production.
+  if (process.env.DISABLE_RATE_LIMIT === '1') return false
+
   const now = Date.now()
 
   opsSinceSweep += 1

@@ -2,12 +2,7 @@
 
 import Image from 'next/image'
 
-export type PaymentMethodValue =
-  | 'credit_card'
-  | 'iris'
-  | 'paypal'
-  | 'klarna'
-  | 'cod'
+export type PaymentMethodValue = 'credit_card' | 'iris' | 'cod'
 
 interface PaymentMethodOption {
   value: PaymentMethodValue
@@ -18,34 +13,24 @@ interface PaymentMethodOption {
 
 const paymentMethods: PaymentMethodOption[] = [
   {
-    value: 'credit_card',
-    label: 'Credit Card',
-    description: 'Visa, Mastercard & Maestro',
-    image: '/images/card.jpg',
-  },
-  {
     value: 'iris',
     label: 'Iris',
     description: 'Instant transfer via your mobile number',
     image: '/images/iris.png',
   },
   {
-    value: 'paypal',
-    label: 'PayPal',
-    description: 'Pay with your PayPal balance or linked cards',
-    image: '/images/paypal.png',
-  },
-  {
-    value: 'klarna',
-    label: 'Klarna',
-    description: 'Buy now, pay later in 3 installments',
-    image: '/images/klarna.png',
-  },
-  {
     value: 'cod',
     label: 'Cash on Delivery',
     description: 'Pay in cash when your order arrives',
     image: '/images/cod.png',
+  },
+  // Kept last: selecting it expands the Stripe PaymentElement inline, so it
+  // shouldn't push the other options down.
+  {
+    value: 'credit_card',
+    label: 'Pay Online',
+    description: 'Card or Klarna — secured by Stripe',
+    image: '/images/card.jpg',
   },
 ]
 
@@ -85,6 +70,7 @@ export default function PaymentMethodSelector({
                 src={method.image}
                 alt={method.label}
                 fill
+                sizes="48px"
                 className="object-contain"
               />
             </span>

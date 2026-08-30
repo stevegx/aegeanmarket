@@ -68,6 +68,7 @@ export default function PaymentMethodsPage() {
                 src={method.image}
                 alt={method.name}
                 fill
+                sizes="(max-width: 640px) 90vw, 240px"
                 className="object-contain object-left"
               />
             </div>

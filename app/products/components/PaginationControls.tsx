@@ -35,14 +35,14 @@ const PaginationControls: FC<PaginationProps> = ({
           'px-4 py-2 rounded-md font-bold text-sm transition-all',
           currentPage <= 1
             ? 'bg-muted text-muted-foreground pointer-events-none'
-            : 'bg-aegean-green text-white hover:bg-opacity-90 shadow-md'
+            : 'bg-aegean-dark text-white hover:bg-aegean-dark/85 shadow-md'
         )}
       >
         Previous
       </Link>
 
       <div className="flex items-center gap-2 text-sm">
-        <span className="font-black text-aegean-green-text">{currentPage}</span>
+        <span className="font-black text-aegean-dark">{currentPage}</span>
         <span className="text-muted-foreground">from</span>
         <select
           aria-label="Go to page"
@@ -67,7 +67,7 @@ const PaginationControls: FC<PaginationProps> = ({
           'px-4 py-2 rounded-md font-bold text-sm transition-all',
           currentPage >= totalPages
             ? 'bg-muted text-muted-foreground pointer-events-none'
-            : 'bg-aegean-green text-white hover:bg-opacity-90 shadow-md'
+            : 'bg-aegean-dark text-white hover:bg-aegean-dark/85 shadow-md'
         )}
       >
         Next

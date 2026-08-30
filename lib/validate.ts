@@ -28,7 +28,7 @@ export const LoginSchema = z.object({
   loginCredentials: z
     .string()
     .min(3, 'Username or email must be at least 3 characters long'),
-  password: z.string().min(0, 'Password is Empty!!'),
+  password: z.string().min(1, 'Password is required'),
 })
 
 export const CartSchema = z.object({
@@ -55,7 +55,7 @@ export const checkoutSchema = z.object({
   city: z.string().min(2, 'City is required'),
   zipcode: z.string().min(3, 'Zipcode is required'),
   country: z.string().min(2, 'Country is required'),
-  paymentMethod: z.enum(['credit_card', 'iris', 'paypal', 'klarna', 'cod']),
+  paymentMethod: z.enum(['credit_card', 'iris', 'cod']),
 })
 
 export const updateProfileSchema = z.object({

@@ -66,7 +66,10 @@ export default function ProductImage({
     <Image
       src={src}
       alt={alt}
-      className={className}
+      // Catalog photos are shot on white; in dark mode a transparent PNG or a
+      // white-on-white product would otherwise sit on the dark card. Paint the
+      // image element white so object-contain letterboxing stays white too.
+      className={cn('dark:bg-white', className)}
       fill={fill}
       width={width}
       height={height}
