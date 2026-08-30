@@ -231,10 +231,10 @@ export default function SearchCategories({ categories }: SearchBarProps) {
           </div>
 
           <SheetFooter>
-            <SheetClose>
-              <Button variant="outline" className="w-full">
-                Close
-              </Button>
+            <SheetClose
+              render={<Button variant="outline" className="w-full" />}
+            >
+              Close
             </SheetClose>
           </SheetFooter>
         </SheetContent>

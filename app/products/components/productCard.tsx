@@ -1,18 +1,10 @@
 'use client'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useCartStore } from '../store/useCartStore'
 import FavoriteButton from './FavoriteButton'
-import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import Link from 'next/link'
 interface ProductValue {
   _id: string
@@ -45,31 +37,29 @@ export default function ProductCard({ product }: ProductProps) {
   const stock = product.stock
   return (
     <Card
-      className="mx-auto w-full h-auto overflow-hidden max-w-sm pt-0 my-10 hover:shadow-xl hover:cursor-pointer flex flex-col"
+      className="group mx-auto w-full h-[520px] max-w-sm my-2 flex flex-col gap-0 p-3 rounded-xl shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:cursor-pointer"
       id={product._id}
     >
-      <Link href={`/products/${product._id}`} className="block h-full">
+      {/* Image sits on a soft rounded panel, ~58% of the card */}
+      <Link
+        href={`/products/${product._id}`}
+        className="relative block h-[55%] w-full shrink-0 overflow-hidden rounded-xl bg-muted/60"
+      >
+        <FavoriteButton
+          productId={product._id}
+          className="absolute top-2.5 right-2.5 z-10 bg-background shadow-md"
+        />
         {stock > 0 ? (
-          <div className="relative aspect-video w-full">
-            <FavoriteButton
-              productId={product._id}
-              className="absolute top-2 right-2 z-10"
-            />
-            <Image
-              src={(product.image || '').trim().replace(/\s/g, '')}
-              alt={product.name}
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
-              className="object-contain"
-            />
-          </div>
+          <Image
+            src={(product.image || '').trim().replace(/\s/g, '')}
+            alt={product.name}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
+            className="object-contain p-4 transition-transform duration-500 group-hover:scale-105 dark:bg-white"
+          />
         ) : (
-          <div className="relative aspect-video w-full">
-            <FavoriteButton
-              productId={product._id}
-              className="absolute top-2 right-2 z-10"
-            />
-            <span className="z-10 absolute text-2xl font-bold text-white bg-black/70 px-3 py-1.5 rounded top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+          <>
+            <span className="z-10 absolute text-xl font-bold text-white bg-black/70 px-3 py-1.5 rounded top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
               OUT OF STOCK
             </span>
             <Image
@@ -77,77 +67,73 @@ export default function ProductCard({ product }: ProductProps) {
               alt={product.name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 384px"
-              className="object-cover grayscale-100"
+              className="object-contain p-4 grayscale"
               loading="lazy"
             />
-          </div>
+          </>
         )}
-
-        <CardHeader className="flex-none p-5 pb-2">
-          <div className="flex flex-col items-start gap-y-2">
-            {/* Category */}
-            <span className="text-sm font-light text-muted-foreground uppercase tracking-wider">
-              {product.category}
-            </span>
-
-            <CardTitle className="font-bold text-xl line-clamp-2 text-left leading-tight">
-              {product.name}
-            </CardTitle>
-
-            <CardAction className="p-0">
-              <Badge variant="secondary" className="flex gap-0.5 px-2 py-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <span
-                    key={star}
-                    className={`text-lg leading-none ${
-                      star <= product.rating
-                        ? 'text-yellow-500'
-                        : 'text-muted'
-                    }`}
-                  >
-                    ★
-                  </span>
-                ))}
-              </Badge>
-            </CardAction>
-
-            <span className="font-bold text-3xl text-aegean-blue">
-              {product.price}€
-            </span>
-
-            <CardDescription className="text-left line-clamp-3 mt-1">
-              {product.description}
-            </CardDescription>
-          </div>
-        </CardHeader>
       </Link>
-      <CardFooter className="mt-auto">
-        <div className="w-full">
-          {quantity === 0 ? (
-            stock > 0 ? (
-              <Button
-                variant="buy"
-                size="lg"
-                className={
-                  'w-full transition-all duration-300 animate-in fade-in zoom-in-95 font-bold'
-                }
-                onClick={() => buyItem(product)}
-              >
-                BUY
-              </Button>
-            ) : (
-              <Button variant="disabledBuy" size="lg" className="w-full font-bold">
-                BUY
-              </Button>
-            )
-          ) : (
-            <QuantityController
-              product={product}
-              className="w-full justify-center"
-            />
-          )}
+
+      <Link
+        href={`/products/${product._id}`}
+        className="flex grow min-h-0 flex-col gap-1 px-1 pt-3"
+      >
+        {/* Category */}
+        <span className="text-sm font-semibold text-aegean-blue line-clamp-1">
+          {product.category}
+        </span>
+
+        <h3 className="font-bold text-base leading-snug text-foreground line-clamp-2">
+          {product.name}
+        </h3>
+
+        <div className="flex gap-0.5 text-base leading-none">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <span
+              key={star}
+              className={
+                star <= product.rating
+                  ? 'text-yellow-500'
+                  : 'text-muted-foreground/30'
+              }
+            >
+              ★
+            </span>
+          ))}
         </div>
-      </CardFooter>
+
+        <p className="text-sm text-muted-foreground line-clamp-1">
+          {product.description}
+        </p>
+
+        <span className="mt-auto text-xl font-extrabold text-foreground">
+          {product.price.toFixed(2)} €
+        </span>
+      </Link>
+
+      <div className="shrink-0 pt-3">
+        {quantity === 0 ? (
+          stock > 0 ? (
+            <Button
+              variant="buy"
+              size="lg"
+              className="w-full font-bold transition-all duration-300 animate-in fade-in zoom-in-95"
+              onClick={() => buyItem(product)}
+            >
+              BUY
+            </Button>
+          ) : (
+            <Button variant="disabledBuy" size="lg" className="w-full font-bold">
+              BUY
+            </Button>
+          )
+        ) : (
+          <QuantityController
+            product={product}
+            className="w-full justify-center"
+          />
+        )}
+      </div>
     </Card>
   )
 }

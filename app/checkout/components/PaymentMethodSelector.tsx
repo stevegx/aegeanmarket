@@ -70,6 +70,7 @@ export default function PaymentMethodSelector({
                 src={method.image}
                 alt={method.label}
                 fill
+                sizes="48px"
                 className="object-contain"
               />
             </span>

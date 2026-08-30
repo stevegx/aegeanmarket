@@ -38,6 +38,7 @@ export default async function mainPage() {
               src={macallanLogo}
               alt="Macallan Logo"
               fill
+              sizes="(max-width: 768px) 192px, 256px"
               className="object-contain p-4 grayscale hover:grayscale-0 transition-all duration-500"
               priority
             />
@@ -47,6 +48,7 @@ export default async function mainPage() {
               src={walkerLogo}
               alt="Johnny Walker Logo"
               fill
+              sizes="(max-width: 768px) 192px, 256px"
               className="object-contain rounded-md grayscale hover:grayscale-0 transition-all duration-500"
               priority
             />
